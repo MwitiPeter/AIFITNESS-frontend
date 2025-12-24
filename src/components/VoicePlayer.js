@@ -1,20 +1,24 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 const VoicePlayer = ({ exercise }) => {
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const [speed, setSpeed] = useState(1.0);
   const [isSupported, setIsSupported] = useState(true);
+  
+  // Use a ref to track the current utterance to prevent garbage collection issues
+  const utteranceRef = useRef(null);
 
-  // Check if browser supports speech synthesis
   useEffect(() => {
     if (!('speechSynthesis' in window)) {
       setIsSupported(false);
-      console.warn('Speech synthesis not supported in this browser');
     }
+    
+    // Prime the voices (Chrome fix)
+    window.speechSynthesis.getVoices();
   }, []);
 
-  // Build the text to be spoken
+  // 1. SANITIZE TEXT: Remove emojis (🔥, ⏹️, etc.) that crash the engine
   const buildSpeechText = () => {
     let text = `Exercise: ${exercise.name}. `;
     text += `${exercise.sets} sets of ${exercise.reps} repetitions. `;
@@ -24,20 +28,17 @@ const VoicePlayer = ({ exercise }) => {
     if (exercise.instructions) {
       text += `Instructions: ${exercise.instructions}`;
     }
-    return text;
+
+    // Regex to remove emojis and special symbols
+    return text.replace(/([\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF])/g, '');
   };
 
-  // Handle speaking
   const handleSpeak = () => {
-    if (!isSupported) {
-      alert('Voice instructions are not supported in your browser. Please try Chrome, Safari, or Edge.');
-      return;
-    }
+    if (!isSupported) return;
 
-    // Cancel any ongoing speech
+    // 2. CLEAR QUEUE: Always cancel before starting
     window.speechSynthesis.cancel();
 
-    // If already speaking, just resume
     if (isPaused) {
       window.speechSynthesis.resume();
       setIsPaused(false);
@@ -45,149 +46,106 @@ const VoicePlayer = ({ exercise }) => {
       return;
     }
 
-    // Create new speech utterance
-    const utterance = new SpeechSynthesisUtterance(buildSpeechText());
-    
-    // Configure speech
-    utterance.rate = speed; // Speed: 0.1 to 10
-    utterance.pitch = 1; // Pitch: 0 to 2
-    utterance.volume = 1; // Volume: 0 to 1
-    
-    // Set language (you can make this dynamic later)
-    utterance.lang = 'en-US';
+    // 3. ASYNC DELAY: Small timeout ensures the 'cancel' above finished 
+    // and the audio hardware is released.
+    setTimeout(() => {
+      const cleanText = buildSpeechText();
+      const utterance = new SpeechSynthesisUtterance(cleanText);
+      utteranceRef.current = utterance;
 
-    // Event handlers
-    utterance.onstart = () => {
-      setIsSpeaking(true);
-      setIsPaused(false);
-    };
+      // Select a local voice to avoid 'network' synthesis errors
+      const voices = window.speechSynthesis.getVoices();
+      const preferredVoice = voices.find(v => v.lang.startsWith('en') && !v.name.includes('Google')) || voices[0];
+      
+      if (preferredVoice) utterance.voice = preferredVoice;
+      
+      utterance.rate = speed;
+      utterance.lang = 'en-US';
 
-    utterance.onend = () => {
-      setIsSpeaking(false);
-      setIsPaused(false);
-    };
+      utterance.onstart = () => {
+        setIsSpeaking(true);
+        setIsPaused(false);
+      };
 
-    utterance.onerror = (event) => {
-      console.error('Speech error:', event);
-      setIsSpeaking(false);
-      setIsPaused(false);
-    };
+      utterance.onend = () => {
+        setIsSpeaking(false);
+        setIsPaused(false);
+      };
 
-    // Speak
-    window.speechSynthesis.speak(utterance);
+      utterance.onerror = (event) => {
+        // Only log if it's not a manual 'interrupted' or 'canceled' event
+        if (event.error !== 'interrupted' && event.error !== 'canceled') {
+          console.error('SpeechSynthesis Error:', event.error);
+        }
+        setIsSpeaking(false);
+        setIsPaused(false);
+      };
+
+      window.speechSynthesis.speak(utterance);
+    }, 100); 
   };
 
-  // Handle pause
   const handlePause = () => {
-    if (isSpeaking) {
+    if (window.speechSynthesis.speaking) {
       window.speechSynthesis.pause();
       setIsPaused(true);
       setIsSpeaking(false);
     }
   };
 
-  // Handle stop
   const handleStop = () => {
     window.speechSynthesis.cancel();
     setIsSpeaking(false);
     setIsPaused(false);
   };
 
-  // Handle speed change
   const handleSpeedChange = (newSpeed) => {
     setSpeed(newSpeed);
-    // Save preference to localStorage
     localStorage.setItem('voiceSpeed', newSpeed);
     
-    // If currently speaking, restart with new speed
+    // Restart if currently active
     if (isSpeaking || isPaused) {
       handleStop();
-      setTimeout(() => {
-        handleSpeak();
-      }, 100);
+      setTimeout(() => handleSpeak(), 200);
     }
   };
 
-  // Load saved speed preference on mount
   useEffect(() => {
     const savedSpeed = localStorage.getItem('voiceSpeed');
-    if (savedSpeed) {
-      setSpeed(parseFloat(savedSpeed));
-    }
+    if (savedSpeed) setSpeed(parseFloat(savedSpeed));
+    
+    return () => window.speechSynthesis.cancel();
   }, []);
 
-  // Cleanup on unmount
-  useEffect(() => {
-    return () => {
-      window.speechSynthesis.cancel();
-    };
-  }, []);
-
-  if (!isSupported) {
-    return null; // Don't show anything if not supported
-  }
+  if (!isSupported) return null;
 
   return (
     <div style={styles.container}>
       <div style={styles.controls}>
-        {/* Play/Resume button */}
         {!isSpeaking && !isPaused && (
-          <button 
-            onClick={handleSpeak} 
-            style={styles.button}
-            title="Listen to instructions"
-          >
-            🔊 Listen
-          </button>
+          <button onClick={handleSpeak} style={styles.button}>🔊 Listen</button>
         )}
-
-        {/* Resume button (when paused) */}
         {isPaused && (
-          <button 
-            onClick={handleSpeak} 
-            style={{...styles.button, ...styles.resumeButton}}
-            title="Resume"
-          >
-            ▶️ Resume
-          </button>
+          <button onClick={handleSpeak} style={{...styles.button, ...styles.resumeButton}}>▶️ Resume</button>
         )}
-
-        {/* Pause button (when speaking) */}
         {isSpeaking && (
-          <button 
-            onClick={handlePause} 
-            style={{...styles.button, ...styles.pauseButton}}
-            title="Pause"
-          >
-            ⏸️ Pause
-          </button>
+          <button onClick={handlePause} style={{...styles.button, ...styles.pauseButton}}>⏸️ Pause</button>
         )}
-
-        {/* Stop button (when speaking or paused) */}
         {(isSpeaking || isPaused) && (
-          <button 
-            onClick={handleStop} 
-            style={{...styles.button, ...styles.stopButton}}
-            title="Stop"
-          >
-            ⏹️ Stop
-          </button>
+          <button onClick={handleStop} style={{...styles.button, ...styles.stopButton}}>⏹️ Stop</button>
         )}
 
-        {/* Speed selector */}
         <select 
           value={speed} 
           onChange={(e) => handleSpeedChange(parseFloat(e.target.value))}
           style={styles.speedSelect}
-          title="Speech speed"
         >
-          <option value="0.8">0.8x (Slow)</option>
-          <option value="1.0">1.0x (Normal)</option>
-          <option value="1.2">1.2x (Fast)</option>
+          <option value="0.8">0.8x</option>
+          <option value="1.0">1.0x</option>
+          <option value="1.2">1.2x</option>
         </select>
       </div>
 
-      {/* Speaking indicator */}
       {isSpeaking && (
         <div style={styles.indicator}>
           <span style={styles.wave}>🔊</span>
@@ -198,6 +156,7 @@ const VoicePlayer = ({ exercise }) => {
   );
 };
 
+// ... Styles remain the same as your original code
 const styles = {
   container: {
     display: 'flex',

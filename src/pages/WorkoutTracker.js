@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { workoutAPI, progressAPI } from '../utils/api';
 import Loading from '../components/Loading';
 import VoicePlayer from '../components/VoicePlayer'; // ADDED
-
+import ExerciseDetails from '../components/ExerciseDetails';
 const WorkoutTracker = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -203,56 +203,34 @@ const WorkoutTracker = () => {
               </div>
 
               {/* Exercise Checklist */}
-              <div style={styles.exerciseSection}>
-                <h3 style={styles.sectionTitle}>Exercises</h3>
-                <div style={styles.exerciseList}>
-                  {selectedDay.exercises.map((exercise, index) => (
-                    <div
-                      key={index}
-                      style={{
-                        ...styles.exerciseCard,
-                        ...(isExerciseCompleted(exercise.name) ? styles.exerciseCardCompleted : {})
-                      }}
-                    >
-                      <div style={styles.exerciseHeader}>
-                        <label style={styles.checkboxLabel}>
-                          <input
-                            type="checkbox"
-                            checked={isExerciseCompleted(exercise.name)}
-                            onChange={() => handleExerciseToggle(exercise)}
-                            style={styles.checkbox}
-                          />
-                          <span style={styles.exerciseName}>{exercise.name}</span>
-                        </label>
-                      </div>
+              {selectedDay.exercises.map((exercise, index) => (
+                <div
+                  key={index}
+                  style={{
+                    ...styles.exerciseCard,
+                    ...(isExerciseCompleted(exercise.name) ? styles.exerciseCardCompleted : {})
+                  }}
+                >
+                  <div style={styles.exerciseHeader}>
+                    <label style={styles.checkboxLabel}>
+                      <input
+                        type="checkbox"
+                        checked={isExerciseCompleted(exercise.name)}
+                        onChange={() => handleExerciseToggle(exercise)}
+                        style={styles.checkbox}
+                      />
+                      <span style={styles.exerciseName}>{exercise.name}</span>
+                    </label>
+                  </div>
 
-                      <div style={styles.exerciseDetails}>
-                        <span style={styles.exerciseStat}>
-                          <strong>Sets:</strong> {exercise.sets}
-                        </span>
-                        <span style={styles.exerciseStat}>
-                          <strong>Reps:</strong> {exercise.reps}
-                        </span>
-                        {exercise.restTime && (
-                          <span style={styles.exerciseStat}>
-                            <strong>Rest:</strong> {exercise.restTime}s
-                          </span>
-                        )}
-                      </div>
+                  {/* ADDED: Detailed Exercise Instructions */}
+                  <ExerciseDetails exercise={exercise} />
 
-                      {exercise.instructions && (
-                        <p style={styles.exerciseInstructions}>
-                          💡 {exercise.instructions}
-                        </p>
-                      )}
-
-                      {/* ADDED: Voice Player */}
-                      <VoicePlayer exercise={exercise} />
-                    </div>
-                  ))}
+                  {/* Voice Player */}
+                  <VoicePlayer exercise={exercise} />
                 </div>
-              </div>
-
+              ))}
+              
               {/* Workout Details Form */}
               <form onSubmit={handleSubmit} style={styles.form}>
                 <h3 style={styles.sectionTitle}>Workout Details</h3>

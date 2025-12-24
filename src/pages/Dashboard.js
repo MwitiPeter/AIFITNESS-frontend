@@ -4,7 +4,7 @@ import { workoutAPI, profileAPI } from '../utils/api';
 import { useAuth } from '../context/AuthContext';
 import Loading from '../components/Loading';
 import VoicePlayer from '../components/VoicePlayer'; // ADDED
-
+import ExerciseDetails from '../components/ExerciseDetails';
 const Dashboard = () => {
   const [profile, setProfile] = useState(null);
   const [workoutPlan, setWorkoutPlan] = useState(null);
@@ -21,7 +21,7 @@ const Dashboard = () => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      
+
       // Fetch profile
       const profileRes = await profileAPI.getMyProfile();
       setProfile(profileRes.data.data);
@@ -114,8 +114,8 @@ const Dashboard = () => {
               <p style={styles.emptyText}>
                 Generate your personalized AI-powered workout plan based on your profile and goals!
               </p>
-              <button 
-                onClick={handleGenerateWorkout} 
+              <button
+                onClick={handleGenerateWorkout}
                 style={styles.generateBtn}
                 disabled={generating}
               >
@@ -136,19 +136,19 @@ const Dashboard = () => {
             <div style={styles.card}>
               <div style={styles.cardHeader}>
                 <h2 style={styles.cardTitle}>💪 Your Current Workout Plan</h2>
-                <button 
-                  onClick={handleGenerateWorkout} 
+                <button
+                  onClick={handleGenerateWorkout}
                   style={styles.regenerateBtn}
                   disabled={generating}
                 >
                   {generating ? 'Generating...' : '🔄 Generate New Plan'}
                 </button>
               </div>
-              
+
               <div style={styles.planInfo}>
                 <h3 style={styles.planName}>{workoutPlan.planName}</h3>
                 <p style={styles.planDescription}>{workoutPlan.description}</p>
-                
+
                 <div style={styles.planStats}>
                   <div style={styles.stat}>
                     <span style={styles.statLabel}>Difficulty:</span>
@@ -170,47 +170,27 @@ const Dashboard = () => {
               </div>
 
               {/* Daily Workouts */}
-              <div style={styles.workoutsContainer}>
-                <h3 style={styles.sectionTitle}>Weekly Schedule</h3>
-                <div style={styles.workoutGrid}>
-                  {workoutPlan.dailyWorkouts.map((day, index) => (
-                    <div key={index} style={styles.workoutDay}>
-                      <div style={styles.dayHeader}>
-                        <h4 style={styles.dayTitle}>{day.day}</h4>
-                        <span style={styles.dayDuration}>⏱️ {day.totalDuration} min</span>
-                      </div>
-                      
-                      <div style={styles.exerciseList}>
-                        <p style={styles.exerciseCount}>
-                          {day.exercises.length} exercises
-                        </p>
-                        <div style={styles.exercises}>
-                          {day.exercises.slice(0, 3).map((exercise, idx) => (
-                            <div key={idx} style={styles.exerciseItem}>
-                              <li style={styles.exerciseListItem}>
-                                • {exercise.name} - {exercise.sets} sets × {exercise.reps}
-                              </li>
-                              {/* ADDED: Voice Player */}
-                              <VoicePlayer exercise={exercise} />
-                            </div>
-                          ))}
-                          {day.exercises.length > 3 && (
-                            <li style={styles.moreExercises}>
-                              + {day.exercises.length - 3} more exercises
-                            </li>
-                          )}
-                        </div>
-                      </div>
-
-                      <button 
-                        onClick={() => navigate('/workout-tracker', { state: { day, planId: workoutPlan._id } })}
-                        style={styles.startBtn}
-                      >
-                        Start Workout →
-                      </button>
+              <div style={styles.exercises}>
+                {day.exercises.slice(0, 3).map((exercise, idx) => (
+                  <div key={idx} style={styles.exerciseItem}>
+                    <div style={styles.exerciseHeader}>
+                      <span style={styles.exerciseName}>
+                        • {exercise.name}
+                      </span>
                     </div>
-                  ))}
-                </div>
+
+                    {/* ADDED: Detailed Exercise Info */}
+                    <ExerciseDetails exercise={exercise} />
+
+                    {/* Voice Player */}
+                    <VoicePlayer exercise={exercise} />
+                  </div>
+                ))}
+                {day.exercises.length > 3 && (
+                  <li style={styles.moreExercises}>
+                    + {day.exercises.length - 3} more exercises
+                  </li>
+                )}
               </div>
             </div>
 
@@ -218,19 +198,19 @@ const Dashboard = () => {
             <div style={styles.actionsCard}>
               <h3 style={styles.actionsTitle}>Quick Actions</h3>
               <div style={styles.actions}>
-                <button 
+                <button
                   onClick={() => navigate('/workout-tracker')}
                   style={styles.actionBtn}
                 >
                   📝 Log Workout
                 </button>
-                <button 
+                <button
                   onClick={() => navigate('/progress')}
                   style={styles.actionBtn}
                 >
                   📊 View Progress
                 </button>
-                <button 
+                <button
                   onClick={() => navigate('/onboarding')}
                   style={styles.actionBtn}
                 >
@@ -513,7 +493,14 @@ const styles = {
     fontWeight: '600',
     cursor: 'pointer',
     transition: 'background-color 0.2s'
-  }
+  },exerciseHeader: {
+  marginBottom: '0.5rem'
+},
+exerciseName: {
+  fontSize: '1rem',
+  fontWeight: '600',
+  color: '#2c3e50'
+}
 };
 
 // Add spinner animation

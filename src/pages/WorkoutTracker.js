@@ -2,17 +2,18 @@ import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { workoutAPI, progressAPI } from '../utils/api';
 import Loading from '../components/Loading';
+import VoicePlayer from '../components/VoicePlayer'; // ADDED
 
 const WorkoutTracker = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  
+
   const [workoutPlan, setWorkoutPlan] = useState(null);
   const [selectedDay, setSelectedDay] = useState(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
-  
+
   // Workout log data
   const [logData, setLogData] = useState({
     completedExercises: [],
@@ -29,7 +30,7 @@ const WorkoutTracker = () => {
   const fetchWorkoutPlan = async () => {
     try {
       setLoading(true);
-      
+
       // Check if we came from dashboard with specific day
       if (location.state?.day && location.state?.planId) {
         setSelectedDay(location.state.day);
@@ -41,7 +42,7 @@ const WorkoutTracker = () => {
         setWorkoutPlan(response.data.data);
         setSelectedDay(response.data.data.dailyWorkouts[0]);
       }
-      
+
       setLoading(false);
     } catch (err) {
       console.error('Error fetching workout:', err);
@@ -65,7 +66,7 @@ const WorkoutTracker = () => {
   const handleExerciseToggle = (exercise) => {
     setLogData(prev => {
       const exists = prev.completedExercises.find(e => e.exerciseName === exercise.name);
-      
+
       if (exists) {
         // Remove exercise
         return {
@@ -97,7 +98,7 @@ const WorkoutTracker = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (logData.completedExercises.length === 0) {
       alert('Please check off at least one completed exercise');
       return;
@@ -124,23 +125,20 @@ const WorkoutTracker = () => {
         mood: logData.mood,
         notes: logData.notes
       };
-
       await progressAPI.logWorkout(workoutLog);
-      
+
       alert('✅ Workout logged successfully!');
       navigate('/progress');
-      
+
     } catch (err) {
       console.error('Error logging workout:', err);
       setError(err.response?.data?.message || 'Failed to log workout');
       setSaving(false);
     }
   };
-
   if (loading) {
     return <Loading message="Loading workout..." />;
   }
-
   if (!workoutPlan || !selectedDay) {
     return (
       <div style={styles.container}>
@@ -154,11 +152,9 @@ const WorkoutTracker = () => {
       </div>
     );
   }
-
   const completionPercentage = selectedDay.exercises.length > 0
     ? Math.round((logData.completedExercises.length / selectedDay.exercises.length) * 100)
     : 0;
-
   return (
     <div style={styles.container}>
       <div style={styles.content}>
@@ -168,7 +164,6 @@ const WorkoutTracker = () => {
           </button>
           <h1 style={styles.title}>Track Your Workout</h1>
         </div>
-
         {error && <div style={styles.error}>{error}</div>}
 
         <div style={styles.mainGrid}>
@@ -212,8 +207,8 @@ const WorkoutTracker = () => {
                 <h3 style={styles.sectionTitle}>Exercises</h3>
                 <div style={styles.exerciseList}>
                   {selectedDay.exercises.map((exercise, index) => (
-                    <div 
-                      key={index} 
+                    <div
+                      key={index}
                       style={{
                         ...styles.exerciseCard,
                         ...(isExerciseCompleted(exercise.name) ? styles.exerciseCardCompleted : {})
@@ -230,7 +225,7 @@ const WorkoutTracker = () => {
                           <span style={styles.exerciseName}>{exercise.name}</span>
                         </label>
                       </div>
-                      
+
                       <div style={styles.exerciseDetails}>
                         <span style={styles.exerciseStat}>
                           <strong>Sets:</strong> {exercise.sets}
@@ -250,6 +245,9 @@ const WorkoutTracker = () => {
                           💡 {exercise.instructions}
                         </p>
                       )}
+
+                      {/* ADDED: Voice Player */}
+                      <VoicePlayer exercise={exercise} />
                     </div>
                   ))}
                 </div>
@@ -265,7 +263,7 @@ const WorkoutTracker = () => {
                     <input
                       type="number"
                       value={logData.totalDuration}
-                      onChange={(e) => setLogData({...logData, totalDuration: e.target.value})}
+                      onChange={(e) => setLogData({ ...logData, totalDuration: e.target.value })}
                       style={styles.input}
                       placeholder="e.g., 45"
                       min="1"
@@ -277,7 +275,7 @@ const WorkoutTracker = () => {
                     <label style={styles.label}>How was it? *</label>
                     <select
                       value={logData.mood}
-                      onChange={(e) => setLogData({...logData, mood: e.target.value})}
+                      onChange={(e) => setLogData({ ...logData, mood: e.target.value })}
                       style={styles.select}
                       required
                     >
@@ -298,7 +296,7 @@ const WorkoutTracker = () => {
                       <button
                         key={rating}
                         type="button"
-                        onClick={() => setLogData({...logData, difficultyRating: rating})}
+                        onClick={() => setLogData({ ...logData, difficultyRating: rating })}
                         style={{
                           ...styles.ratingBtn,
                           ...(logData.difficultyRating >= rating ? styles.ratingBtnActive : {})
@@ -317,15 +315,15 @@ const WorkoutTracker = () => {
                   <label style={styles.label}>Notes (Optional)</label>
                   <textarea
                     value={logData.notes}
-                    onChange={(e) => setLogData({...logData, notes: e.target.value})}
+                    onChange={(e) => setLogData({ ...logData, notes: e.target.value })}
                     style={styles.textarea}
                     placeholder="Any comments about this workout? (e.g., felt strong, need to increase weight, etc.)"
                     rows="4"
                   />
                 </div>
 
-                <button 
-                  type="submit" 
+                <button
+                  type="submit"
                   style={styles.submitBtn}
                   disabled={saving}
                 >
@@ -339,7 +337,6 @@ const WorkoutTracker = () => {
     </div>
   );
 };
-
 const styles = {
   container: {
     minHeight: 'calc(100vh - 70px)',
@@ -534,7 +531,8 @@ const styles = {
     color: '#7f8c8d',
     fontSize: '0.9rem',
     fontStyle: 'italic',
-    margin: 0
+    margin: 0,
+    marginBottom: '0.75rem'
   },
   form: {
     borderTop: '2px solid #ecf0f1',
@@ -614,5 +612,4 @@ const styles = {
     marginTop: '1rem'
   }
 };
-
 export default WorkoutTracker;

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { workoutAPI, profileAPI } from '../utils/api';
 import { useAuth } from '../context/AuthContext';
 import Loading from '../components/Loading';
+import VoicePlayer from '../components/VoicePlayer'; // ADDED
 
 const Dashboard = () => {
   const [profile, setProfile] = useState(null);
@@ -183,18 +184,22 @@ const Dashboard = () => {
                         <p style={styles.exerciseCount}>
                           {day.exercises.length} exercises
                         </p>
-                        <ul style={styles.exercises}>
+                        <div style={styles.exercises}>
                           {day.exercises.slice(0, 3).map((exercise, idx) => (
-                            <li key={idx} style={styles.exerciseItem}>
-                              • {exercise.name} - {exercise.sets} sets × {exercise.reps}
-                            </li>
+                            <div key={idx} style={styles.exerciseItem}>
+                              <li style={styles.exerciseListItem}>
+                                • {exercise.name} - {exercise.sets} sets × {exercise.reps}
+                              </li>
+                              {/* ADDED: Voice Player */}
+                              <VoicePlayer exercise={exercise} />
+                            </div>
                           ))}
                           {day.exercises.length > 3 && (
                             <li style={styles.moreExercises}>
                               + {day.exercises.length - 3} more exercises
                             </li>
                           )}
-                        </ul>
+                        </div>
                       </div>
 
                       <button 
@@ -433,7 +438,8 @@ const styles = {
   dayTitle: {
     color: '#2c3e50',
     fontSize: '1.2rem',
-    margin: 0
+    margin: 0,
+    fontWeight: 'bold'
   },
   dayDuration: {
     color: '#7f8c8d',
@@ -453,10 +459,16 @@ const styles = {
     margin: 0
   },
   exerciseItem: {
+    marginBottom: '1rem',
+    paddingBottom: '0.75rem',
+    borderBottom: '1px solid #ecf0f1'
+  },
+  exerciseListItem: {
     color: '#34495e',
     fontSize: '0.95rem',
     padding: '0.25rem 0',
-    lineHeight: '1.5'
+    lineHeight: '1.5',
+    marginBottom: '0.5rem'
   },
   moreExercises: {
     color: '#3498db',

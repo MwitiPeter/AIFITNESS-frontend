@@ -37,46 +37,18 @@ const PWAInstallPrompt = () => {
     window.addEventListener('appinstalled', () => {
       setIsInstalled(true);
       setShowPrompt(false);
-      localStorage.removeItem('pwa-prompt-dismissed');
-      localStorage.removeItem('pwa-prompt-last-shown');
     });
 
-    // Function to check and show prompt
-    const checkAndShowPrompt = () => {
-      const currentState = stateRef.current;
-      if (currentState.isInstalled || !currentState.deferredPrompt || currentState.showPrompt) return;
-      
-      const lastDismissed = localStorage.getItem('pwa-prompt-dismissed');
-      if (!lastDismissed) {
-        // First time - show after 2 minutes
-        const siteEntryTime = parseInt(sessionStorage.getItem('site-entry-time') || Date.now(), 10);
-        const minutesOnSite = (Date.now() - siteEntryTime) / (1000 * 60);
-        if (minutesOnSite >= 2) {
-          setShowPrompt(true);
-        }
-      } else {
-        // Check if enough time has passed since last dismissal (3 minutes)
-        const dismissedTime = parseInt(lastDismissed, 10);
-        const minutesSinceDismissed = (Date.now() - dismissedTime) / (1000 * 60);
-        if (minutesSinceDismissed >= 3) {
-          setShowPrompt(true);
-        }
-      }
-    };
-
-    // Show prompt after 2 minutes of usage
+    // Show prompt after 30 seconds
     const initialDelay = setTimeout(() => {
-      checkAndShowPrompt();
-    }, 2 * 60 * 1000); // 2 minutes
-
-    // Show prompt periodically (every minute to check conditions)
-    const interval = setInterval(() => {
-      checkAndShowPrompt();
-    }, 60000); // Check every minute
+      const currentState = stateRef.current;
+      if (!currentState.isInstalled && currentState.deferredPrompt && !currentState.showPrompt) {
+        setShowPrompt(true);
+      }
+    }, 30 * 1000); // 30 seconds
 
     return () => {
       window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
-      clearInterval(interval);
       clearTimeout(initialDelay);
     };
   }, []);
@@ -97,8 +69,6 @@ const PWAInstallPrompt = () => {
       setIsInstalled(true);
     } else {
       console.log('User dismissed the install prompt');
-      // Store dismissal time
-      localStorage.setItem('pwa-prompt-dismissed', Date.now().toString());
     }
 
     setDeferredPrompt(null);
@@ -107,7 +77,6 @@ const PWAInstallPrompt = () => {
 
   const handleDismiss = () => {
     setShowPrompt(false);
-    localStorage.setItem('pwa-prompt-dismissed', Date.now().toString());
   };
 
   // Don't show if already installed or if no prompt available
@@ -151,12 +120,12 @@ const styles = {
   container: {
     position: 'fixed',
     bottom: '15px',
-    right: '15px',
+    left: '15px',
     zIndex: 10000,
     display: 'flex',
     alignItems: 'center',
     gap: '0.5rem',
-    animation: 'slideInRight 0.3s ease-out'
+    animation: 'slideInLeft 0.3s ease-out'
   },
   installButton: {
     backgroundColor: '#27ae60',
@@ -202,9 +171,9 @@ const styles = {
 if (typeof document !== 'undefined') {
   const style = document.createElement('style');
   style.textContent = `
-    @keyframes slideInRight {
+    @keyframes slideInLeft {
       from {
-        transform: translateX(100%);
+        transform: translateX(-100%);
         opacity: 0;
       }
       to {
@@ -215,7 +184,7 @@ if (typeof document !== 'undefined') {
     @media (max-width: 768px) {
       [data-pwa-install-container] {
         bottom: 10px !important;
-        right: 10px !important;
+        left: 10px !important;
       }
       [data-pwa-install-button] {
         font-size: 0.75rem !important;

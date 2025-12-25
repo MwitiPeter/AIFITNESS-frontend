@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 
 const VoicePlayer = ({ exercise }) => {
   const [isSpeaking, setIsSpeaking] = useState(false);
-  const [isPaused, setIsPaused] = useState(false);
   const [speed, setSpeed] = useState(1.0);
   const [isSupported, setIsSupported] = useState(true);
   
@@ -36,28 +35,6 @@ const VoicePlayer = ({ exercise }) => {
   const handleSpeak = () => {
     if (!isSupported) return;
 
-    // If paused, try to resume
-    if (isPaused) {
-      try {
-        if (window.speechSynthesis.paused) {
-          window.speechSynthesis.resume();
-          setIsPaused(false);
-          setIsSpeaking(true);
-          return;
-        } else {
-          // Not actually paused, reset state and continue
-          setIsPaused(false);
-          setIsSpeaking(false);
-        }
-      } catch (error) {
-        console.error('Error resuming speech:', error);
-        // If resume fails, cancel and start fresh
-        window.speechSynthesis.cancel();
-        setIsPaused(false);
-        setIsSpeaking(false);
-      }
-    }
-
     // 2. CLEAR QUEUE: Always cancel before starting
     window.speechSynthesis.cancel();
 
@@ -79,14 +56,11 @@ const VoicePlayer = ({ exercise }) => {
 
       utterance.onstart = () => {
         setIsSpeaking(true);
-        setIsPaused(false);
-        // Ensure we can pause after it starts
         utteranceRef.current = utterance;
       };
 
       utterance.onend = () => {
         setIsSpeaking(false);
-        setIsPaused(false);
         utteranceRef.current = null;
       };
 
@@ -96,114 +70,16 @@ const VoicePlayer = ({ exercise }) => {
           console.error('SpeechSynthesis Error:', event.error);
         }
         setIsSpeaking(false);
-        setIsPaused(false);
         utteranceRef.current = null;
-      };
-
-      // Track pause/resume events if supported
-      utterance.onpause = () => {
-        setIsPaused(true);
-        setIsSpeaking(false);
-      };
-
-      utterance.onresume = () => {
-        setIsPaused(false);
-        setIsSpeaking(true);
       };
 
       window.speechSynthesis.speak(utterance);
     }, 100); 
   };
 
-  const handlePause = () => {
-    console.log('Pause button clicked', {
-      speaking: window.speechSynthesis.speaking,
-      pending: window.speechSynthesis.pending,
-      paused: window.speechSynthesis.paused,
-      hasUtterance: !!utteranceRef.current,
-      isSpeaking,
-      isPaused
-    });
-    
-    // Check if we have an active utterance and speech is actually happening
-    const isActive = (window.speechSynthesis.speaking || window.speechSynthesis.pending) && utteranceRef.current;
-    
-    if (isActive && !window.speechSynthesis.paused) {
-      try {
-        // Immediately update UI state for better UX
-        setIsPaused(true);
-        setIsSpeaking(false);
-        
-        // Call pause - some browsers need this to be called when speech is actively speaking
-        window.speechSynthesis.pause();
-        console.log('Pause called, checking state...');
-        
-        // Double-check and force pause if needed (browser compatibility)
-        setTimeout(() => {
-          const stillSpeaking = window.speechSynthesis.speaking;
-          const isPausedNow = window.speechSynthesis.paused;
-          
-          console.log('After pause attempt:', {
-            stillSpeaking,
-            isPausedNow,
-            pending: window.speechSynthesis.pending
-          });
-          
-          if (stillSpeaking && !isPausedNow) {
-            // Try pausing again - some browsers need multiple attempts
-            console.log('Pause didn\'t work, trying again...');
-            window.speechSynthesis.pause();
-            
-            // Check one more time
-            setTimeout(() => {
-              if (window.speechSynthesis.paused) {
-                setIsPaused(true);
-                setIsSpeaking(false);
-                console.log('Pause successful on retry');
-              } else if (!window.speechSynthesis.speaking && !window.speechSynthesis.pending) {
-                // Speech ended
-                setIsSpeaking(false);
-                setIsPaused(false);
-                console.log('Speech ended while pausing');
-              } else {
-                // Pause still didn't work - browser limitation
-                console.warn('Pause not supported - using stop instead');
-                handleStop();
-              }
-            }, 50);
-          } else if (isPausedNow) {
-            // Pause worked
-            setIsPaused(true);
-            setIsSpeaking(false);
-            console.log('Pause successful');
-          } else if (!stillSpeaking && !window.speechSynthesis.pending) {
-            // Speech ended
-            setIsSpeaking(false);
-            setIsPaused(false);
-            console.log('Speech ended');
-          }
-        }, 100);
-        
-      } catch (error) {
-        console.error('Error pausing speech:', error);
-        // On error, just stop
-        handleStop();
-      }
-    } else if (window.speechSynthesis.paused) {
-      // Already paused
-      setIsPaused(true);
-      setIsSpeaking(false);
-    } else {
-      // Not active, sync state
-      setIsSpeaking(false);
-      setIsPaused(false);
-    }
-  };
-
   const handleStop = () => {
     window.speechSynthesis.cancel();
     setIsSpeaking(false);
-    setIsPaused(false);
     utteranceRef.current = null;
   };
 
@@ -212,7 +88,7 @@ const VoicePlayer = ({ exercise }) => {
     localStorage.setItem('voiceSpeed', newSpeed);
     
     // Restart if currently active
-    if (isSpeaking || isPaused) {
+    if (isSpeaking) {
       handleStop();
       setTimeout(() => handleSpeak(), 200);
     }
@@ -230,25 +106,10 @@ const VoicePlayer = ({ exercise }) => {
   return (
     <div style={styles.container}>
       <div style={styles.controls}>
-        {!isSpeaking && !isPaused && (
+        {!isSpeaking && (
           <button onClick={handleSpeak} style={styles.button}>🔊 Listen</button>
         )}
-        {isPaused && (
-          <button onClick={handleSpeak} style={{...styles.button, ...styles.resumeButton}}>▶️ Resume</button>
-        )}
         {isSpeaking && (
-          <button 
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              handlePause();
-            }} 
-            style={{...styles.button, ...styles.pauseButton}}
-          >
-            ⏸️ Pause
-          </button>
-        )}
-        {(isSpeaking || isPaused) && (
           <button onClick={handleStop} style={{...styles.button, ...styles.stopButton}}>⏹️ Stop</button>
         )}
 
@@ -297,12 +158,6 @@ const styles = {
     color: 'white',
     transition: 'all 0.2s',
     fontWeight: '500'
-  },
-  resumeButton: {
-    backgroundColor: '#27ae60'
-  },
-  pauseButton: {
-    backgroundColor: '#f39c12'
   },
   stopButton: {
     backgroundColor: '#e74c3c'

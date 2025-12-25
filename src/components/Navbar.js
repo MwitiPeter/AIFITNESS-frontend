@@ -20,6 +20,7 @@ const Navbar = memo(() => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+
   const handleLogout = useCallback(() => {
     logout();
     navigate('/');

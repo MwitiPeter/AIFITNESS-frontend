@@ -1,10 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 const PWAInstallPrompt = () => {
   const [deferredPrompt, setDeferredPrompt] = useState(null);
   const [showPrompt, setShowPrompt] = useState(false);
   const [isInstalled, setIsInstalled] = useState(false);
-  const [dismissedUntil, setDismissedUntil] = useState(null);
+  const [isHovering, setIsHovering] = useState(false);
+  const stateRef = useRef({ deferredPrompt, showPrompt, isInstalled });
+
+  // Keep refs in sync with state
+  useEffect(() => {
+    stateRef.current = { deferredPrompt, showPrompt, isInstalled };
+  }, [deferredPrompt, showPrompt, isInstalled]);
 
   useEffect(() => {
     // Check if app is already installed
@@ -14,36 +20,16 @@ const PWAInstallPrompt = () => {
       return;
     }
 
-    // Check if user dismissed the prompt recently (within 24 hours)
-    const lastDismissed = localStorage.getItem('pwa-prompt-dismissed');
-    if (lastDismissed) {
-      const dismissedTime = parseInt(lastDismissed, 10);
-      const hoursSinceDismissed = (Date.now() - dismissedTime) / (1000 * 60 * 60);
-      
-      if (hoursSinceDismissed < 24) {
-        setDismissedUntil(new Date(dismissedTime + 24 * 60 * 60 * 1000));
-        return;
-      }
+    // Track when user enters the site
+    if (!sessionStorage.getItem('site-entry-time')) {
+      sessionStorage.setItem('site-entry-time', Date.now().toString());
     }
 
     // Listen for beforeinstallprompt event
     const handleBeforeInstallPrompt = (e) => {
       e.preventDefault();
       setDeferredPrompt(e);
-      
-      // Show prompt after a delay (3 seconds) or show immediately if user has been on site for a while
-      const timeOnSite = Date.now() - (parseInt(sessionStorage.getItem('site-entry-time') || Date.now(), 10));
-      const delay = timeOnSite > 30000 ? 2000 : 5000; // Show faster if user has been on site > 30 seconds
-      
-      setTimeout(() => {
-        setShowPrompt(true);
-      }, delay);
     };
-
-    // Track when user enters the site
-    if (!sessionStorage.getItem('site-entry-time')) {
-      sessionStorage.setItem('site-entry-time', Date.now().toString());
-    }
 
     window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
 
@@ -52,26 +38,48 @@ const PWAInstallPrompt = () => {
       setIsInstalled(true);
       setShowPrompt(false);
       localStorage.removeItem('pwa-prompt-dismissed');
+      localStorage.removeItem('pwa-prompt-last-shown');
     });
 
-    // Show prompt periodically (every 2 minutes if conditions are met)
-    const interval = setInterval(() => {
-      if (!isInstalled && deferredPrompt && !showPrompt) {
-        const lastShown = localStorage.getItem('pwa-prompt-last-shown');
-        const twoMinutesAgo = Date.now() - 2 * 60 * 1000;
-        
-        if (!lastShown || parseInt(lastShown, 10) < twoMinutesAgo) {
+    // Function to check and show prompt
+    const checkAndShowPrompt = () => {
+      const currentState = stateRef.current;
+      if (currentState.isInstalled || !currentState.deferredPrompt || currentState.showPrompt) return;
+      
+      const lastDismissed = localStorage.getItem('pwa-prompt-dismissed');
+      if (!lastDismissed) {
+        // First time - show after 2 minutes
+        const siteEntryTime = parseInt(sessionStorage.getItem('site-entry-time') || Date.now(), 10);
+        const minutesOnSite = (Date.now() - siteEntryTime) / (1000 * 60);
+        if (minutesOnSite >= 2) {
           setShowPrompt(true);
-          localStorage.setItem('pwa-prompt-last-shown', Date.now().toString());
+        }
+      } else {
+        // Check if enough time has passed since last dismissal (3 minutes)
+        const dismissedTime = parseInt(lastDismissed, 10);
+        const minutesSinceDismissed = (Date.now() - dismissedTime) / (1000 * 60);
+        if (minutesSinceDismissed >= 3) {
+          setShowPrompt(true);
         }
       }
-    }, 120000); // Check every 2 minutes
+    };
+
+    // Show prompt after 2 minutes of usage
+    const initialDelay = setTimeout(() => {
+      checkAndShowPrompt();
+    }, 2 * 60 * 1000); // 2 minutes
+
+    // Show prompt periodically (every minute to check conditions)
+    const interval = setInterval(() => {
+      checkAndShowPrompt();
+    }, 60000); // Check every minute
 
     return () => {
       window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
       clearInterval(interval);
+      clearTimeout(initialDelay);
     };
-  }, [deferredPrompt, isInstalled, showPrompt]);
+  }, []);
 
   const handleInstallClick = async () => {
     if (!deferredPrompt) {
@@ -100,187 +108,134 @@ const PWAInstallPrompt = () => {
   const handleDismiss = () => {
     setShowPrompt(false);
     localStorage.setItem('pwa-prompt-dismissed', Date.now().toString());
-    localStorage.setItem('pwa-prompt-last-shown', Date.now().toString());
   };
 
-  // Don't show if already installed or if dismissed recently
+  // Don't show if already installed or if no prompt available
   if (isInstalled || !showPrompt || !deferredPrompt) {
     return null;
   }
 
   return (
-    <div style={styles.overlay}>
-      <div style={styles.prompt}>
-        <div style={styles.header}>
-          <span style={styles.icon}>📱</span>
-          <h3 style={styles.title}>Install AI Fitness App</h3>
-          <button onClick={handleDismiss} style={styles.closeBtn} aria-label="Close">
-            ✕
-          </button>
-        </div>
-        
-        <div style={styles.content}>
-          <p style={styles.message}>
-            Install our app for a faster, more convenient experience! Get quick access to your workouts, 
-            track your progress offline, and receive notifications.
-          </p>
-          
-          <div style={styles.benefits}>
-            <div style={styles.benefit}>
-              <span style={styles.benefitIcon}>⚡</span>
-              <span>Faster Loading</span>
-            </div>
-            <div style={styles.benefit}>
-              <span style={styles.benefitIcon}>📴</span>
-              <span>Works Offline</span>
-            </div>
-            <div style={styles.benefit}>
-              <span style={styles.benefitIcon}>🔔</span>
-              <span>Notifications</span>
-            </div>
-          </div>
-        </div>
-
-        <div style={styles.actions}>
-          <button onClick={handleDismiss} style={styles.dismissBtn}>
-            Maybe Later
-          </button>
-          <button onClick={handleInstallClick} style={styles.installBtn}>
-            Install App
-          </button>
-        </div>
-      </div>
+    <div style={styles.container} data-pwa-install-container>
+      <button 
+        onClick={handleInstallClick} 
+        style={{
+          ...styles.installButton,
+          ...(isHovering ? styles.installButtonHover : {})
+        }}
+        onMouseEnter={() => setIsHovering(true)}
+        onMouseLeave={() => setIsHovering(false)}
+        data-pwa-install-button
+      >
+        Install App
+      </button>
+      <button 
+        onClick={handleDismiss} 
+        style={styles.closeButton}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.backgroundColor = 'rgba(0,0,0,0.7)';
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.backgroundColor = 'rgba(0,0,0,0.5)';
+        }}
+        aria-label="Close"
+        data-pwa-close-button
+      >
+        ✕
+      </button>
     </div>
   );
 };
 
 const styles = {
-  overlay: {
+  container: {
     position: 'fixed',
-    bottom: '20px',
-    left: '50%',
-    transform: 'translateX(-50%)',
+    bottom: '15px',
+    right: '15px',
     zIndex: 10000,
-    maxWidth: '400px',
-    width: 'calc(100% - 2rem)',
-    animation: 'slideUp 0.3s ease-out'
-  },
-  prompt: {
-    backgroundColor: 'white',
-    borderRadius: '12px',
-    boxShadow: '0 8px 24px rgba(0,0,0,0.2)',
-    padding: '1.5rem',
-    border: '2px solid #3498db'
-  },
-  header: {
     display: 'flex',
     alignItems: 'center',
-    marginBottom: '1rem',
-    position: 'relative'
+    gap: '0.5rem',
+    animation: 'slideInRight 0.3s ease-out'
   },
-  icon: {
-    fontSize: '2rem',
-    marginRight: '0.75rem'
+  installButton: {
+    backgroundColor: '#27ae60',
+    color: 'white',
+    border: 'none',
+    padding: '0.5rem 1rem',
+    borderRadius: '6px',
+    fontSize: '0.85rem',
+    fontWeight: '600',
+    cursor: 'pointer',
+    boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+    transition: 'all 0.2s',
+    whiteSpace: 'nowrap',
+    minHeight: '36px'
   },
-  title: {
-    margin: 0,
-    fontSize: '1.25rem',
-    color: '#2c3e50',
-    flex: 1
+  installButtonHover: {
+    backgroundColor: '#229954',
+    transform: 'scale(1.05)',
+    boxShadow: '0 4px 12px rgba(0,0,0,0.2)'
   },
-  closeBtn: {
-    position: 'absolute',
-    top: '-0.5rem',
-    right: '-0.5rem',
-    backgroundColor: '#e74c3c',
+  closeButton: {
+    backgroundColor: 'rgba(0,0,0,0.5)',
     color: 'white',
     border: 'none',
     borderRadius: '50%',
-    width: '28px',
-    height: '28px',
+    width: '24px',
+    height: '24px',
     cursor: 'pointer',
-    fontSize: '1rem',
+    fontSize: '0.75rem',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    padding: 0
+    padding: 0,
+    transition: 'background-color 0.2s',
+    flexShrink: 0
   },
-  content: {
-    marginBottom: '1.5rem'
-  },
-  message: {
-    color: '#555',
-    fontSize: '0.95rem',
-    lineHeight: '1.5',
-    marginBottom: '1rem'
-  },
-  benefits: {
-    display: 'flex',
-    gap: '1rem',
-    flexWrap: 'wrap',
-    justifyContent: 'space-around'
-  },
-  benefit: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    gap: '0.5rem',
-    fontSize: '0.85rem',
-    color: '#555'
-  },
-  benefitIcon: {
-    fontSize: '1.5rem'
-  },
-  actions: {
-    display: 'flex',
-    gap: '0.75rem'
-  },
-  dismissBtn: {
-    flex: 1,
-    padding: '0.75rem',
-    backgroundColor: '#ecf0f1',
-    color: '#2c3e50',
-    border: 'none',
-    borderRadius: '6px',
-    fontSize: '0.95rem',
-    fontWeight: '600',
-    cursor: 'pointer',
-    minHeight: '44px',
-    transition: 'background-color 0.2s'
-  },
-  installBtn: {
-    flex: 2,
-    padding: '0.75rem',
-    backgroundColor: '#3498db',
-    color: 'white',
-    border: 'none',
-    borderRadius: '6px',
-    fontSize: '0.95rem',
-    fontWeight: 'bold',
-    cursor: 'pointer',
-    minHeight: '44px',
-    transition: 'background-color 0.2s'
+  closeButtonHover: {
+    backgroundColor: 'rgba(0,0,0,0.7)'
   }
 };
 
-// Add slide-up animation
+// Add slide-in animation and responsive styles
 if (typeof document !== 'undefined') {
   const style = document.createElement('style');
   style.textContent = `
-    @keyframes slideUp {
+    @keyframes slideInRight {
       from {
-        transform: translateX(-50%) translateY(100%);
+        transform: translateX(100%);
         opacity: 0;
       }
       to {
-        transform: translateX(-50%) translateY(0);
+        transform: translateX(0);
         opacity: 1;
       }
     }
+    @media (max-width: 768px) {
+      [data-pwa-install-container] {
+        bottom: 10px !important;
+        right: 10px !important;
+      }
+      [data-pwa-install-button] {
+        font-size: 0.75rem !important;
+        padding: 0.4rem 0.8rem !important;
+        min-height: 32px !important;
+      }
+      [data-pwa-close-button] {
+        width: 20px !important;
+        height: 20px !important;
+        font-size: 0.7rem !important;
+      }
+    }
   `;
-  document.head.appendChild(style);
+  if (!document.head.querySelector('style[data-pwa-animation]')) {
+    style.setAttribute('data-pwa-animation', 'true');
+    document.head.appendChild(style);
+  }
 }
 
 export default PWAInstallPrompt;
+
 
 

@@ -36,15 +36,24 @@ const VoicePlayer = ({ exercise }) => {
   const handleSpeak = () => {
     if (!isSupported) return;
 
+    // If paused, try to resume
+    if (isPaused && window.speechSynthesis.paused) {
+      try {
+        window.speechSynthesis.resume();
+        setIsPaused(false);
+        setIsSpeaking(true);
+        return;
+      } catch (error) {
+        console.error('Error resuming speech:', error);
+        // If resume fails, cancel and start fresh
+        window.speechSynthesis.cancel();
+        setIsPaused(false);
+        setIsSpeaking(false);
+      }
+    }
+
     // 2. CLEAR QUEUE: Always cancel before starting
     window.speechSynthesis.cancel();
-
-    if (isPaused) {
-      window.speechSynthesis.resume();
-      setIsPaused(false);
-      setIsSpeaking(true);
-      return;
-    }
 
     // 3. ASYNC DELAY: Small timeout ensures the 'cancel' above finished 
     // and the audio hardware is released.
@@ -70,6 +79,7 @@ const VoicePlayer = ({ exercise }) => {
       utterance.onend = () => {
         setIsSpeaking(false);
         setIsPaused(false);
+        utteranceRef.current = null;
       };
 
       utterance.onerror = (event) => {
@@ -79,6 +89,18 @@ const VoicePlayer = ({ exercise }) => {
         }
         setIsSpeaking(false);
         setIsPaused(false);
+        utteranceRef.current = null;
+      };
+
+      // Track pause/resume events if supported
+      utterance.onpause = () => {
+        setIsPaused(true);
+        setIsSpeaking(false);
+      };
+
+      utterance.onresume = () => {
+        setIsPaused(false);
+        setIsSpeaking(true);
       };
 
       window.speechSynthesis.speak(utterance);
@@ -86,10 +108,52 @@ const VoicePlayer = ({ exercise }) => {
   };
 
   const handlePause = () => {
-    if (window.speechSynthesis.speaking) {
-      window.speechSynthesis.pause();
+    // Check if speech is actually active
+    const isActive = window.speechSynthesis.speaking || window.speechSynthesis.pending;
+    const alreadyPaused = window.speechSynthesis.paused;
+    
+    // Only pause if actively speaking and not already paused
+    if (isActive && !alreadyPaused) {
+      try {
+        // Call pause
+        window.speechSynthesis.pause();
+        
+        // Update state optimistically
+        setIsPaused(true);
+        setIsSpeaking(false);
+        
+        // Verify pause was successful after a brief delay
+        setTimeout(() => {
+          const stillPaused = window.speechSynthesis.paused;
+          const stillSpeaking = window.speechSynthesis.speaking;
+          
+          if (!stillPaused && stillSpeaking) {
+            // Pause didn't work, might need to stop instead
+            console.warn('Pause command did not take effect');
+            // Keep the paused state but mark as speaking if it's still going
+            if (stillSpeaking) {
+              setIsPaused(false);
+              setIsSpeaking(true);
+            }
+          } else if (stillPaused) {
+            // Pause worked, ensure state is correct
+            setIsPaused(true);
+            setIsSpeaking(false);
+          }
+        }, 150);
+      } catch (error) {
+        console.error('Error pausing speech:', error);
+        // Fallback: stop instead of pause
+        handleStop();
+      }
+    } else if (alreadyPaused) {
+      // Already paused, state should already be correct
       setIsPaused(true);
       setIsSpeaking(false);
+    } else if (!isActive && isSpeaking) {
+      // State mismatch - speech ended but state wasn't updated
+      setIsSpeaking(false);
+      setIsPaused(false);
     }
   };
 
@@ -97,6 +161,7 @@ const VoicePlayer = ({ exercise }) => {
     window.speechSynthesis.cancel();
     setIsSpeaking(false);
     setIsPaused(false);
+    utteranceRef.current = null;
   };
 
   const handleSpeedChange = (newSpeed) => {

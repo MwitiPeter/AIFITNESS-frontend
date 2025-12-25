@@ -8,7 +8,7 @@ const ExerciseDetails = ({ exercise }) => {
     if (!instructions) return null;
 
     const sections = {
-      steps: '',
+      steps: [],
       muscles: '',
       doThis: '',
       avoid: '',
@@ -20,7 +20,21 @@ const ExerciseDetails = ({ exercise }) => {
 
     // Extract sections using markers
     if (instructions.includes('📋 STEPS:')) {
-      sections.steps = instructions.split('📋 STEPS:')[1]?.split('.')[0] || '';
+      const stepsSection = instructions.split('📋 STEPS:')[1];
+      if (stepsSection) {
+        // Extract all numbered steps (1), 2), 3), etc. or 1. 2. 3. etc.)
+        const stepMatches = stepsSection.match(/\d+[\.)]\s+[^0-9]+/g);
+        if (stepMatches && stepMatches.length > 0) {
+          sections.steps = stepMatches.map(step => step.replace(/^\d+[\.)]\s+/, '').trim());
+        } else {
+          // Fallback: split by periods and filter out empty strings
+          const allSteps = stepsSection.split(/\.\s*(?=\d+[\.)])|\.\s*(?=💪|🫁|✅|❌|⚡|🔥|⚠)/);
+          sections.steps = allSteps
+            .filter(step => step.trim() && !step.match(/^(💪|🫁|✅|❌|⚡|🔥|⚠)/))
+            .map(step => step.trim())
+            .filter(step => step.length > 0);
+        }
+      }
     }
     if (instructions.includes('💪 MUSCLES:')) {
       sections.muscles = instructions.match(/💪 MUSCLES:([^.]*)/)?.[1] || '';
@@ -38,6 +52,16 @@ const ExerciseDetails = ({ exercise }) => {
     return sections;
   };
 
+  // Get step-by-step instructions - prioritize stepByStep array if available
+  const getStepByStepInstructions = () => {
+    if (exercise.stepByStep && Array.isArray(exercise.stepByStep) && exercise.stepByStep.length > 0) {
+      return exercise.stepByStep;
+    }
+    const sections = parseInstructions(exercise.instructions);
+    return sections?.steps || [];
+  };
+
+  const stepByStepList = getStepByStepInstructions();
   const sections = parseInstructions(exercise.instructions);
 
   return (
@@ -72,10 +96,16 @@ const ExerciseDetails = ({ exercise }) => {
       {isExpanded && sections && (
         <div style={styles.details}>
           {/* Step-by-Step */}
-          {sections.steps && (
+          {stepByStepList.length > 0 && (
             <div style={styles.section}>
               <h4 style={styles.sectionTitle}>📋 Step-by-Step Instructions</h4>
-              <p style={styles.sectionContent}>{sections.steps.trim()}</p>
+              <ol style={styles.stepsList}>
+                {stepByStepList.map((step, index) => (
+                  <li key={index} style={styles.stepItem}>
+                    {step}
+                  </li>
+                ))}
+              </ol>
             </div>
           )}
 
@@ -218,6 +248,17 @@ const styles = {
     fontSize: '0.9rem',
     color: '#555',
     lineHeight: '1.6'
+  },
+  stepsList: {
+    margin: '0.5rem 0 0 0',
+    paddingLeft: '1.5rem',
+    fontSize: '0.9rem',
+    color: '#555',
+    lineHeight: '1.8'
+  },
+  stepItem: {
+    marginBottom: '0.5rem',
+    paddingLeft: '0.5rem'
   },
   modificationsGrid: {
     display: 'grid',

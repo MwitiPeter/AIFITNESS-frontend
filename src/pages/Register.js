@@ -139,35 +139,34 @@ const styles = {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    background: 'linear-gradient(135deg, #0f4c3a 0%, #1a5f4a 25%, #2d7a5f 50%, #1a5f4a 75%, #0f4c3a 100%)',
+    background: 'linear-gradient(180deg, #000000 0%, #1a1a1a 50%, #000000 100%)',
     padding: 'clamp(1rem, 4vw, 2rem)'
   },
   formCard: {
-    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+    backgroundColor: '#1a1a1a',
     padding: 'clamp(1.5rem, 4vw, 2.5rem)',
     borderRadius: '20px',
-    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
+    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.8)',
     width: '100%',
     maxWidth: '420px',
     boxSizing: 'border-box',
-    backdropFilter: 'blur(10px)',
-    border: '1px solid rgba(255, 255, 255, 0.2)'
+    border: '1px solid #2d2d2d'
   },
   title: {
     textAlign: 'center',
     marginBottom: 'clamp(1.5rem, 4vw, 2rem)',
-    color: '#1a5f4a',
+    color: '#ffffff',
     fontSize: 'clamp(1.5rem, 4vw, 2rem)',
     fontWeight: '700'
   },
   error: {
-    backgroundColor: '#ffebee',
-    color: '#c62828',
+    backgroundColor: '#2d1a1a',
+    color: '#ff6b6b',
     padding: '0.75rem',
     borderRadius: '8px',
     marginBottom: '1rem',
     textAlign: 'center',
-    border: '1px solid #ffcdd2',
+    border: '1px solid #ff6b6b',
     fontSize: '0.9rem'
   },
   form: {
@@ -181,43 +180,44 @@ const styles = {
   },
   label: {
     marginBottom: '0.5rem',
-    color: '#2c3e50',
+    color: '#ffffff',
     fontWeight: '600',
     fontSize: '0.95rem'
   },
   input: {
     padding: 'clamp(0.75rem, 2vw, 0.875rem)',
-    border: '2px solid #e0e0e0',
+    border: '1px solid #2d2d2d',
     borderRadius: '10px',
     fontSize: '16px',
     width: '100%',
     boxSizing: 'border-box',
     minHeight: '44px',
     transition: 'border-color 0.3s ease',
-    backgroundColor: '#ffffff'
+    backgroundColor: '#0a0a0a',
+    color: '#ffffff'
   },
   submitBtn: {
-    backgroundColor: '#4caf50',
-    color: 'white',
+    backgroundColor: '#FFD700',
+    color: '#000000',
     padding: 'clamp(0.75rem, 2vw, 0.875rem)',
     border: 'none',
     borderRadius: '10px',
     fontSize: 'clamp(0.95rem, 2.5vw, 1rem)',
-    fontWeight: '600',
+    fontWeight: '700',
     cursor: 'pointer',
     marginTop: '1rem',
     width: '100%',
     minHeight: '44px',
-    boxShadow: '0 4px 15px rgba(76, 175, 80, 0.3)',
+    boxShadow: '0 4px 20px rgba(255, 215, 0, 0.4)',
     transition: 'all 0.3s ease'
   },
   footer: {
     textAlign: 'center',
     marginTop: '1.5rem',
-    color: '#555'
+    color: '#999'
   },
   link: {
-    color: '#4caf50',
+    color: '#FFD700',
     textDecoration: 'none',
     fontWeight: '600',
     transition: 'color 0.3s ease'

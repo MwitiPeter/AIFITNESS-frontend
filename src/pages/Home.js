@@ -8,7 +8,11 @@ const Home = () => {
   return (
     <div style={styles.container}>
       <div style={styles.hero}>
-        <h1 style={styles.title}>Welcome to AI Fitness App 💪</h1>
+        <h1 style={styles.title}>
+          BE HEALTHY<br />
+          BE STRONGER<br />
+          BE YOURSELF
+        </h1>
         <p style={styles.subtitle}>
           Get personalized workout plans powered by AI
         </p>
@@ -41,10 +45,10 @@ const Home = () => {
           ) : (
             <>
               <Link to="/register" style={styles.primaryBtn}>
-                Get Started
+                Join Now
               </Link>
               <Link to="/login" style={styles.secondaryBtn}>
-                Login
+                Log In
               </Link>
             </>
           )}
@@ -57,7 +61,7 @@ const Home = () => {
 const styles = {
   container: {
     minHeight: 'calc(100vh - 70px)',
-    background: 'linear-gradient(135deg, #0f4c3a 0%, #1a5f4a 25%, #2d7a5f 50%, #1a5f4a 75%, #0f4c3a 100%)',
+    background: 'linear-gradient(180deg, #000000 0%, #1a1a1a 50%, #000000 100%)',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -73,19 +77,22 @@ const styles = {
     zIndex: 1
   },
   title: {
-    fontSize: 'clamp(1.75rem, 6vw, 3rem)',
+    fontSize: 'clamp(2rem, 8vw, 4rem)',
     marginBottom: '1rem',
-    fontWeight: '700',
+    fontWeight: '800',
     wordWrap: 'break-word',
     color: '#ffffff',
-    textShadow: '0 2px 10px rgba(0,0,0,0.3)'
+    textShadow: '0 4px 20px rgba(0,0,0,0.8)',
+    letterSpacing: '-0.02em',
+    lineHeight: '1.1'
   },
   subtitle: {
     fontSize: 'clamp(1rem, 3vw, 1.5rem)',
     marginBottom: 'clamp(2rem, 6vw, 3rem)',
-    opacity: 0.95,
-    color: '#e8f5e9',
-    fontWeight: '400'
+    opacity: 0.9,
+    color: '#ffffff',
+    fontWeight: '400',
+    letterSpacing: '0.02em'
   },
   features: {
     display: 'grid',
@@ -94,13 +101,12 @@ const styles = {
     marginBottom: 'clamp(2rem, 6vw, 3rem)'
   },
   feature: {
-    backgroundColor: 'rgba(255, 255, 255, 0.08)',
+    backgroundColor: '#1a1a1a',
     padding: 'clamp(1.5rem, 4vw, 2rem)',
-    borderRadius: '16px',
-    backdropFilter: 'blur(20px)',
-    border: '1px solid rgba(255, 255, 255, 0.1)',
-    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.2)',
-    transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+    borderRadius: '20px',
+    border: '1px solid #2d2d2d',
+    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.5)',
+    transition: 'transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease',
     color: '#ffffff'
   },
   icon: {
@@ -115,37 +121,37 @@ const styles = {
     flexWrap: 'wrap'
   },
   primaryBtn: {
-    backgroundColor: '#4caf50',
-    color: '#ffffff',
+    backgroundColor: '#FFD700',
+    color: '#000000',
     padding: 'clamp(0.875rem, 2vw, 1rem) clamp(1.5rem, 4vw, 2rem)',
     borderRadius: '12px',
     textDecoration: 'none',
     fontSize: 'clamp(0.95rem, 3vw, 1.1rem)',
-    fontWeight: '600',
+    fontWeight: '700',
     transition: 'all 0.3s ease',
     display: 'inline-block',
     minHeight: '44px',
     minWidth: '120px',
     textAlign: 'center',
-    boxShadow: '0 4px 15px rgba(76, 175, 80, 0.4)',
+    boxShadow: '0 4px 20px rgba(255, 215, 0, 0.4)',
     border: 'none',
-    cursor: 'pointer'
+    cursor: 'pointer',
+    letterSpacing: '0.02em'
   },
   secondaryBtn: {
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    backgroundColor: '#2d2d2d',
     color: '#ffffff',
     padding: 'clamp(0.875rem, 2vw, 1rem) clamp(1.5rem, 4vw, 2rem)',
     borderRadius: '12px',
     textDecoration: 'none',
     fontSize: 'clamp(0.95rem, 3vw, 1.1rem)',
     fontWeight: '600',
-    border: '2px solid rgba(255, 255, 255, 0.3)',
+    border: '1px solid #404040',
     transition: 'all 0.3s ease',
     display: 'inline-block',
     minHeight: '44px',
     minWidth: '120px',
-    textAlign: 'center',
-    backdropFilter: 'blur(10px)'
+    textAlign: 'center'
   }
 };
 

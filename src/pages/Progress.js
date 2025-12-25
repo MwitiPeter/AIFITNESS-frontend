@@ -288,7 +288,7 @@ const Progress = () => {
 const styles = {
   container: {
     minHeight: 'calc(100vh - 70px)',
-    background: 'linear-gradient(135deg, #0f4c3a 0%, #1a5f4a 25%, #2d7a5f 50%, #1a5f4a 75%, #0f4c3a 100%)',
+    background: 'linear-gradient(180deg, #000000 0%, #1a1a1a 50%, #000000 100%)',
     padding: 'clamp(1rem, 4vw, 2rem)'
   },
   content: {
@@ -313,33 +313,32 @@ const styles = {
     textShadow: '0 2px 10px rgba(0,0,0,0.3)'
   },
   subtitle: {
-    color: '#e8f5e9',
+    color: '#999',
     fontSize: 'clamp(0.9rem, 3vw, 1.1rem)',
     opacity: 0.9
   },
   backBtn: {
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    backgroundColor: '#2d2d2d',
     color: '#ffffff',
     padding: '0.75rem 1.5rem',
-    border: '1px solid rgba(255, 255, 255, 0.3)',
+    border: '1px solid #404040',
     borderRadius: '10px',
     fontSize: '1rem',
     cursor: 'pointer',
     fontWeight: '600',
-    transition: 'all 0.3s ease',
-    backdropFilter: 'blur(10px)'
+    transition: 'all 0.3s ease'
   },
   error: {
-    backgroundColor: '#ffebee',
-    color: '#c62828',
+    backgroundColor: '#2d1a1a',
+    color: '#ff6b6b',
     padding: '1rem',
     borderRadius: '12px',
     marginBottom: '1rem',
     textAlign: 'center',
-    border: '1px solid #ffcdd2'
+    border: '1px solid #ff6b6b'
   },
   timeframeCard: {
-    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+    backgroundColor: '#1a1a1a',
     borderRadius: '20px',
     padding: '1.5rem',
     marginBottom: '2rem',
@@ -347,12 +346,11 @@ const styles = {
     alignItems: 'center',
     gap: '1rem',
     flexWrap: 'wrap',
-    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
-    backdropFilter: 'blur(10px)',
-    border: '1px solid rgba(255, 255, 255, 0.2)'
+    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.8)',
+    border: '1px solid #2d2d2d'
   },
   timeframeLabel: {
-    color: '#1a5f4a',
+    color: '#ffffff',
     fontWeight: '600',
     fontSize: '1rem'
   },
@@ -361,10 +359,10 @@ const styles = {
     gap: '0.5rem'
   },
   timeframeBtn: {
-    backgroundColor: '#f1f8f4',
-    color: '#1a5f4a',
+    backgroundColor: '#0a0a0a',
+    color: '#ffffff',
     padding: '0.5rem 1rem',
-    border: '2px solid #e8f5e9',
+    border: '1px solid #2d2d2d',
     borderRadius: '10px',
     fontSize: '0.95rem',
     cursor: 'pointer',
@@ -372,10 +370,10 @@ const styles = {
     fontWeight: '500'
   },
   timeframeBtnActive: {
-    backgroundColor: '#4caf50',
-    color: 'white',
-    borderColor: '#4caf50',
-    boxShadow: '0 2px 8px rgba(76, 175, 80, 0.3)'
+    backgroundColor: '#FFD700',
+    color: '#000000',
+    borderColor: '#FFD700',
+    boxShadow: '0 2px 8px rgba(255, 215, 0, 0.3)'
   },
   statsGrid: {
     display: 'grid',
@@ -384,15 +382,14 @@ const styles = {
     marginBottom: 'clamp(1rem, 4vw, 2rem)'
   },
   statCard: {
-    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+    backgroundColor: '#1a1a1a',
     borderRadius: '16px',
     padding: '1.5rem',
     display: 'flex',
     alignItems: 'center',
     gap: '1rem',
-    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
-    backdropFilter: 'blur(10px)',
-    border: '1px solid rgba(255, 255, 255, 0.2)',
+    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.8)',
+    border: '1px solid #2d2d2d',
     transition: 'transform 0.3s ease'
   },
   statIcon: {
@@ -402,30 +399,29 @@ const styles = {
     flex: 1
   },
   statValue: {
-    color: '#1a5f4a',
+    color: '#FFD700',
     fontSize: '2rem',
     fontWeight: '700',
     margin: '0 0 0.25rem 0'
   },
   statLabel: {
-    color: '#555',
+    color: '#999',
     fontSize: '0.9rem',
     margin: 0,
     fontWeight: '500'
   },
   card: {
-    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+    backgroundColor: '#1a1a1a',
     borderRadius: '20px',
     padding: 'clamp(1rem, 4vw, 2rem)',
     marginBottom: 'clamp(1rem, 4vw, 2rem)',
-    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
+    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.8)',
     width: '100%',
     boxSizing: 'border-box',
-    backdropFilter: 'blur(10px)',
-    border: '1px solid rgba(255, 255, 255, 0.2)'
+    border: '1px solid #2d2d2d'
   },
   cardTitle: {
-    color: '#1a5f4a',
+    color: '#ffffff',
     fontSize: 'clamp(1.3rem, 4vw, 1.8rem)',
     marginBottom: 'clamp(1rem, 3vw, 1.5rem)',
     wordWrap: 'break-word',
@@ -441,16 +437,16 @@ const styles = {
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: '1rem',
-    backgroundColor: '#f1f8f4',
+    backgroundColor: '#0a0a0a',
     borderRadius: '12px',
-    border: '1px solid rgba(76, 175, 80, 0.2)'
+    border: '1px solid #2d2d2d'
   },
   averageLabel: {
-    color: '#555',
+    color: '#999',
     fontWeight: '600'
   },
   averageValue: {
-    color: '#4caf50',
+    color: '#FFD700',
     fontSize: '1.2rem',
     fontWeight: '700'
   },
@@ -459,20 +455,20 @@ const styles = {
     padding: '3rem'
   },
   emptyText: {
-    color: '#555',
+    color: '#999',
     fontSize: '1.1rem',
     marginBottom: '1.5rem'
   },
   primaryBtn: {
-    backgroundColor: '#4caf50',
-    color: 'white',
+    backgroundColor: '#FFD700',
+    color: '#000000',
     padding: '0.75rem 1.5rem',
     border: 'none',
     borderRadius: '10px',
     fontSize: '1rem',
     cursor: 'pointer',
-    fontWeight: '600',
-    boxShadow: '0 4px 15px rgba(76, 175, 80, 0.3)',
+    fontWeight: '700',
+    boxShadow: '0 4px 20px rgba(255, 215, 0, 0.4)',
     transition: 'all 0.3s ease'
   },
   logsList: {
@@ -481,11 +477,11 @@ const styles = {
     gap: '1.5rem'
   },
   logCard: {
-    border: '2px solid #e8f5e9',
+    border: '1px solid #2d2d2d',
     borderRadius: '16px',
     padding: '1.5rem',
-    backgroundColor: '#f1f8f4',
-    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)'
+    backgroundColor: '#0a0a0a',
+    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.5)'
   },
   logHeader: {
     display: 'flex',
@@ -498,13 +494,13 @@ const styles = {
     gap: '1rem'
   },
   logDay: {
-    color: '#1a5f4a',
+    color: '#ffffff',
     fontSize: '1.3rem',
     margin: '0 0 0.25rem 0',
     fontWeight: '700'
   },
   logDate: {
-    color: '#555',
+    color: '#999',
     fontSize: '0.9rem',
     margin: 0
   },
@@ -514,22 +510,22 @@ const styles = {
     flexWrap: 'wrap'
   },
   completedBadge: {
-    backgroundColor: '#4caf50',
-    color: 'white',
+    backgroundColor: '#FFD700',
+    color: '#000000',
     padding: '0.25rem 0.75rem',
     borderRadius: '15px',
     fontSize: '0.85rem',
     fontWeight: '600',
-    boxShadow: '0 2px 4px rgba(76, 175, 80, 0.3)'
+    boxShadow: '0 2px 4px rgba(255, 215, 0, 0.3)'
   },
   moodBadge: {
-    backgroundColor: '#4caf50',
-    color: 'white',
+    backgroundColor: '#FFD700',
+    color: '#000000',
     padding: '0.25rem 0.75rem',
     borderRadius: '15px',
     fontSize: '0.85rem',
     fontWeight: '600',
-    boxShadow: '0 2px 4px rgba(76, 175, 80, 0.3)'
+    boxShadow: '0 2px 4px rgba(255, 215, 0, 0.3)'
   },
   logStats: {
     display: 'grid',
@@ -542,13 +538,13 @@ const styles = {
     flexDirection: 'column'
   },
   logStatLabel: {
-    color: '#555',
+    color: '#999',
     fontSize: '0.85rem',
     marginBottom: '0.25rem',
     fontWeight: '500'
   },
   logStatValue: {
-    color: '#1a5f4a',
+    color: '#FFD700',
     fontSize: '1.1rem',
     fontWeight: '700'
   },
@@ -559,7 +555,7 @@ const styles = {
     marginBottom: '1rem'
   },
   logRatingLabel: {
-    color: '#555',
+    color: '#999',
     fontSize: '0.9rem',
     fontWeight: '600'
   },
@@ -578,7 +574,7 @@ const styles = {
     marginBottom: '1rem'
   },
   exercisesSummaryTitle: {
-    color: '#555',
+    color: '#999',
     fontSize: '0.9rem',
     fontWeight: '600',
     marginBottom: '0.5rem'
@@ -589,43 +585,42 @@ const styles = {
     gap: '0.5rem'
   },
   exerciseTag: {
-    backgroundColor: '#e8f5e9',
-    color: '#1a5f4a',
+    backgroundColor: '#1a1a00',
+    color: '#FFD700',
     padding: '0.25rem 0.75rem',
     borderRadius: '15px',
     fontSize: '0.85rem',
     fontWeight: '500',
-    border: '1px solid rgba(76, 175, 80, 0.3)'
+    border: '1px solid rgba(255, 215, 0, 0.3)'
   },
   logNotes: {
-    backgroundColor: '#ffffff',
+    backgroundColor: '#1a1a1a',
     padding: '1rem',
     borderRadius: '10px',
     marginTop: '1rem',
-    border: '1px solid #e8f5e9'
+    border: '1px solid #2d2d2d'
   },
   logNotesLabel: {
-    color: '#1a5f4a',
+    color: '#ffffff',
     fontSize: '0.9rem',
     fontWeight: '600',
     marginBottom: '0.5rem'
   },
   logNotesText: {
-    color: '#2c3e50',
+    color: '#ffffff',
     fontSize: '0.95rem',
     margin: 0,
     lineHeight: '1.5'
   },
   actionsCard: {
-    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+    backgroundColor: '#1a1a1a',
     borderRadius: '20px',
     padding: '1.5rem',
-    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
-    backdropFilter: 'blur(10px)',
-    border: '1px solid rgba(255, 255, 255, 0.2)'
+    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.8)',
+    border: '1px solid #2d2d2d'
   },
   actionsTitle: {
-    color: '#1a5f4a',
+    color: '#ffffff',
     fontSize: '1.3rem',
     marginBottom: '1rem',
     fontWeight: '700'
@@ -636,16 +631,16 @@ const styles = {
     gap: '1rem'
   },
   actionBtn: {
-    backgroundColor: '#4caf50',
-    color: 'white',
+    backgroundColor: '#FFD700',
+    color: '#000000',
     padding: '1rem',
     border: 'none',
     borderRadius: '10px',
     fontSize: '1rem',
-    fontWeight: '600',
+    fontWeight: '700',
     cursor: 'pointer',
     transition: 'all 0.3s ease',
-    boxShadow: '0 4px 15px rgba(76, 175, 80, 0.3)'
+    boxShadow: '0 4px 20px rgba(255, 215, 0, 0.4)'
   }
 };
 

@@ -249,7 +249,7 @@ const Dashboard = React.memo(() => {
 const styles = {
   container: {
     minHeight: 'calc(100vh - 70px)',
-    background: 'linear-gradient(135deg, #0f4c3a 0%, #1a5f4a 25%, #2d7a5f 50%, #1a5f4a 75%, #0f4c3a 100%)',
+    background: 'linear-gradient(180deg, #000000 0%, #1a1a1a 50%, #000000 100%)',
     padding: 'clamp(1rem, 4vw, 2rem)'
   },
   content: {
@@ -274,29 +274,28 @@ const styles = {
     textShadow: '0 2px 10px rgba(0,0,0,0.3)'
   },
   subtitle: {
-    color: '#e8f5e9',
+    color: '#999',
     fontSize: 'clamp(0.9rem, 3vw, 1.1rem)',
     opacity: 0.9
   },
   error: {
-    backgroundColor: '#ffebee',
-    color: '#c62828',
+    backgroundColor: '#2d1a1a',
+    color: '#ff6b6b',
     padding: '1rem',
     borderRadius: '12px',
     marginBottom: '1rem',
     textAlign: 'center',
-    border: '1px solid #ffcdd2'
+    border: '1px solid #ff6b6b'
   },
   card: {
-    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+    backgroundColor: '#1a1a1a',
     borderRadius: '20px',
-    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
+    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.8)',
     padding: 'clamp(1rem, 4vw, 2rem)',
     marginBottom: 'clamp(1rem, 4vw, 2rem)',
     width: '100%',
     boxSizing: 'border-box',
-    backdropFilter: 'blur(10px)',
-    border: '1px solid rgba(255, 255, 255, 0.2)'
+    border: '1px solid #2d2d2d'
   },
   cardHeader: {
     display: 'flex',
@@ -307,7 +306,7 @@ const styles = {
     gap: '1rem'
   },
   cardTitle: {
-    color: '#1a5f4a',
+    color: '#ffffff',
     fontSize: 'clamp(1.3rem, 4vw, 1.8rem)',
     marginBottom: '1rem',
     wordWrap: 'break-word',
@@ -322,18 +321,18 @@ const styles = {
     display: 'flex',
     flexDirection: 'column',
     padding: '1rem',
-    backgroundColor: '#f1f8f4',
+    backgroundColor: '#0a0a0a',
     borderRadius: '12px',
-    border: '1px solid rgba(76, 175, 80, 0.2)'
+    border: '1px solid #2d2d2d'
   },
   profileLabel: {
-    color: '#555',
+    color: '#999',
     fontSize: '0.9rem',
     marginBottom: '0.5rem',
     fontWeight: '500'
   },
   profileValue: {
-    color: '#1a5f4a',
+    color: '#FFD700',
     fontSize: '1.1rem',
     fontWeight: '700'
   },
@@ -347,26 +346,26 @@ const styles = {
     marginBottom: '1rem'
   },
   emptyTitle: {
-    color: '#1a5f4a',
+    color: '#ffffff',
     fontSize: '2rem',
     marginBottom: '1rem',
     fontWeight: '700'
   },
   emptyText: {
-    color: '#555',
+    color: '#999',
     fontSize: '1.1rem',
     marginBottom: '2rem',
     maxWidth: '500px',
     margin: '0 auto 2rem'
   },
   generateBtn: {
-    backgroundColor: '#4caf50',
-    color: 'white',
+    backgroundColor: '#FFD700',
+    color: '#000000',
     padding: 'clamp(0.875rem, 2vw, 1rem) clamp(1.5rem, 4vw, 2rem)',
     border: 'none',
     borderRadius: '12px',
     fontSize: 'clamp(0.95rem, 3vw, 1.1rem)',
-    fontWeight: '600',
+    fontWeight: '700',
     cursor: 'pointer',
     display: 'inline-flex',
     alignItems: 'center',
@@ -375,19 +374,19 @@ const styles = {
     width: '100%',
     maxWidth: '400px',
     justifyContent: 'center',
-    boxShadow: '0 4px 15px rgba(76, 175, 80, 0.4)',
+    boxShadow: '0 4px 20px rgba(255, 215, 0, 0.4)',
     transition: 'all 0.3s ease'
   },
   regenerateBtn: {
-    backgroundColor: '#4caf50',
-    color: 'white',
+    backgroundColor: '#FFD700',
+    color: '#000000',
     padding: '0.75rem 1.5rem',
     border: 'none',
     borderRadius: '10px',
     fontSize: '1rem',
-    fontWeight: '600',
+    fontWeight: '700',
     cursor: 'pointer',
-    boxShadow: '0 4px 15px rgba(76, 175, 80, 0.3)',
+    boxShadow: '0 4px 20px rgba(255, 215, 0, 0.4)',
     transition: 'all 0.3s ease'
   },
   spinner: {
@@ -402,16 +401,16 @@ const styles = {
   planInfo: {
     marginBottom: '2rem',
     paddingBottom: '1.5rem',
-    borderBottom: '2px solid #e8f5e9'
+    borderBottom: '1px solid #2d2d2d'
   },
   planName: {
-    color: '#1a5f4a',
+    color: '#ffffff',
     fontSize: '1.5rem',
     marginBottom: '0.5rem',
     fontWeight: '700'
   },
   planDescription: {
-    color: '#555',
+    color: '#999',
     fontSize: '1rem',
     marginBottom: '1rem'
   },
@@ -425,13 +424,13 @@ const styles = {
     flexDirection: 'column'
   },
   statLabel: {
-    color: '#757575',
+    color: '#999',
     fontSize: '0.9rem',
     marginBottom: '0.25rem',
     fontWeight: '500'
   },
   statValue: {
-    color: '#1a5f4a',
+    color: '#FFD700',
     fontSize: '1.1rem',
     fontWeight: '700'
   },
@@ -439,7 +438,7 @@ const styles = {
     marginTop: '2rem'
   },
   sectionTitle: {
-    color: '#1a5f4a',
+    color: '#ffffff',
     fontSize: '1.5rem',
     marginBottom: '1.5rem',
     fontWeight: '700'
@@ -450,12 +449,12 @@ const styles = {
     gap: 'clamp(1rem, 3vw, 1.5rem)'
   },
   workoutDay: {
-    border: '2px solid #e8f5e9',
+    border: '1px solid #2d2d2d',
     borderRadius: '16px',
     padding: '1.5rem',
-    backgroundColor: '#f1f8f4',
+    backgroundColor: '#0a0a0a',
     transition: 'transform 0.2s, box-shadow 0.2s',
-    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)'
+    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.5)'
   },
   dayHeader: {
     display: 'flex',
@@ -463,16 +462,16 @@ const styles = {
     alignItems: 'center',
     marginBottom: '1rem',
     paddingBottom: '0.75rem',
-    borderBottom: '1px solid rgba(76, 175, 80, 0.2)'
+    borderBottom: '1px solid #2d2d2d'
   },
   dayTitle: {
-    color: '#1a5f4a',
+    color: '#ffffff',
     fontSize: '1.2rem',
     margin: 0,
     fontWeight: '700'
   },
   dayDuration: {
-    color: '#4caf50',
+    color: '#FFD700',
     fontSize: '0.9rem',
     fontWeight: '600'
   },
@@ -480,7 +479,7 @@ const styles = {
     marginBottom: '1rem'
   },
   exerciseCount: {
-    color: '#555',
+    color: '#999',
     fontSize: '0.9rem',
     marginBottom: '0.5rem',
     fontWeight: '500'
@@ -493,17 +492,17 @@ const styles = {
   exerciseItem: {
     marginBottom: '1rem',
     paddingBottom: '0.75rem',
-    borderBottom: '1px solid #e8f5e9'
+    borderBottom: '1px solid #2d2d2d'
   },
   exerciseListItem: {
-    color: '#2c3e50',
+    color: '#ffffff',
     fontSize: '0.95rem',
     padding: '0.25rem 0',
     lineHeight: '1.5',
     marginBottom: '0.5rem'
   },
   moreExercises: {
-    color: '#4caf50',
+    color: '#FFD700',
     fontSize: '0.9rem',
     fontStyle: 'italic',
     marginTop: '0.5rem',
@@ -511,27 +510,26 @@ const styles = {
   },
   startBtn: {
     width: '100%',
-    backgroundColor: '#4caf50',
-    color: 'white',
+    backgroundColor: '#FFD700',
+    color: '#000000',
     padding: '0.75rem',
     border: 'none',
     borderRadius: '10px',
     fontSize: '1rem',
-    fontWeight: '600',
+    fontWeight: '700',
     cursor: 'pointer',
-    boxShadow: '0 4px 15px rgba(76, 175, 80, 0.3)',
+    boxShadow: '0 4px 20px rgba(255, 215, 0, 0.4)',
     transition: 'all 0.3s ease'
   },
   actionsCard: {
-    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+    backgroundColor: '#1a1a1a',
     borderRadius: '20px',
-    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
+    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.8)',
     padding: '1.5rem',
-    backdropFilter: 'blur(10px)',
-    border: '1px solid rgba(255, 255, 255, 0.2)'
+    border: '1px solid #2d2d2d'
   },
   actionsTitle: {
-    color: '#1a5f4a',
+    color: '#ffffff',
     fontSize: '1.3rem',
     marginBottom: '1rem',
     fontWeight: '700'
@@ -542,10 +540,10 @@ const styles = {
     gap: 'clamp(0.75rem, 2vw, 1rem)'
   },
   actionBtn: {
-    backgroundColor: '#f1f8f4',
-    color: '#1a5f4a',
+    backgroundColor: '#0a0a0a',
+    color: '#ffffff',
     padding: 'clamp(0.875rem, 2vw, 1rem)',
-    border: '2px solid rgba(76, 175, 80, 0.3)',
+    border: '1px solid #2d2d2d',
     borderRadius: '10px',
     fontSize: 'clamp(0.9rem, 2.5vw, 1rem)',
     fontWeight: '600',
@@ -560,7 +558,7 @@ const styles = {
   exerciseName: {
     fontSize: '1rem',
     fontWeight: '600',
-    color: '#1a5f4a'
+    color: '#ffffff'
   }
 };
 

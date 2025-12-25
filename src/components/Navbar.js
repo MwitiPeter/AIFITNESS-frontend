@@ -84,13 +84,13 @@ const Navbar = memo(() => {
 
 const styles = {
   navbar: {
-    background: 'linear-gradient(135deg, #0f4c3a 0%, #1a5f4a 50%, #0f4c3a 100%)',
+    background: 'linear-gradient(180deg, #000000 0%, #1a1a1a 50%, #000000 100%)',
     padding: '1rem 0',
-    boxShadow: '0 4px 20px rgba(0, 0, 0, 0.3)',
+    boxShadow: '0 4px 20px rgba(0, 0, 0, 0.8)',
     position: 'sticky',
     top: 0,
     zIndex: 1000,
-    borderBottom: '1px solid rgba(255, 255, 255, 0.1)'
+    borderBottom: '1px solid #2d2d2d'
   },
   container: {
     maxWidth: '1200px',
@@ -111,8 +111,8 @@ const styles = {
     textShadow: '0 2px 4px rgba(0,0,0,0.3)'
   },
   mobileMenuButton: {
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
-    border: '1px solid rgba(255, 255, 255, 0.2)',
+    backgroundColor: '#2d2d2d',
+    border: '1px solid #404040',
     color: 'white',
     fontSize: '1.5rem',
     cursor: 'pointer',
@@ -120,8 +120,7 @@ const styles = {
     minWidth: '44px',
     minHeight: '44px',
     borderRadius: '8px',
-    transition: 'all 0.3s ease',
-    backdropFilter: 'blur(10px)'
+    transition: 'all 0.3s ease'
   },
   navLinks: {
     display: 'flex',
@@ -136,14 +135,13 @@ const styles = {
     top: '100%',
     left: 0,
     right: 0,
-    background: 'linear-gradient(135deg, #0f4c3a 0%, #1a5f4a 100%)',
+    background: 'linear-gradient(180deg, #000000 0%, #1a1a1a 100%)',
     padding: '1rem',
-    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
+    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.8)',
     width: '100%',
     gap: '0.75rem',
     borderRadius: '0 0 16px 16px',
-    backdropFilter: 'blur(10px)',
-    borderTop: '1px solid rgba(255, 255, 255, 0.1)'
+    borderTop: '1px solid #2d2d2d'
   },
   navLinksClosed: {
     display: 'none'
@@ -161,19 +159,19 @@ const styles = {
     fontWeight: '500'
   },
   userName: {
-    color: '#e8f5e9',
+    color: '#FFD700',
     fontWeight: '600',
     fontSize: 'clamp(0.85rem, 2.5vw, 1rem)',
     whiteSpace: 'nowrap',
     padding: '0.5rem 0.75rem',
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    backgroundColor: '#1a1a00',
     borderRadius: '8px',
-    backdropFilter: 'blur(10px)'
+    border: '1px solid rgba(255, 215, 0, 0.3)'
   },
   logoutBtn: {
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    backgroundColor: '#2d2d2d',
     color: '#ffffff',
-    border: '1px solid rgba(255, 255, 255, 0.3)',
+    border: '1px solid #404040',
     padding: '0.75rem 1rem',
     borderRadius: '10px',
     cursor: 'pointer',
@@ -181,8 +179,7 @@ const styles = {
     minHeight: '44px',
     minWidth: '80px',
     transition: 'all 0.3s ease',
-    fontWeight: '600',
-    backdropFilter: 'blur(10px)'
+    fontWeight: '600'
   }
 };
 

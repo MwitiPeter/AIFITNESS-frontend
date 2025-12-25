@@ -318,7 +318,7 @@ const WorkoutTracker = () => {
 const styles = {
   container: {
     minHeight: 'calc(100vh - 70px)',
-    background: 'linear-gradient(135deg, #0f4c3a 0%, #1a5f4a 25%, #2d7a5f 50%, #1a5f4a 75%, #0f4c3a 100%)',
+    background: 'linear-gradient(180deg, #000000 0%, #1a1a1a 50%, #000000 100%)',
     padding: 'clamp(1rem, 4vw, 2rem)'
   },
   content: {
@@ -330,55 +330,54 @@ const styles = {
     marginBottom: 'clamp(1rem, 4vw, 2rem)'
   },
   backBtn: {
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    backgroundColor: '#2d2d2d',
     color: '#ffffff',
     padding: 'clamp(0.5rem, 1.5vw, 0.75rem) clamp(0.75rem, 2vw, 1rem)',
-    border: '1px solid rgba(255, 255, 255, 0.3)',
+    border: '1px solid #404040',
     borderRadius: '10px',
     fontSize: 'clamp(0.9rem, 2.5vw, 1rem)',
     cursor: 'pointer',
     marginBottom: '1rem',
     minHeight: '44px',
     fontWeight: '600',
-    transition: 'all 0.3s ease',
-    backdropFilter: 'blur(10px)'
+    transition: 'all 0.3s ease'
   },
   title: {
     color: '#ffffff',
     fontSize: 'clamp(1.5rem, 5vw, 2.5rem)',
     wordWrap: 'break-word',
     fontWeight: '700',
-    textShadow: '0 2px 10px rgba(0,0,0,0.3)'
+    textShadow: '0 2px 10px rgba(0,0,0,0.5)'
   },
   error: {
-    backgroundColor: '#ffebee',
-    color: '#c62828',
+    backgroundColor: '#2d1a1a',
+    color: '#ff6b6b',
     padding: '1rem',
     borderRadius: '12px',
     marginBottom: '1rem',
-    border: '1px solid #ffcdd2'
+    border: '1px solid #ff6b6b'
   },
   errorCard: {
-    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+    backgroundColor: '#1a1a1a',
     padding: '3rem',
     borderRadius: '20px',
     textAlign: 'center',
     maxWidth: '500px',
     margin: '0 auto',
-    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
-    backdropFilter: 'blur(10px)'
+    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.8)',
+    border: '1px solid #2d2d2d'
   },
   button: {
-    backgroundColor: '#4caf50',
-    color: 'white',
+    backgroundColor: '#FFD700',
+    color: '#000000',
     padding: '0.75rem 1.5rem',
     border: 'none',
     borderRadius: '10px',
     fontSize: '1rem',
     cursor: 'pointer',
     marginTop: '1rem',
-    fontWeight: '600',
-    boxShadow: '0 4px 15px rgba(76, 175, 80, 0.3)'
+    fontWeight: '700',
+    boxShadow: '0 4px 20px rgba(255, 215, 0, 0.4)'
   },
   mainGrid: {
     display: 'grid',
@@ -386,18 +385,17 @@ const styles = {
     gap: 'clamp(1rem, 3vw, 2rem)'
   },
   sidebar: {
-    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+    backgroundColor: '#1a1a1a',
     borderRadius: '20px',
     padding: 'clamp(1rem, 3vw, 1.5rem)',
     height: 'fit-content',
     position: 'sticky',
     top: 'clamp(1rem, 3vw, 2rem)',
-    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
-    backdropFilter: 'blur(10px)',
-    border: '1px solid rgba(255, 255, 255, 0.2)'
+    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.8)',
+    border: '1px solid #2d2d2d'
   },
   sidebarTitle: {
-    color: '#1a5f4a',
+    color: '#ffffff',
     fontSize: '1.2rem',
     marginBottom: '1rem',
     fontWeight: '700'
@@ -408,8 +406,8 @@ const styles = {
     gap: '0.75rem'
   },
   dayButton: {
-    backgroundColor: '#f1f8f4',
-    border: '2px solid #e8f5e9',
+    backgroundColor: '#0a0a0a',
+    border: '1px solid #2d2d2d',
     borderRadius: '12px',
     padding: '1rem',
     cursor: 'pointer',
@@ -417,13 +415,14 @@ const styles = {
     transition: 'all 0.3s ease',
     display: 'flex',
     justifyContent: 'space-between',
-    alignItems: 'center'
+    alignItems: 'center',
+    color: '#ffffff'
   },
   dayButtonActive: {
-    backgroundColor: '#4caf50',
-    borderColor: '#4caf50',
-    color: 'white',
-    boxShadow: '0 4px 15px rgba(76, 175, 80, 0.3)'
+    backgroundColor: '#FFD700',
+    borderColor: '#FFD700',
+    color: '#000000',
+    boxShadow: '0 4px 20px rgba(255, 215, 0, 0.4)'
   },
   dayButtonText: {
     fontWeight: '600',
@@ -438,14 +437,13 @@ const styles = {
     flexDirection: 'column'
   },
   card: {
-    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+    backgroundColor: '#1a1a1a',
     borderRadius: '20px',
     padding: 'clamp(1rem, 4vw, 2rem)',
-    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
+    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.8)',
     width: '100%',
     boxSizing: 'border-box',
-    backdropFilter: 'blur(10px)',
-    border: '1px solid rgba(255, 255, 255, 0.2)'
+    border: '1px solid #2d2d2d'
   },
   cardHeader: {
     display: 'flex',
@@ -453,32 +451,32 @@ const styles = {
     alignItems: 'flex-start',
     marginBottom: '2rem',
     paddingBottom: '1rem',
-    borderBottom: '2px solid #e8f5e9'
+    borderBottom: '1px solid #2d2d2d'
   },
   cardTitle: {
-    color: '#1a5f4a',
+    color: '#ffffff',
     fontSize: '1.8rem',
     marginBottom: '0.5rem',
     fontWeight: '700'
   },
   cardSubtitle: {
-    color: '#555',
+    color: '#999',
     fontSize: '1rem'
   },
   completionBadge: {
-    backgroundColor: '#4caf50',
-    color: 'white',
+    backgroundColor: '#FFD700',
+    color: '#000000',
     padding: '0.5rem 1rem',
     borderRadius: '20px',
     fontSize: '1rem',
     fontWeight: '700',
-    boxShadow: '0 2px 8px rgba(76, 175, 80, 0.3)'
+    boxShadow: '0 2px 8px rgba(255, 215, 0, 0.3)'
   },
   exerciseSection: {
     marginBottom: '2rem'
   },
   sectionTitle: {
-    color: '#1a5f4a',
+    color: '#ffffff',
     fontSize: '1.5rem',
     marginBottom: '1rem',
     fontWeight: '700'
@@ -489,16 +487,16 @@ const styles = {
     gap: '1rem'
   },
   exerciseCard: {
-    border: '2px solid #e8f5e9',
+    border: '1px solid #2d2d2d',
     borderRadius: '12px',
     padding: '1rem',
     transition: 'all 0.3s ease',
-    backgroundColor: '#ffffff'
+    backgroundColor: '#0a0a0a'
   },
   exerciseCardCompleted: {
-    backgroundColor: '#e8f5e9',
-    borderColor: '#4caf50',
-    boxShadow: '0 2px 8px rgba(76, 175, 80, 0.2)'
+    backgroundColor: '#1a1a00',
+    borderColor: '#FFD700',
+    boxShadow: '0 2px 8px rgba(255, 215, 0, 0.2)'
   },
   exerciseHeader: {
     marginBottom: '0.75rem'
@@ -517,7 +515,7 @@ const styles = {
   exerciseName: {
     fontSize: '1.1rem',
     fontWeight: '600',
-    color: '#1a5f4a'
+    color: '#ffffff'
   },
   exerciseDetails: {
     display: 'flex',
@@ -537,7 +535,7 @@ const styles = {
     marginBottom: '0.75rem'
   },
   form: {
-    borderTop: '2px solid #e8f5e9',
+    borderTop: '1px solid #2d2d2d',
     paddingTop: '2rem'
   },
   formGrid: {
@@ -552,36 +550,38 @@ const styles = {
     marginBottom: '1.5rem'
   },
   label: {
-    color: '#1a5f4a',
+    color: '#ffffff',
     fontWeight: '600',
     marginBottom: '0.5rem',
     fontSize: '1rem'
   },
   input: {
     padding: 'clamp(0.75rem, 2vw, 0.875rem)',
-    border: '2px solid #e0e0e0',
+    border: '1px solid #2d2d2d',
     borderRadius: '10px',
     fontSize: '16px',
     width: '100%',
     boxSizing: 'border-box',
     minHeight: '44px',
-    backgroundColor: '#ffffff',
-    transition: 'border-color 0.3s ease'
+    backgroundColor: '#0a0a0a',
+    transition: 'border-color 0.3s ease',
+    color: '#ffffff'
   },
   select: {
     padding: 'clamp(0.75rem, 2vw, 0.875rem)',
-    border: '2px solid #e0e0e0',
+    border: '1px solid #2d2d2d',
     borderRadius: '10px',
     fontSize: '16px',
-    backgroundColor: 'white',
+    backgroundColor: '#0a0a0a',
     width: '100%',
     boxSizing: 'border-box',
     minHeight: '44px',
-    transition: 'border-color 0.3s ease'
+    transition: 'border-color 0.3s ease',
+    color: '#ffffff'
   },
   textarea: {
     padding: 'clamp(0.75rem, 2vw, 0.875rem)',
-    border: '2px solid #e0e0e0',
+    border: '1px solid #2d2d2d',
     borderRadius: '10px',
     fontSize: '16px',
     fontFamily: 'inherit',
@@ -589,8 +589,9 @@ const styles = {
     width: '100%',
     boxSizing: 'border-box',
     minHeight: '100px',
-    backgroundColor: '#ffffff',
-    transition: 'border-color 0.3s ease'
+    backgroundColor: '#0a0a0a',
+    transition: 'border-color 0.3s ease',
+    color: '#ffffff'
   },
   ratingContainer: {
     display: 'flex',
@@ -612,23 +613,23 @@ const styles = {
     boxShadow: '0 2px 8px rgba(255, 193, 7, 0.4)'
   },
   ratingHint: {
-    color: '#555',
+    color: '#999',
     fontSize: '0.9rem',
     margin: 0
   },
   submitBtn: {
     width: '100%',
-    backgroundColor: '#4caf50',
-    color: 'white',
+    backgroundColor: '#FFD700',
+    color: '#000000',
     padding: 'clamp(0.875rem, 2vw, 1rem)',
     border: 'none',
     borderRadius: '12px',
     fontSize: 'clamp(1rem, 3vw, 1.1rem)',
-    fontWeight: '600',
+    fontWeight: '700',
     cursor: 'pointer',
     marginTop: '1rem',
     minHeight: '44px',
-    boxShadow: '0 4px 15px rgba(76, 175, 80, 0.4)',
+    boxShadow: '0 4px 20px rgba(255, 215, 0, 0.4)',
     transition: 'all 0.3s ease'
   }
 };

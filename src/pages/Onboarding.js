@@ -379,40 +379,40 @@ const Onboarding = () => {
 const styles = {
   container: {
     minHeight: 'calc(100vh - 70px)',
-    background: 'linear-gradient(135deg, #0f4c3a 0%, #1a5f4a 25%, #2d7a5f 50%, #1a5f4a 75%, #0f4c3a 100%)',
+    background: 'linear-gradient(180deg, #000000 0%, #1a1a1a 50%, #000000 100%)',
     padding: 'clamp(1rem, 4vw, 2rem)',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center'
   },
   card: {
-    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+    backgroundColor: '#1a1a1a',
     borderRadius: '20px',
-    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
+    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.8)',
     padding: 'clamp(1.5rem, 4vw, 2.5rem)',
     maxWidth: '650px',
     width: '100%',
     boxSizing: 'border-box',
-    backdropFilter: 'blur(10px)',
-    border: '1px solid rgba(255, 255, 255, 0.2)'
+    border: '1px solid #2d2d2d'
   },
   progress: {
     width: '100%',
     height: '10px',
-    backgroundColor: 'rgba(0, 0, 0, 0.1)',
+    backgroundColor: '#0a0a0a',
     borderRadius: '10px',
     marginBottom: '2rem',
-    overflow: 'hidden'
+    overflow: 'hidden',
+    border: '1px solid #2d2d2d'
   },
   progressBar: {
     height: '100%',
-    background: 'linear-gradient(90deg, #4caf50 0%, #66bb6a 100%)',
+    background: 'linear-gradient(90deg, #FFD700 0%, #FFC107 100%)',
     transition: 'width 0.3s ease',
     borderRadius: '10px'
   },
   title: {
     textAlign: 'center',
-    color: '#1a5f4a',
+    color: '#ffffff',
     fontSize: 'clamp(1.5rem, 4vw, 2rem)',
     marginBottom: '0.5rem',
     wordWrap: 'break-word',
@@ -420,25 +420,25 @@ const styles = {
   },
   subtitle: {
     textAlign: 'center',
-    color: '#555',
+    color: '#999',
     marginBottom: 'clamp(1.5rem, 4vw, 2rem)',
     fontSize: 'clamp(0.9rem, 2.5vw, 1rem)'
   },
   error: {
-    backgroundColor: '#ffebee',
-    color: '#c62828',
+    backgroundColor: '#2d1a1a',
+    color: '#ff6b6b',
     padding: '0.75rem',
     borderRadius: '8px',
     marginBottom: '1rem',
     textAlign: 'center',
-    border: '1px solid #ffcdd2',
+    border: '1px solid #ff6b6b',
     fontSize: '0.9rem'
   },
   stepContent: {
     minHeight: 'auto'
   },
   stepTitle: {
-    color: '#1a5f4a',
+    color: '#ffffff',
     marginBottom: 'clamp(1rem, 3vw, 1.5rem)',
     fontSize: 'clamp(1.2rem, 3.5vw, 1.5rem)',
     wordWrap: 'break-word',
@@ -450,31 +450,33 @@ const styles = {
   label: {
     display: 'block',
     marginBottom: '0.5rem',
-    color: '#2c3e50',
+    color: '#ffffff',
     fontWeight: '600',
     fontSize: '0.95rem'
   },
   input: {
     width: '100%',
     padding: 'clamp(0.75rem, 2vw, 0.875rem)',
-    border: '2px solid #e0e0e0',
+    border: '1px solid #2d2d2d',
     borderRadius: '10px',
     fontSize: '16px',
     boxSizing: 'border-box',
     minHeight: '44px',
-    backgroundColor: '#ffffff',
-    transition: 'border-color 0.3s ease'
+    backgroundColor: '#0a0a0a',
+    transition: 'border-color 0.3s ease',
+    color: '#ffffff'
   },
   select: {
     width: '100%',
     padding: 'clamp(0.75rem, 2vw, 0.875rem)',
-    border: '2px solid #e0e0e0',
+    border: '1px solid #2d2d2d',
     borderRadius: '10px',
     fontSize: '16px',
     boxSizing: 'border-box',
-    backgroundColor: 'white',
+    backgroundColor: '#0a0a0a',
     minHeight: '44px',
-    transition: 'border-color 0.3s ease'
+    transition: 'border-color 0.3s ease',
+    color: '#ffffff'
   },
   inputGroup: {
     display: 'flex',
@@ -489,20 +491,21 @@ const styles = {
     display: 'flex',
     alignItems: 'center',
     padding: '0.75rem 1rem',
-    border: '2px solid #e0e0e0',
+    border: '1px solid #2d2d2d',
     borderRadius: '10px',
     cursor: 'pointer',
     flex: '1',
     minWidth: '150px',
-    backgroundColor: '#ffffff',
-    transition: 'all 0.3s ease'
+    backgroundColor: '#0a0a0a',
+    transition: 'all 0.3s ease',
+    color: '#ffffff'
   },
   radio: {
     marginRight: '0.5rem'
   },
   radioText: {
     fontSize: '1rem',
-    color: '#2c3e50'
+    color: '#ffffff'
   },
   checkboxGroup: {
     display: 'grid',
@@ -513,11 +516,12 @@ const styles = {
     display: 'flex',
     alignItems: 'center',
     padding: '0.75rem',
-    border: '2px solid #e0e0e0',
+    border: '1px solid #2d2d2d',
     borderRadius: '10px',
     cursor: 'pointer',
-    backgroundColor: '#ffffff',
-    transition: 'all 0.3s ease'
+    backgroundColor: '#0a0a0a',
+    transition: 'all 0.3s ease',
+    color: '#ffffff'
   },
   checkbox: {
     marginRight: '0.5rem',
@@ -527,34 +531,35 @@ const styles = {
   },
   checkboxText: {
     fontSize: '0.95rem',
-    color: '#2c3e50'
+    color: '#ffffff'
   },
   slider: {
     width: '100%',
     height: '10px',
     borderRadius: '10px',
     outline: 'none',
-    backgroundColor: '#e0e0e0'
+    backgroundColor: '#2d2d2d'
   },
   sliderValue: {
     textAlign: 'center',
     marginTop: '0.5rem',
     fontSize: '1.1rem',
     fontWeight: 'bold',
-    color: '#4caf50'
+    color: '#FFD700'
   },
   textarea: {
     width: '100%',
     padding: 'clamp(0.75rem, 2vw, 0.875rem)',
-    border: '2px solid #e0e0e0',
+    border: '1px solid #2d2d2d',
     borderRadius: '10px',
     fontSize: '16px',
     fontFamily: 'inherit',
     resize: 'vertical',
     boxSizing: 'border-box',
     minHeight: '80px',
-    backgroundColor: '#ffffff',
-    transition: 'border-color 0.3s ease'
+    backgroundColor: '#0a0a0a',
+    transition: 'border-color 0.3s ease',
+    color: '#ffffff'
   },
   buttonGroup: {
     display: 'flex',
@@ -564,45 +569,44 @@ const styles = {
   backBtn: {
     flex: '1',
     padding: 'clamp(0.75rem, 2vw, 0.875rem)',
-    backgroundColor: '#757575',
-    color: 'white',
-    border: 'none',
+    backgroundColor: '#2d2d2d',
+    color: '#ffffff',
+    border: '1px solid #404040',
     borderRadius: '10px',
     fontSize: 'clamp(0.95rem, 2.5vw, 1rem)',
     fontWeight: '600',
     cursor: 'pointer',
     minHeight: '44px',
-    transition: 'all 0.3s ease',
-    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.2)'
+    transition: 'all 0.3s ease'
   },
   nextBtn: {
     width: '100%',
     padding: 'clamp(0.75rem, 2vw, 0.875rem)',
-    backgroundColor: '#4caf50',
-    color: 'white',
+    backgroundColor: '#FFD700',
+    color: '#000000',
     border: 'none',
     borderRadius: '10px',
     fontSize: 'clamp(0.95rem, 2.5vw, 1rem)',
-    fontWeight: '600',
+    fontWeight: '700',
     cursor: 'pointer',
     marginTop: 'clamp(1.5rem, 4vw, 2rem)',
     minHeight: '44px',
     transition: 'all 0.3s ease',
-    boxShadow: '0 4px 15px rgba(76, 175, 80, 0.3)'
+    boxShadow: '0 4px 20px rgba(255, 215, 0, 0.4)'
   },
   submitBtn: {
     flex: '1',
     padding: 'clamp(0.75rem, 2vw, 0.875rem)',
-    backgroundColor: '#4caf50',
-    color: 'white',
+    backgroundColor: '#FFD700',
+    color: '#000000',
     border: 'none',
     borderRadius: '10px',
     fontSize: 'clamp(0.95rem, 2.5vw, 1rem)',
-    fontWeight: '600',
+    fontWeight: '700',
     cursor: 'pointer',
     minHeight: '44px',
     transition: 'all 0.3s ease',
-    boxShadow: '0 4px 15px rgba(76, 175, 80, 0.3)'
+    boxShadow: '0 4px 20px rgba(255, 215, 0, 0.4)'
   }
 };
 

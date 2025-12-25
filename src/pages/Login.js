@@ -62,26 +62,34 @@ const Login = () => {
         
         <form onSubmit={handleSubmit} style={styles.form}>
           <div style={styles.formGroup}>
-            <label style={styles.label}>Email</label>
+            <label htmlFor="email" style={styles.label}>Email Address</label>
             <input
+              id="email"
               type="email"
               name="email"
               value={formData.email}
               onChange={handleChange}
               style={styles.input}
-              placeholder="Enter your email"
+              placeholder="your.email@example.com"
+              autoComplete="email"
+              required
+              aria-required="true"
             />
           </div>
 
           <div style={styles.formGroup}>
-            <label style={styles.label}>Password</label>
+            <label htmlFor="password" style={styles.label}>Password</label>
             <input
+              id="password"
               type="password"
               name="password"
               value={formData.password}
               onChange={handleChange}
               style={styles.input}
               placeholder="Enter your password"
+              autoComplete="current-password"
+              required
+              aria-required="true"
             />
           </div>
 
@@ -96,7 +104,7 @@ const Login = () => {
 
         <p style={styles.footer}>
           Don't have an account?{' '}
-          <Link to="/register" style={styles.link}>Register here</Link>
+          <Link to="/register" style={styles.link} aria-label="Navigate to registration page">Sign up here</Link>
         </p>
       </div>
     </div>
@@ -152,32 +160,34 @@ const styles = {
     marginBottom: '0.5rem',
     color: '#ffffff',
     fontWeight: '600',
-    fontSize: '0.95rem'
+    fontSize: '0.95rem',
+    display: 'block'
   },
   input: {
-    padding: 'clamp(0.75rem, 2vw, 0.875rem)',
+    padding: 'clamp(0.875rem, 2vw, 1rem)',
     border: '1px solid #2d2d2d',
-    borderRadius: '10px',
+    borderRadius: '12px',
     fontSize: '16px',
     width: '100%',
     boxSizing: 'border-box',
-    minHeight: '44px',
-    transition: 'border-color 0.3s ease',
+    minHeight: '48px',
+    transition: 'all 0.3s ease',
     backgroundColor: '#0a0a0a',
-    color: '#ffffff'
+    color: '#ffffff',
+    fontFamily: 'inherit'
   },
   submitBtn: {
     backgroundColor: '#FFD700',
     color: '#000000',
-    padding: 'clamp(0.75rem, 2vw, 0.875rem)',
+    padding: 'clamp(0.875rem, 2vw, 1rem)',
     border: 'none',
-    borderRadius: '10px',
+    borderRadius: '12px',
     fontSize: 'clamp(0.95rem, 2.5vw, 1rem)',
     fontWeight: '700',
     cursor: 'pointer',
-    marginTop: '1rem',
+    marginTop: '1.5rem',
     width: '100%',
-    minHeight: '44px',
+    minHeight: '48px',
     boxShadow: '0 4px 20px rgba(255, 215, 0, 0.4)',
     transition: 'all 0.3s ease'
   },

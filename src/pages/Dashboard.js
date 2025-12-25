@@ -70,7 +70,7 @@ const Dashboard = React.memo(() => {
         {/* Header */}
         <div style={styles.header}>
           <div>
-            <h1 style={styles.title}>Welcome back, {user?.name}! 👋</h1>
+            <h1 style={styles.title}>Welcome back, {user?.name?.split(' ')[0] || user?.name}! 👋</h1>
             <p style={styles.subtitle}>Your personalized fitness dashboard</p>
           </div>
         </div>
@@ -119,6 +119,7 @@ const Dashboard = React.memo(() => {
                 onClick={handleGenerateWorkout}
                 style={styles.generateBtn}
                 disabled={generating}
+                aria-label="Generate personalized workout plan"
               >
                 {generating ? (
                   <>
@@ -206,6 +207,7 @@ const Dashboard = React.memo(() => {
                           state: { day: day, planId: workoutPlan._id } 
                         })}
                         style={styles.startBtn}
+                        aria-label={`Start ${day.day} workout`}
                       >
                         Start This Workout
                       </button>
@@ -370,7 +372,7 @@ const styles = {
     display: 'inline-flex',
     alignItems: 'center',
     gap: '0.5rem',
-    minHeight: '44px',
+    minHeight: '48px',
     width: '100%',
     maxWidth: '400px',
     justifyContent: 'center',
@@ -380,14 +382,15 @@ const styles = {
   regenerateBtn: {
     backgroundColor: '#FFD700',
     color: '#000000',
-    padding: '0.75rem 1.5rem',
+    padding: '0.875rem 1.5rem',
     border: 'none',
-    borderRadius: '10px',
+    borderRadius: '12px',
     fontSize: '1rem',
     fontWeight: '700',
     cursor: 'pointer',
     boxShadow: '0 4px 20px rgba(255, 215, 0, 0.4)',
-    transition: 'all 0.3s ease'
+    transition: 'all 0.3s ease',
+    minHeight: '48px'
   },
   spinner: {
     border: '3px solid rgba(255,255,255,0.3)',
@@ -453,7 +456,7 @@ const styles = {
     borderRadius: '16px',
     padding: '1.5rem',
     backgroundColor: '#0a0a0a',
-    transition: 'transform 0.2s, box-shadow 0.2s',
+    transition: 'transform 0.2s, box-shadow 0.2s, border-color 0.2s',
     boxShadow: '0 4px 12px rgba(0, 0, 0, 0.5)'
   },
   dayHeader: {
@@ -512,14 +515,16 @@ const styles = {
     width: '100%',
     backgroundColor: '#FFD700',
     color: '#000000',
-    padding: '0.75rem',
+    padding: '0.875rem',
     border: 'none',
-    borderRadius: '10px',
+    borderRadius: '12px',
     fontSize: '1rem',
     fontWeight: '700',
     cursor: 'pointer',
     boxShadow: '0 4px 20px rgba(255, 215, 0, 0.4)',
-    transition: 'all 0.3s ease'
+    transition: 'all 0.3s ease',
+    minHeight: '48px',
+    marginTop: '1rem'
   },
   actionsCard: {
     backgroundColor: '#1a1a1a',
@@ -544,12 +549,12 @@ const styles = {
     color: '#ffffff',
     padding: 'clamp(0.875rem, 2vw, 1rem)',
     border: '1px solid #2d2d2d',
-    borderRadius: '10px',
+    borderRadius: '12px',
     fontSize: 'clamp(0.9rem, 2.5vw, 1rem)',
     fontWeight: '600',
     cursor: 'pointer',
     transition: 'all 0.3s ease',
-    minHeight: '44px',
+    minHeight: '48px',
     wordWrap: 'break-word'
   },
   exerciseHeader: {

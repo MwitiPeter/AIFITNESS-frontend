@@ -20,20 +20,20 @@ const Home = () => {
         <div style={styles.features}>
           <div style={styles.feature}>
             <span style={styles.icon}>🤖</span>
-            <h3>AI-Powered Plans</h3>
-            <p>Custom workouts generated just for you</p>
+            <h3 style={styles.featureTitle}>AI-Powered Plans</h3>
+            <p style={styles.featureText}>Custom workouts generated just for you</p>
           </div>
           
           <div style={styles.feature}>
             <span style={styles.icon}>📊</span>
-            <h3>Track Progress</h3>
-            <p>Monitor your fitness journey</p>
+            <h3 style={styles.featureTitle}>Track Progress</h3>
+            <p style={styles.featureText}>Monitor your fitness journey with detailed analytics</p>
           </div>
           
           <div style={styles.feature}>
             <span style={styles.icon}>🎯</span>
-            <h3>Reach Goals</h3>
-            <p>Achieve your fitness objectives</p>
+            <h3 style={styles.featureTitle}>Reach Goals</h3>
+            <p style={styles.featureText}>Achieve your fitness objectives with personalized guidance</p>
           </div>
         </div>
 
@@ -107,12 +107,25 @@ const styles = {
     border: '1px solid #2d2d2d',
     boxShadow: '0 8px 32px rgba(0, 0, 0, 0.5)',
     transition: 'transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease',
-    color: '#ffffff'
+    color: '#ffffff',
+    cursor: 'default'
   },
   icon: {
     fontSize: 'clamp(2rem, 6vw, 3rem)',
     display: 'block',
     marginBottom: '1rem'
+  },
+  featureTitle: {
+    fontSize: 'clamp(1.1rem, 3vw, 1.3rem)',
+    fontWeight: '700',
+    marginBottom: '0.75rem',
+    color: '#FFD700'
+  },
+  featureText: {
+    fontSize: 'clamp(0.9rem, 2.5vw, 1rem)',
+    lineHeight: '1.6',
+    color: '#cccccc',
+    margin: 0
   },
   cta: {
     display: 'flex',
@@ -130,8 +143,8 @@ const styles = {
     fontWeight: '700',
     transition: 'all 0.3s ease',
     display: 'inline-block',
-    minHeight: '44px',
-    minWidth: '120px',
+    minHeight: '48px',
+    minWidth: '140px',
     textAlign: 'center',
     boxShadow: '0 4px 20px rgba(255, 215, 0, 0.4)',
     border: 'none',
@@ -149,8 +162,8 @@ const styles = {
     border: '1px solid #404040',
     transition: 'all 0.3s ease',
     display: 'inline-block',
-    minHeight: '44px',
-    minWidth: '120px',
+    minHeight: '48px',
+    minWidth: '140px',
     textAlign: 'center'
   }
 };

@@ -68,50 +68,68 @@ const Register = () => {
         
         <form onSubmit={handleSubmit} style={styles.form}>
           <div style={styles.formGroup}>
-            <label style={styles.label}>Full Name</label>
+            <label htmlFor="name" style={styles.label}>Full Name</label>
             <input
+              id="name"
               type="text"
               name="name"
               value={formData.name}
               onChange={handleChange}
               style={styles.input}
-              placeholder="Enter your name"
+              placeholder="John Doe"
+              autoComplete="name"
+              required
+              aria-required="true"
             />
           </div>
 
           <div style={styles.formGroup}>
-            <label style={styles.label}>Email</label>
+            <label htmlFor="email" style={styles.label}>Email Address</label>
             <input
+              id="email"
               type="email"
               name="email"
               value={formData.email}
               onChange={handleChange}
               style={styles.input}
-              placeholder="Enter your email"
+              placeholder="your.email@example.com"
+              autoComplete="email"
+              required
+              aria-required="true"
             />
           </div>
 
           <div style={styles.formGroup}>
-            <label style={styles.label}>Password</label>
+            <label htmlFor="password" style={styles.label}>Password</label>
             <input
+              id="password"
               type="password"
               name="password"
               value={formData.password}
               onChange={handleChange}
               style={styles.input}
-              placeholder="Enter password"
+              placeholder="At least 6 characters"
+              autoComplete="new-password"
+              required
+              aria-required="true"
+              minLength={6}
             />
+            <small style={styles.hint}>Minimum 6 characters</small>
           </div>
 
           <div style={styles.formGroup}>
-            <label style={styles.label}>Confirm Password</label>
+            <label htmlFor="confirmPassword" style={styles.label}>Confirm Password</label>
             <input
+              id="confirmPassword"
               type="password"
               name="confirmPassword"
               value={formData.confirmPassword}
               onChange={handleChange}
               style={styles.input}
-              placeholder="Confirm password"
+              placeholder="Re-enter your password"
+              autoComplete="new-password"
+              required
+              aria-required="true"
             />
           </div>
 
@@ -126,7 +144,7 @@ const Register = () => {
 
         <p style={styles.footer}>
           Already have an account?{' '}
-          <Link to="/login" style={styles.link}>Login here</Link>
+          <Link to="/login" style={styles.link} aria-label="Navigate to login page">Sign in here</Link>
         </p>
       </div>
     </div>
@@ -182,32 +200,41 @@ const styles = {
     marginBottom: '0.5rem',
     color: '#ffffff',
     fontWeight: '600',
-    fontSize: '0.95rem'
+    fontSize: '0.95rem',
+    display: 'block'
   },
   input: {
-    padding: 'clamp(0.75rem, 2vw, 0.875rem)',
+    padding: 'clamp(0.875rem, 2vw, 1rem)',
     border: '1px solid #2d2d2d',
-    borderRadius: '10px',
+    borderRadius: '12px',
     fontSize: '16px',
     width: '100%',
     boxSizing: 'border-box',
-    minHeight: '44px',
-    transition: 'border-color 0.3s ease',
+    minHeight: '48px',
+    transition: 'all 0.3s ease',
     backgroundColor: '#0a0a0a',
-    color: '#ffffff'
+    color: '#ffffff',
+    fontFamily: 'inherit'
+  },
+  hint: {
+    display: 'block',
+    marginTop: '0.5rem',
+    fontSize: '0.85rem',
+    color: '#999',
+    fontStyle: 'italic'
   },
   submitBtn: {
     backgroundColor: '#FFD700',
     color: '#000000',
-    padding: 'clamp(0.75rem, 2vw, 0.875rem)',
+    padding: 'clamp(0.875rem, 2vw, 1rem)',
     border: 'none',
-    borderRadius: '10px',
+    borderRadius: '12px',
     fontSize: 'clamp(0.95rem, 2.5vw, 1rem)',
     fontWeight: '700',
     cursor: 'pointer',
-    marginTop: '1rem',
+    marginTop: '1.5rem',
     width: '100%',
-    minHeight: '44px',
+    minHeight: '48px',
     boxShadow: '0 4px 20px rgba(255, 215, 0, 0.4)',
     transition: 'all 0.3s ease'
   },

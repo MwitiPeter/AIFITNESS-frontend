@@ -462,14 +462,15 @@ const styles = {
   primaryBtn: {
     backgroundColor: '#FFD700',
     color: '#000000',
-    padding: '0.75rem 1.5rem',
+    padding: '0.875rem 1.5rem',
     border: 'none',
-    borderRadius: '10px',
+    borderRadius: '12px',
     fontSize: '1rem',
     cursor: 'pointer',
     fontWeight: '700',
     boxShadow: '0 4px 20px rgba(255, 215, 0, 0.4)',
-    transition: 'all 0.3s ease'
+    transition: 'all 0.3s ease',
+    minHeight: '48px'
   },
   logsList: {
     display: 'flex',
@@ -635,12 +636,13 @@ const styles = {
     color: '#000000',
     padding: '1rem',
     border: 'none',
-    borderRadius: '10px',
+    borderRadius: '12px',
     fontSize: '1rem',
     fontWeight: '700',
     cursor: 'pointer',
     transition: 'all 0.3s ease',
-    boxShadow: '0 4px 20px rgba(255, 215, 0, 0.4)'
+    boxShadow: '0 4px 20px rgba(255, 215, 0, 0.4)',
+    minHeight: '48px'
   }
 };
 

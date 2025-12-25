@@ -556,42 +556,46 @@ const styles = {
     fontSize: '1rem'
   },
   input: {
-    padding: 'clamp(0.75rem, 2vw, 0.875rem)',
+    padding: 'clamp(0.875rem, 2vw, 1rem)',
     border: '1px solid #2d2d2d',
-    borderRadius: '10px',
+    borderRadius: '12px',
     fontSize: '16px',
     width: '100%',
     boxSizing: 'border-box',
-    minHeight: '44px',
+    minHeight: '48px',
     backgroundColor: '#0a0a0a',
-    transition: 'border-color 0.3s ease',
-    color: '#ffffff'
+    transition: 'all 0.3s ease',
+    color: '#ffffff',
+    fontFamily: 'inherit'
   },
   select: {
-    padding: 'clamp(0.75rem, 2vw, 0.875rem)',
+    padding: 'clamp(0.875rem, 2vw, 1rem)',
     border: '1px solid #2d2d2d',
-    borderRadius: '10px',
+    borderRadius: '12px',
     fontSize: '16px',
     backgroundColor: '#0a0a0a',
     width: '100%',
     boxSizing: 'border-box',
-    minHeight: '44px',
-    transition: 'border-color 0.3s ease',
-    color: '#ffffff'
+    minHeight: '48px',
+    transition: 'all 0.3s ease',
+    color: '#ffffff',
+    fontFamily: 'inherit',
+    cursor: 'pointer'
   },
   textarea: {
-    padding: 'clamp(0.75rem, 2vw, 0.875rem)',
+    padding: 'clamp(0.875rem, 2vw, 1rem)',
     border: '1px solid #2d2d2d',
-    borderRadius: '10px',
+    borderRadius: '12px',
     fontSize: '16px',
     fontFamily: 'inherit',
     resize: 'vertical',
     width: '100%',
     boxSizing: 'border-box',
-    minHeight: '100px',
+    minHeight: '120px',
     backgroundColor: '#0a0a0a',
-    transition: 'border-color 0.3s ease',
-    color: '#ffffff'
+    transition: 'all 0.3s ease',
+    color: '#ffffff',
+    lineHeight: '1.5'
   },
   ratingContainer: {
     display: 'flex',
@@ -627,8 +631,8 @@ const styles = {
     fontSize: 'clamp(1rem, 3vw, 1.1rem)',
     fontWeight: '700',
     cursor: 'pointer',
-    marginTop: '1rem',
-    minHeight: '44px',
+    marginTop: '1.5rem',
+    minHeight: '48px',
     boxShadow: '0 4px 20px rgba(255, 215, 0, 0.4)',
     transition: 'all 0.3s ease'
   }

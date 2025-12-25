@@ -249,7 +249,7 @@ const Dashboard = React.memo(() => {
 const styles = {
   container: {
     minHeight: 'calc(100vh - 70px)',
-    backgroundColor: '#f5f5f5',
+    background: 'linear-gradient(135deg, #0f4c3a 0%, #1a5f4a 25%, #2d7a5f 50%, #1a5f4a 75%, #0f4c3a 100%)',
     padding: 'clamp(1rem, 4vw, 2rem)'
   },
   content: {
@@ -266,31 +266,37 @@ const styles = {
     gap: '1rem'
   },
   title: {
-    color: '#2c3e50',
+    color: '#ffffff',
     fontSize: 'clamp(1.5rem, 5vw, 2.5rem)',
     marginBottom: '0.5rem',
-    wordWrap: 'break-word'
+    wordWrap: 'break-word',
+    fontWeight: '700',
+    textShadow: '0 2px 10px rgba(0,0,0,0.3)'
   },
   subtitle: {
-    color: '#7f8c8d',
-    fontSize: 'clamp(0.9rem, 3vw, 1.1rem)'
+    color: '#e8f5e9',
+    fontSize: 'clamp(0.9rem, 3vw, 1.1rem)',
+    opacity: 0.9
   },
   error: {
-    backgroundColor: '#fee',
-    color: '#c33',
+    backgroundColor: '#ffebee',
+    color: '#c62828',
     padding: '1rem',
-    borderRadius: '8px',
+    borderRadius: '12px',
     marginBottom: '1rem',
-    textAlign: 'center'
+    textAlign: 'center',
+    border: '1px solid #ffcdd2'
   },
   card: {
-    backgroundColor: 'white',
-    borderRadius: '10px',
-    boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+    borderRadius: '20px',
+    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
     padding: 'clamp(1rem, 4vw, 2rem)',
     marginBottom: 'clamp(1rem, 4vw, 2rem)',
     width: '100%',
-    boxSizing: 'border-box'
+    boxSizing: 'border-box',
+    backdropFilter: 'blur(10px)',
+    border: '1px solid rgba(255, 255, 255, 0.2)'
   },
   cardHeader: {
     display: 'flex',
@@ -301,10 +307,11 @@ const styles = {
     gap: '1rem'
   },
   cardTitle: {
-    color: '#2c3e50',
+    color: '#1a5f4a',
     fontSize: 'clamp(1.3rem, 4vw, 1.8rem)',
     marginBottom: '1rem',
-    wordWrap: 'break-word'
+    wordWrap: 'break-word',
+    fontWeight: '700'
   },
   profileGrid: {
     display: 'grid',
@@ -315,18 +322,20 @@ const styles = {
     display: 'flex',
     flexDirection: 'column',
     padding: '1rem',
-    backgroundColor: '#f8f9fa',
-    borderRadius: '8px'
+    backgroundColor: '#f1f8f4',
+    borderRadius: '12px',
+    border: '1px solid rgba(76, 175, 80, 0.2)'
   },
   profileLabel: {
-    color: '#7f8c8d',
+    color: '#555',
     fontSize: '0.9rem',
-    marginBottom: '0.5rem'
+    marginBottom: '0.5rem',
+    fontWeight: '500'
   },
   profileValue: {
-    color: '#2c3e50',
+    color: '#1a5f4a',
     fontSize: '1.1rem',
-    fontWeight: 'bold'
+    fontWeight: '700'
   },
   emptyState: {
     textAlign: 'center',
@@ -338,25 +347,26 @@ const styles = {
     marginBottom: '1rem'
   },
   emptyTitle: {
-    color: '#2c3e50',
+    color: '#1a5f4a',
     fontSize: '2rem',
-    marginBottom: '1rem'
+    marginBottom: '1rem',
+    fontWeight: '700'
   },
   emptyText: {
-    color: '#7f8c8d',
+    color: '#555',
     fontSize: '1.1rem',
     marginBottom: '2rem',
     maxWidth: '500px',
     margin: '0 auto 2rem'
   },
   generateBtn: {
-    backgroundColor: '#3498db',
+    backgroundColor: '#4caf50',
     color: 'white',
     padding: 'clamp(0.875rem, 2vw, 1rem) clamp(1.5rem, 4vw, 2rem)',
     border: 'none',
-    borderRadius: '8px',
+    borderRadius: '12px',
     fontSize: 'clamp(0.95rem, 3vw, 1.1rem)',
-    fontWeight: 'bold',
+    fontWeight: '600',
     cursor: 'pointer',
     display: 'inline-flex',
     alignItems: 'center',
@@ -364,17 +374,21 @@ const styles = {
     minHeight: '44px',
     width: '100%',
     maxWidth: '400px',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    boxShadow: '0 4px 15px rgba(76, 175, 80, 0.4)',
+    transition: 'all 0.3s ease'
   },
   regenerateBtn: {
-    backgroundColor: '#9b59b6',
+    backgroundColor: '#4caf50',
     color: 'white',
     padding: '0.75rem 1.5rem',
     border: 'none',
-    borderRadius: '6px',
+    borderRadius: '10px',
     fontSize: '1rem',
-    fontWeight: 'bold',
-    cursor: 'pointer'
+    fontWeight: '600',
+    cursor: 'pointer',
+    boxShadow: '0 4px 15px rgba(76, 175, 80, 0.3)',
+    transition: 'all 0.3s ease'
   },
   spinner: {
     border: '3px solid rgba(255,255,255,0.3)',
@@ -388,15 +402,16 @@ const styles = {
   planInfo: {
     marginBottom: '2rem',
     paddingBottom: '1.5rem',
-    borderBottom: '2px solid #ecf0f1'
+    borderBottom: '2px solid #e8f5e9'
   },
   planName: {
-    color: '#2c3e50',
+    color: '#1a5f4a',
     fontSize: '1.5rem',
-    marginBottom: '0.5rem'
+    marginBottom: '0.5rem',
+    fontWeight: '700'
   },
   planDescription: {
-    color: '#7f8c8d',
+    color: '#555',
     fontSize: '1rem',
     marginBottom: '1rem'
   },
@@ -410,22 +425,24 @@ const styles = {
     flexDirection: 'column'
   },
   statLabel: {
-    color: '#95a5a6',
+    color: '#757575',
     fontSize: '0.9rem',
-    marginBottom: '0.25rem'
+    marginBottom: '0.25rem',
+    fontWeight: '500'
   },
   statValue: {
-    color: '#2c3e50',
+    color: '#1a5f4a',
     fontSize: '1.1rem',
-    fontWeight: 'bold'
+    fontWeight: '700'
   },
   workoutsContainer: {
     marginTop: '2rem'
   },
   sectionTitle: {
-    color: '#2c3e50',
+    color: '#1a5f4a',
     fontSize: '1.5rem',
-    marginBottom: '1.5rem'
+    marginBottom: '1.5rem',
+    fontWeight: '700'
   },
   workoutGrid: {
     display: 'grid',
@@ -433,11 +450,12 @@ const styles = {
     gap: 'clamp(1rem, 3vw, 1.5rem)'
   },
   workoutDay: {
-    border: '2px solid #ecf0f1',
-    borderRadius: '8px',
+    border: '2px solid #e8f5e9',
+    borderRadius: '16px',
     padding: '1.5rem',
-    backgroundColor: '#f8f9fa',
-    transition: 'transform 0.2s, box-shadow 0.2s'
+    backgroundColor: '#f1f8f4',
+    transition: 'transform 0.2s, box-shadow 0.2s',
+    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)'
   },
   dayHeader: {
     display: 'flex',
@@ -445,25 +463,27 @@ const styles = {
     alignItems: 'center',
     marginBottom: '1rem',
     paddingBottom: '0.75rem',
-    borderBottom: '1px solid #dee2e6'
+    borderBottom: '1px solid rgba(76, 175, 80, 0.2)'
   },
   dayTitle: {
-    color: '#2c3e50',
+    color: '#1a5f4a',
     fontSize: '1.2rem',
     margin: 0,
-    fontWeight: 'bold'
+    fontWeight: '700'
   },
   dayDuration: {
-    color: '#7f8c8d',
-    fontSize: '0.9rem'
+    color: '#4caf50',
+    fontSize: '0.9rem',
+    fontWeight: '600'
   },
   exerciseList: {
     marginBottom: '1rem'
   },
   exerciseCount: {
-    color: '#7f8c8d',
+    color: '#555',
     fontSize: '0.9rem',
-    marginBottom: '0.5rem'
+    marginBottom: '0.5rem',
+    fontWeight: '500'
   },
   exercises: {
     listStyle: 'none',
@@ -473,42 +493,48 @@ const styles = {
   exerciseItem: {
     marginBottom: '1rem',
     paddingBottom: '0.75rem',
-    borderBottom: '1px solid #ecf0f1'
+    borderBottom: '1px solid #e8f5e9'
   },
   exerciseListItem: {
-    color: '#34495e',
+    color: '#2c3e50',
     fontSize: '0.95rem',
     padding: '0.25rem 0',
     lineHeight: '1.5',
     marginBottom: '0.5rem'
   },
   moreExercises: {
-    color: '#3498db',
+    color: '#4caf50',
     fontSize: '0.9rem',
     fontStyle: 'italic',
-    marginTop: '0.5rem'
+    marginTop: '0.5rem',
+    fontWeight: '600'
   },
   startBtn: {
     width: '100%',
-    backgroundColor: '#27ae60',
+    backgroundColor: '#4caf50',
     color: 'white',
     padding: '0.75rem',
     border: 'none',
-    borderRadius: '6px',
+    borderRadius: '10px',
     fontSize: '1rem',
-    fontWeight: 'bold',
-    cursor: 'pointer'
+    fontWeight: '600',
+    cursor: 'pointer',
+    boxShadow: '0 4px 15px rgba(76, 175, 80, 0.3)',
+    transition: 'all 0.3s ease'
   },
   actionsCard: {
-    backgroundColor: 'white',
-    borderRadius: '10px',
-    boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-    padding: '1.5rem'
+    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+    borderRadius: '20px',
+    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
+    padding: '1.5rem',
+    backdropFilter: 'blur(10px)',
+    border: '1px solid rgba(255, 255, 255, 0.2)'
   },
   actionsTitle: {
-    color: '#2c3e50',
+    color: '#1a5f4a',
     fontSize: '1.3rem',
-    marginBottom: '1rem'
+    marginBottom: '1rem',
+    fontWeight: '700'
   },
   actions: {
     display: 'grid',
@@ -516,25 +542,26 @@ const styles = {
     gap: 'clamp(0.75rem, 2vw, 1rem)'
   },
   actionBtn: {
-    backgroundColor: '#ecf0f1',
-    color: '#2c3e50',
+    backgroundColor: '#f1f8f4',
+    color: '#1a5f4a',
     padding: 'clamp(0.875rem, 2vw, 1rem)',
-    border: 'none',
-    borderRadius: '6px',
+    border: '2px solid rgba(76, 175, 80, 0.3)',
+    borderRadius: '10px',
     fontSize: 'clamp(0.9rem, 2.5vw, 1rem)',
     fontWeight: '600',
     cursor: 'pointer',
-    transition: 'background-color 0.2s',
+    transition: 'all 0.3s ease',
     minHeight: '44px',
     wordWrap: 'break-word'
-  },exerciseHeader: {
-  marginBottom: '0.5rem'
-},
-exerciseName: {
-  fontSize: '1rem',
-  fontWeight: '600',
-  color: '#2c3e50'
-}
+  },
+  exerciseHeader: {
+    marginBottom: '0.5rem'
+  },
+  exerciseName: {
+    fontSize: '1rem',
+    fontWeight: '600',
+    color: '#1a5f4a'
+  }
 };
 
 // Add spinner animation

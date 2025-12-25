@@ -57,28 +57,35 @@ const Home = () => {
 const styles = {
   container: {
     minHeight: 'calc(100vh - 70px)',
-    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+    background: 'linear-gradient(135deg, #0f4c3a 0%, #1a5f4a 25%, #2d7a5f 50%, #1a5f4a 75%, #0f4c3a 100%)',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    padding: 'clamp(1rem, 4vw, 2rem)'
+    padding: 'clamp(1rem, 4vw, 2rem)',
+    position: 'relative',
+    overflow: 'hidden'
   },
   hero: {
     textAlign: 'center',
-    color: 'white',
+    color: '#ffffff',
     maxWidth: '1000px',
-    width: '100%'
+    width: '100%',
+    zIndex: 1
   },
   title: {
     fontSize: 'clamp(1.75rem, 6vw, 3rem)',
     marginBottom: '1rem',
-    fontWeight: 'bold',
-    wordWrap: 'break-word'
+    fontWeight: '700',
+    wordWrap: 'break-word',
+    color: '#ffffff',
+    textShadow: '0 2px 10px rgba(0,0,0,0.3)'
   },
   subtitle: {
     fontSize: 'clamp(1rem, 3vw, 1.5rem)',
     marginBottom: 'clamp(2rem, 6vw, 3rem)',
-    opacity: 0.9
+    opacity: 0.95,
+    color: '#e8f5e9',
+    fontWeight: '400'
   },
   features: {
     display: 'grid',
@@ -87,10 +94,14 @@ const styles = {
     marginBottom: 'clamp(2rem, 6vw, 3rem)'
   },
   feature: {
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    backgroundColor: 'rgba(255, 255, 255, 0.08)',
     padding: 'clamp(1.5rem, 4vw, 2rem)',
-    borderRadius: '10px',
-    backdropFilter: 'blur(10px)'
+    borderRadius: '16px',
+    backdropFilter: 'blur(20px)',
+    border: '1px solid rgba(255, 255, 255, 0.1)',
+    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.2)',
+    transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+    color: '#ffffff'
   },
   icon: {
     fontSize: 'clamp(2rem, 6vw, 3rem)',
@@ -104,33 +115,37 @@ const styles = {
     flexWrap: 'wrap'
   },
   primaryBtn: {
-    backgroundColor: '#3498db',
-    color: 'white',
+    backgroundColor: '#4caf50',
+    color: '#ffffff',
     padding: 'clamp(0.875rem, 2vw, 1rem) clamp(1.5rem, 4vw, 2rem)',
-    borderRadius: '8px',
+    borderRadius: '12px',
     textDecoration: 'none',
     fontSize: 'clamp(0.95rem, 3vw, 1.1rem)',
-    fontWeight: 'bold',
-    transition: 'transform 0.2s',
+    fontWeight: '600',
+    transition: 'all 0.3s ease',
     display: 'inline-block',
     minHeight: '44px',
     minWidth: '120px',
-    textAlign: 'center'
+    textAlign: 'center',
+    boxShadow: '0 4px 15px rgba(76, 175, 80, 0.4)',
+    border: 'none',
+    cursor: 'pointer'
   },
   secondaryBtn: {
-    backgroundColor: 'transparent',
-    color: 'white',
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    color: '#ffffff',
     padding: 'clamp(0.875rem, 2vw, 1rem) clamp(1.5rem, 4vw, 2rem)',
-    borderRadius: '8px',
+    borderRadius: '12px',
     textDecoration: 'none',
     fontSize: 'clamp(0.95rem, 3vw, 1.1rem)',
-    fontWeight: 'bold',
-    border: '2px solid white',
-    transition: 'transform 0.2s',
+    fontWeight: '600',
+    border: '2px solid rgba(255, 255, 255, 0.3)',
+    transition: 'all 0.3s ease',
     display: 'inline-block',
     minHeight: '44px',
     minWidth: '120px',
-    textAlign: 'center'
+    textAlign: 'center',
+    backdropFilter: 'blur(10px)'
   }
 };
 

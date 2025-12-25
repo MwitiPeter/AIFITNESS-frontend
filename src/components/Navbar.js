@@ -84,12 +84,13 @@ const Navbar = memo(() => {
 
 const styles = {
   navbar: {
-    backgroundColor: '#2c3e50',
+    background: 'linear-gradient(135deg, #0f4c3a 0%, #1a5f4a 50%, #0f4c3a 100%)',
     padding: '1rem 0',
-    boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+    boxShadow: '0 4px 20px rgba(0, 0, 0, 0.3)',
     position: 'sticky',
     top: 0,
-    zIndex: 1000
+    zIndex: 1000,
+    borderBottom: '1px solid rgba(255, 255, 255, 0.1)'
   },
   container: {
     maxWidth: '1200px',
@@ -102,24 +103,25 @@ const styles = {
     position: 'relative'
   },
   brand: {
-    color: 'white',
+    color: '#ffffff',
     fontSize: 'clamp(1.1rem, 4vw, 1.5rem)',
-    fontWeight: 'bold',
+    fontWeight: '700',
     textDecoration: 'none',
-    whiteSpace: 'nowrap'
+    whiteSpace: 'nowrap',
+    textShadow: '0 2px 4px rgba(0,0,0,0.3)'
   },
   mobileMenuButton: {
-    backgroundColor: 'transparent',
-    border: 'none',
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    border: '1px solid rgba(255, 255, 255, 0.2)',
     color: 'white',
     fontSize: '1.5rem',
     cursor: 'pointer',
     padding: '0.5rem',
     minWidth: '44px',
     minHeight: '44px',
-    '@media (min-width: 768px)': {
-      display: 'none'
-    }
+    borderRadius: '8px',
+    transition: 'all 0.3s ease',
+    backdropFilter: 'blur(10px)'
   },
   navLinks: {
     display: 'flex',
@@ -134,42 +136,53 @@ const styles = {
     top: '100%',
     left: 0,
     right: 0,
-    backgroundColor: '#2c3e50',
+    background: 'linear-gradient(135deg, #0f4c3a 0%, #1a5f4a 100%)',
     padding: '1rem',
-    boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
+    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
     width: '100%',
-    gap: '0.75rem'
+    gap: '0.75rem',
+    borderRadius: '0 0 16px 16px',
+    backdropFilter: 'blur(10px)',
+    borderTop: '1px solid rgba(255, 255, 255, 0.1)'
   },
   navLinksClosed: {
     display: 'none'
   },
   link: {
-    color: 'white',
+    color: '#ffffff',
     textDecoration: 'none',
     fontSize: 'clamp(0.9rem, 2.5vw, 1rem)',
-    transition: 'color 0.3s',
-    padding: '0.5rem',
+    transition: 'all 0.3s ease',
+    padding: '0.5rem 0.75rem',
     minHeight: '44px',
     display: 'flex',
-    alignItems: 'center'
+    alignItems: 'center',
+    borderRadius: '8px',
+    fontWeight: '500'
   },
   userName: {
-    color: '#3498db',
-    fontWeight: '500',
+    color: '#e8f5e9',
+    fontWeight: '600',
     fontSize: 'clamp(0.85rem, 2.5vw, 1rem)',
-    whiteSpace: 'nowrap'
+    whiteSpace: 'nowrap',
+    padding: '0.5rem 0.75rem',
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    borderRadius: '8px',
+    backdropFilter: 'blur(10px)'
   },
   logoutBtn: {
-    backgroundColor: '#e74c3c',
-    color: 'white',
-    border: 'none',
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    color: '#ffffff',
+    border: '1px solid rgba(255, 255, 255, 0.3)',
     padding: '0.75rem 1rem',
-    borderRadius: '4px',
+    borderRadius: '10px',
     cursor: 'pointer',
     fontSize: 'clamp(0.9rem, 2.5vw, 1rem)',
     minHeight: '44px',
     minWidth: '80px',
-    transition: 'background-color 0.3s'
+    transition: 'all 0.3s ease',
+    fontWeight: '600',
+    backdropFilter: 'blur(10px)'
   }
 };
 

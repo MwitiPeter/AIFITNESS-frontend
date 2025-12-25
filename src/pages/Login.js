@@ -109,36 +109,41 @@ const styles = {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#f5f5f5',
+    background: 'linear-gradient(135deg, #0f4c3a 0%, #1a5f4a 25%, #2d7a5f 50%, #1a5f4a 75%, #0f4c3a 100%)',
     padding: 'clamp(1rem, 4vw, 2rem)'
   },
   formCard: {
-    backgroundColor: 'white',
-    padding: 'clamp(1.5rem, 4vw, 2rem)',
-    borderRadius: '10px',
-    boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
+    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+    padding: 'clamp(1.5rem, 4vw, 2.5rem)',
+    borderRadius: '20px',
+    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
     width: '100%',
-    maxWidth: '400px',
-    boxSizing: 'border-box'
+    maxWidth: '420px',
+    boxSizing: 'border-box',
+    backdropFilter: 'blur(10px)',
+    border: '1px solid rgba(255, 255, 255, 0.2)'
   },
   title: {
     textAlign: 'center',
     marginBottom: 'clamp(1.5rem, 4vw, 2rem)',
-    color: '#2c3e50',
-    fontSize: 'clamp(1.5rem, 4vw, 2rem)'
+    color: '#1a5f4a',
+    fontSize: 'clamp(1.5rem, 4vw, 2rem)',
+    fontWeight: '700'
   },
   error: {
-    backgroundColor: '#fee',
-    color: '#c33',
+    backgroundColor: '#ffebee',
+    color: '#c62828',
     padding: '0.75rem',
-    borderRadius: '4px',
+    borderRadius: '8px',
     marginBottom: '1rem',
-    textAlign: 'center'
+    textAlign: 'center',
+    border: '1px solid #ffcdd2',
+    fontSize: '0.9rem'
   },
   form: {
     display: 'flex',
     flexDirection: 'column',
-    gap: '1rem'
+    gap: '1.25rem'
   },
   formGroup: {
     display: 'flex',
@@ -146,40 +151,46 @@ const styles = {
   },
   label: {
     marginBottom: '0.5rem',
-    color: '#555',
-    fontWeight: '500'
+    color: '#2c3e50',
+    fontWeight: '600',
+    fontSize: '0.95rem'
   },
   input: {
     padding: 'clamp(0.75rem, 2vw, 0.875rem)',
-    border: '1px solid #ddd',
-    borderRadius: '4px',
-    fontSize: '16px', /* Prevents zoom on iOS */
+    border: '2px solid #e0e0e0',
+    borderRadius: '10px',
+    fontSize: '16px',
     width: '100%',
     boxSizing: 'border-box',
-    minHeight: '44px'
+    minHeight: '44px',
+    transition: 'border-color 0.3s ease',
+    backgroundColor: '#ffffff'
   },
   submitBtn: {
-    backgroundColor: '#3498db',
+    backgroundColor: '#4caf50',
     color: 'white',
     padding: 'clamp(0.75rem, 2vw, 0.875rem)',
     border: 'none',
-    borderRadius: '4px',
+    borderRadius: '10px',
     fontSize: 'clamp(0.95rem, 2.5vw, 1rem)',
-    fontWeight: 'bold',
+    fontWeight: '600',
     cursor: 'pointer',
     marginTop: '1rem',
     width: '100%',
-    minHeight: '44px'
+    minHeight: '44px',
+    boxShadow: '0 4px 15px rgba(76, 175, 80, 0.3)',
+    transition: 'all 0.3s ease'
   },
   footer: {
     textAlign: 'center',
     marginTop: '1.5rem',
-    color: '#666'
+    color: '#555'
   },
   link: {
-    color: '#3498db',
+    color: '#4caf50',
     textDecoration: 'none',
-    fontWeight: '500'
+    fontWeight: '600',
+    transition: 'color 0.3s ease'
   }
 };
 

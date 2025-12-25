@@ -318,7 +318,7 @@ const WorkoutTracker = () => {
 const styles = {
   container: {
     minHeight: 'calc(100vh - 70px)',
-    backgroundColor: '#f5f5f5',
+    background: 'linear-gradient(135deg, #0f4c3a 0%, #1a5f4a 25%, #2d7a5f 50%, #1a5f4a 75%, #0f4c3a 100%)',
     padding: 'clamp(1rem, 4vw, 2rem)'
   },
   content: {
@@ -330,45 +330,55 @@ const styles = {
     marginBottom: 'clamp(1rem, 4vw, 2rem)'
   },
   backBtn: {
-    backgroundColor: '#95a5a6',
-    color: 'white',
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    color: '#ffffff',
     padding: 'clamp(0.5rem, 1.5vw, 0.75rem) clamp(0.75rem, 2vw, 1rem)',
-    border: 'none',
-    borderRadius: '6px',
+    border: '1px solid rgba(255, 255, 255, 0.3)',
+    borderRadius: '10px',
     fontSize: 'clamp(0.9rem, 2.5vw, 1rem)',
     cursor: 'pointer',
     marginBottom: '1rem',
-    minHeight: '44px'
+    minHeight: '44px',
+    fontWeight: '600',
+    transition: 'all 0.3s ease',
+    backdropFilter: 'blur(10px)'
   },
   title: {
-    color: '#2c3e50',
+    color: '#ffffff',
     fontSize: 'clamp(1.5rem, 5vw, 2.5rem)',
-    wordWrap: 'break-word'
+    wordWrap: 'break-word',
+    fontWeight: '700',
+    textShadow: '0 2px 10px rgba(0,0,0,0.3)'
   },
   error: {
-    backgroundColor: '#fee',
-    color: '#c33',
+    backgroundColor: '#ffebee',
+    color: '#c62828',
     padding: '1rem',
-    borderRadius: '8px',
-    marginBottom: '1rem'
+    borderRadius: '12px',
+    marginBottom: '1rem',
+    border: '1px solid #ffcdd2'
   },
   errorCard: {
-    backgroundColor: 'white',
+    backgroundColor: 'rgba(255, 255, 255, 0.95)',
     padding: '3rem',
-    borderRadius: '10px',
+    borderRadius: '20px',
     textAlign: 'center',
     maxWidth: '500px',
-    margin: '0 auto'
+    margin: '0 auto',
+    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
+    backdropFilter: 'blur(10px)'
   },
   button: {
-    backgroundColor: '#3498db',
+    backgroundColor: '#4caf50',
     color: 'white',
     padding: '0.75rem 1.5rem',
     border: 'none',
-    borderRadius: '6px',
+    borderRadius: '10px',
     fontSize: '1rem',
     cursor: 'pointer',
-    marginTop: '1rem'
+    marginTop: '1rem',
+    fontWeight: '600',
+    boxShadow: '0 4px 15px rgba(76, 175, 80, 0.3)'
   },
   mainGrid: {
     display: 'grid',
@@ -376,17 +386,21 @@ const styles = {
     gap: 'clamp(1rem, 3vw, 2rem)'
   },
   sidebar: {
-    backgroundColor: 'white',
-    borderRadius: '10px',
+    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+    borderRadius: '20px',
     padding: 'clamp(1rem, 3vw, 1.5rem)',
     height: 'fit-content',
     position: 'sticky',
-    top: 'clamp(1rem, 3vw, 2rem)'
+    top: 'clamp(1rem, 3vw, 2rem)',
+    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
+    backdropFilter: 'blur(10px)',
+    border: '1px solid rgba(255, 255, 255, 0.2)'
   },
   sidebarTitle: {
-    color: '#2c3e50',
+    color: '#1a5f4a',
     fontSize: '1.2rem',
-    marginBottom: '1rem'
+    marginBottom: '1rem',
+    fontWeight: '700'
   },
   dayList: {
     display: 'flex',
@@ -394,21 +408,22 @@ const styles = {
     gap: '0.75rem'
   },
   dayButton: {
-    backgroundColor: '#f8f9fa',
-    border: '2px solid #dee2e6',
-    borderRadius: '8px',
+    backgroundColor: '#f1f8f4',
+    border: '2px solid #e8f5e9',
+    borderRadius: '12px',
     padding: '1rem',
     cursor: 'pointer',
     textAlign: 'left',
-    transition: 'all 0.2s',
+    transition: 'all 0.3s ease',
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center'
   },
   dayButtonActive: {
-    backgroundColor: '#3498db',
-    borderColor: '#3498db',
-    color: 'white'
+    backgroundColor: '#4caf50',
+    borderColor: '#4caf50',
+    color: 'white',
+    boxShadow: '0 4px 15px rgba(76, 175, 80, 0.3)'
   },
   dayButtonText: {
     fontWeight: '600',
@@ -423,12 +438,14 @@ const styles = {
     flexDirection: 'column'
   },
   card: {
-    backgroundColor: 'white',
-    borderRadius: '10px',
+    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+    borderRadius: '20px',
     padding: 'clamp(1rem, 4vw, 2rem)',
-    boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
     width: '100%',
-    boxSizing: 'border-box'
+    boxSizing: 'border-box',
+    backdropFilter: 'blur(10px)',
+    border: '1px solid rgba(255, 255, 255, 0.2)'
   },
   cardHeader: {
     display: 'flex',
@@ -436,32 +453,35 @@ const styles = {
     alignItems: 'flex-start',
     marginBottom: '2rem',
     paddingBottom: '1rem',
-    borderBottom: '2px solid #ecf0f1'
+    borderBottom: '2px solid #e8f5e9'
   },
   cardTitle: {
-    color: '#2c3e50',
+    color: '#1a5f4a',
     fontSize: '1.8rem',
-    marginBottom: '0.5rem'
+    marginBottom: '0.5rem',
+    fontWeight: '700'
   },
   cardSubtitle: {
-    color: '#7f8c8d',
+    color: '#555',
     fontSize: '1rem'
   },
   completionBadge: {
-    backgroundColor: '#27ae60',
+    backgroundColor: '#4caf50',
     color: 'white',
     padding: '0.5rem 1rem',
     borderRadius: '20px',
     fontSize: '1rem',
-    fontWeight: 'bold'
+    fontWeight: '700',
+    boxShadow: '0 2px 8px rgba(76, 175, 80, 0.3)'
   },
   exerciseSection: {
     marginBottom: '2rem'
   },
   sectionTitle: {
-    color: '#2c3e50',
+    color: '#1a5f4a',
     fontSize: '1.5rem',
-    marginBottom: '1rem'
+    marginBottom: '1rem',
+    fontWeight: '700'
   },
   exerciseList: {
     display: 'flex',
@@ -469,14 +489,16 @@ const styles = {
     gap: '1rem'
   },
   exerciseCard: {
-    border: '2px solid #dee2e6',
-    borderRadius: '8px',
+    border: '2px solid #e8f5e9',
+    borderRadius: '12px',
     padding: '1rem',
-    transition: 'all 0.2s'
+    transition: 'all 0.3s ease',
+    backgroundColor: '#ffffff'
   },
   exerciseCardCompleted: {
-    backgroundColor: '#d4edda',
-    borderColor: '#28a745'
+    backgroundColor: '#e8f5e9',
+    borderColor: '#4caf50',
+    boxShadow: '0 2px 8px rgba(76, 175, 80, 0.2)'
   },
   exerciseHeader: {
     marginBottom: '0.75rem'
@@ -495,7 +517,7 @@ const styles = {
   exerciseName: {
     fontSize: '1.1rem',
     fontWeight: '600',
-    color: '#2c3e50'
+    color: '#1a5f4a'
   },
   exerciseDetails: {
     display: 'flex',
@@ -508,14 +530,14 @@ const styles = {
     fontSize: '0.95rem'
   },
   exerciseInstructions: {
-    color: '#7f8c8d',
+    color: '#555',
     fontSize: '0.9rem',
     fontStyle: 'italic',
     margin: 0,
     marginBottom: '0.75rem'
   },
   form: {
-    borderTop: '2px solid #ecf0f1',
+    borderTop: '2px solid #e8f5e9',
     paddingTop: '2rem'
   },
   formGrid: {
@@ -530,40 +552,45 @@ const styles = {
     marginBottom: '1.5rem'
   },
   label: {
-    color: '#555',
+    color: '#1a5f4a',
     fontWeight: '600',
     marginBottom: '0.5rem',
     fontSize: '1rem'
   },
   input: {
     padding: 'clamp(0.75rem, 2vw, 0.875rem)',
-    border: '1px solid #ddd',
-    borderRadius: '6px',
-    fontSize: '16px', /* Prevents zoom on iOS */
+    border: '2px solid #e0e0e0',
+    borderRadius: '10px',
+    fontSize: '16px',
     width: '100%',
     boxSizing: 'border-box',
-    minHeight: '44px'
+    minHeight: '44px',
+    backgroundColor: '#ffffff',
+    transition: 'border-color 0.3s ease'
   },
   select: {
     padding: 'clamp(0.75rem, 2vw, 0.875rem)',
-    border: '1px solid #ddd',
-    borderRadius: '6px',
-    fontSize: '16px', /* Prevents zoom on iOS */
+    border: '2px solid #e0e0e0',
+    borderRadius: '10px',
+    fontSize: '16px',
     backgroundColor: 'white',
     width: '100%',
     boxSizing: 'border-box',
-    minHeight: '44px'
+    minHeight: '44px',
+    transition: 'border-color 0.3s ease'
   },
   textarea: {
     padding: 'clamp(0.75rem, 2vw, 0.875rem)',
-    border: '1px solid #ddd',
-    borderRadius: '6px',
-    fontSize: '16px', /* Prevents zoom on iOS */
+    border: '2px solid #e0e0e0',
+    borderRadius: '10px',
+    fontSize: '16px',
     fontFamily: 'inherit',
     resize: 'vertical',
     width: '100%',
     boxSizing: 'border-box',
-    minHeight: '100px'
+    minHeight: '100px',
+    backgroundColor: '#ffffff',
+    transition: 'border-color 0.3s ease'
   },
   ratingContainer: {
     display: 'flex',
@@ -573,33 +600,36 @@ const styles = {
   ratingBtn: {
     backgroundColor: '#e9ecef',
     border: 'none',
-    borderRadius: '6px',
+    borderRadius: '8px',
     padding: '0.75rem',
     fontSize: '1.5rem',
     cursor: 'pointer',
-    transition: 'all 0.2s'
+    transition: 'all 0.3s ease'
   },
   ratingBtnActive: {
     backgroundColor: '#ffc107',
-    transform: 'scale(1.1)'
+    transform: 'scale(1.1)',
+    boxShadow: '0 2px 8px rgba(255, 193, 7, 0.4)'
   },
   ratingHint: {
-    color: '#7f8c8d',
+    color: '#555',
     fontSize: '0.9rem',
     margin: 0
   },
   submitBtn: {
     width: '100%',
-    backgroundColor: '#27ae60',
+    backgroundColor: '#4caf50',
     color: 'white',
     padding: 'clamp(0.875rem, 2vw, 1rem)',
     border: 'none',
-    borderRadius: '8px',
+    borderRadius: '12px',
     fontSize: 'clamp(1rem, 3vw, 1.1rem)',
-    fontWeight: 'bold',
+    fontWeight: '600',
     cursor: 'pointer',
     marginTop: '1rem',
-    minHeight: '44px'
+    minHeight: '44px',
+    boxShadow: '0 4px 15px rgba(76, 175, 80, 0.4)',
+    transition: 'all 0.3s ease'
   }
 };
 export default WorkoutTracker;

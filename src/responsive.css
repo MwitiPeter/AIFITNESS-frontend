@@ -1,0 +1,212 @@
+/* Responsive Design for AI Fitness App */
+
+/* Base responsive utilities */
+* {
+  box-sizing: border-box;
+}
+
+/* Mobile-first responsive breakpoints */
+/* Small devices (phones, 576px and up) */
+/* Medium devices (tablets, 768px and up) */
+/* Large devices (desktops, 992px and up) */
+/* Extra large devices (large desktops, 1200px and up) */
+
+/* Mobile styles (default - up to 767px) */
+@media (max-width: 767px) {
+  /* Navbar responsive */
+  .navbar-container {
+    flex-direction: column !important;
+    gap: 1rem !important;
+  }
+
+  .navbar-links {
+    flex-direction: column !important;
+    width: 100% !important;
+    gap: 0.5rem !important;
+  }
+
+  .navbar-link {
+    width: 100% !important;
+    text-align: center !important;
+    padding: 0.75rem !important;
+  }
+
+  /* Show mobile menu button on mobile */
+  button[aria-label="Toggle menu"] {
+    display: block !important;
+  }
+
+  /* WorkoutTracker - Stack sidebar and main content on mobile */
+  .workout-tracker-grid {
+    grid-template-columns: 1fr !important;
+  }
+  
+  /* Sidebar should not be sticky on mobile */
+  .workout-tracker-grid > div:first-child {
+    position: relative !important;
+    top: 0 !important;
+  }
+
+  /* Sidebar should not be sticky on mobile */
+  div[style*="position: sticky"] {
+    position: relative !important;
+    top: 0 !important;
+  }
+
+  /* Make input groups stack on mobile */
+  div[style*="display: flex"][style*="gap"] {
+    flex-direction: column !important;
+  }
+
+  /* Container padding */
+  .page-container {
+    padding: 1rem !important;
+  }
+
+  /* Typography */
+  h1 {
+    font-size: 1.75rem !important;
+  }
+
+  h2 {
+    font-size: 1.5rem !important;
+  }
+
+  h3 {
+    font-size: 1.25rem !important;
+  }
+
+  /* Cards */
+  .card {
+    padding: 1rem !important;
+  }
+
+  /* Grid layouts */
+  .grid-responsive {
+    grid-template-columns: 1fr !important;
+  }
+
+  .grid-2-responsive {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Forms */
+  .form-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Buttons */
+  .btn-responsive {
+    width: 100% !important;
+    padding: 0.875rem 1rem !important;
+    font-size: 1rem !important;
+  }
+
+  /* Hide on mobile */
+  .hide-mobile {
+    display: none !important;
+  }
+}
+
+/* Tablet styles (768px to 991px) */
+@media (min-width: 768px) and (max-width: 991px) {
+  .grid-responsive {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  .grid-2-responsive {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  .page-container {
+    padding: 1.5rem !important;
+  }
+
+  /* WorkoutTracker - Adjust grid for tablet */
+  div[style*="gridTemplateColumns"][style*="300px"] {
+    grid-template-columns: 250px 1fr !important;
+  }
+}
+
+/* Desktop styles (992px and up) */
+@media (min-width: 992px) {
+  .grid-responsive {
+    grid-template-columns: repeat(3, 1fr) !important;
+  }
+
+  .grid-2-responsive {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+/* Touch-friendly elements for mobile */
+@media (max-width: 767px) {
+  button,
+  a,
+  input[type="button"],
+  input[type="submit"] {
+    min-height: 44px !important; /* Apple's recommended touch target size */
+    min-width: 44px !important;
+  }
+
+  input,
+  select,
+  textarea {
+    font-size: 16px !important; /* Prevents zoom on iOS */
+  }
+
+  /* Ensure all cards and containers are full width on mobile */
+  div[style*="maxWidth"] {
+    max-width: 100% !important;
+  }
+
+  /* Improve spacing on mobile */
+  h1, h2, h3 {
+    line-height: 1.2 !important;
+  }
+
+  /* Better button spacing */
+  button {
+    margin: 0.25rem 0 !important;
+  }
+}
+
+/* Landscape mobile orientation */
+@media (max-width: 767px) and (orientation: landscape) {
+  .page-container {
+    padding: 0.75rem !important;
+  }
+}
+
+/* Print styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+}
+
+/* High DPI displays */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  /* Ensure crisp rendering on retina displays */
+  body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+/* Accessibility - Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Dark mode support (optional) */
+@media (prefers-color-scheme: dark) {
+  /* Can be implemented later if needed */
+}
+

@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { workoutAPI, profileAPI } from '../utils/api';
 import { useAuth } from '../context/AuthContext';
 import Loading from '../components/Loading';
-import VoicePlayer from '../components/VoicePlayer'; // ADDED
+import VoicePlayer from '../components/VoicePlayer';
 import ExerciseDetails from '../components/ExerciseDetails';
-const Dashboard = () => {
+
+const Dashboard = React.memo(() => {
   const [profile, setProfile] = useState(null);
   const [workoutPlan, setWorkoutPlan] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -14,11 +15,7 @@ const Dashboard = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       setLoading(true);
 
@@ -41,9 +38,13 @@ const Dashboard = () => {
       setError('Failed to load dashboard data');
       setLoading(false);
     }
-  };
+  }, []);
 
-  const handleGenerateWorkout = async () => {
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
+
+  const handleGenerateWorkout = useCallback(async () => {
     setGenerating(true);
     setError('');
 
@@ -57,7 +58,7 @@ const Dashboard = () => {
     } finally {
       setGenerating(false);
     }
-  };
+  }, []);
 
   if (loading) {
     return <Loading message="Loading your dashboard..." />;
@@ -170,27 +171,47 @@ const Dashboard = () => {
               </div>
 
               {/* Daily Workouts */}
-              <div style={styles.exercises}>
-                {day.exercises.slice(0, 3).map((exercise, idx) => (
-                  <div key={idx} style={styles.exerciseItem}>
-                    <div style={styles.exerciseHeader}>
-                      <span style={styles.exerciseName}>
-                        • {exercise.name}
-                      </span>
+              <div style={styles.workoutsContainer}>
+                <h3 style={styles.sectionTitle}>📅 Your Workout Schedule</h3>
+                <div style={styles.workoutGrid}>
+                  {workoutPlan.dailyWorkouts.map((day, dayIndex) => (
+                    <div key={dayIndex} style={styles.workoutDay}>
+                      <div style={styles.dayHeader}>
+                        <h4 style={styles.dayTitle}>{day.day}</h4>
+                        <span style={styles.dayDuration}>
+                          ⏱️ {day.totalDuration} min
+                        </span>
+                      </div>
+                      
+                      <div style={styles.exerciseList}>
+                        <p style={styles.exerciseCount}>
+                          {day.exercises.length} exercises
+                        </p>
+                        <ul style={styles.exercises}>
+                          {day.exercises.slice(0, 3).map((exercise, idx) => (
+                            <li key={idx} style={styles.exerciseListItem}>
+                              • {exercise.name} ({exercise.sets} sets × {exercise.reps} reps)
+                            </li>
+                          ))}
+                          {day.exercises.length > 3 && (
+                            <li style={styles.moreExercises}>
+                              + {day.exercises.length - 3} more exercises
+                            </li>
+                          )}
+                        </ul>
+                      </div>
+                      
+                      <button
+                        onClick={() => navigate('/workout-tracker', { 
+                          state: { day: day, planId: workoutPlan._id } 
+                        })}
+                        style={styles.startBtn}
+                      >
+                        Start This Workout
+                      </button>
                     </div>
-
-                    {/* ADDED: Detailed Exercise Info */}
-                    <ExerciseDetails exercise={exercise} />
-
-                    {/* Voice Player */}
-                    <VoicePlayer exercise={exercise} />
-                  </div>
-                ))}
-                {day.exercises.length > 3 && (
-                  <li style={styles.moreExercises}>
-                    + {day.exercises.length - 3} more exercises
-                  </li>
-                )}
+                  ))}
+                </div>
               </div>
             </div>
 
@@ -223,32 +244,36 @@ const Dashboard = () => {
       </div>
     </div>
   );
-};
+});
 
 const styles = {
   container: {
     minHeight: 'calc(100vh - 70px)',
     backgroundColor: '#f5f5f5',
-    padding: '2rem'
+    padding: 'clamp(1rem, 4vw, 2rem)'
   },
   content: {
     maxWidth: '1200px',
-    margin: '0 auto'
+    margin: '0 auto',
+    width: '100%'
   },
   header: {
-    marginBottom: '2rem',
+    marginBottom: 'clamp(1rem, 4vw, 2rem)',
     display: 'flex',
     justifyContent: 'space-between',
-    alignItems: 'center'
+    alignItems: 'center',
+    flexWrap: 'wrap',
+    gap: '1rem'
   },
   title: {
     color: '#2c3e50',
-    fontSize: '2.5rem',
-    marginBottom: '0.5rem'
+    fontSize: 'clamp(1.5rem, 5vw, 2.5rem)',
+    marginBottom: '0.5rem',
+    wordWrap: 'break-word'
   },
   subtitle: {
     color: '#7f8c8d',
-    fontSize: '1.1rem'
+    fontSize: 'clamp(0.9rem, 3vw, 1.1rem)'
   },
   error: {
     backgroundColor: '#fee',
@@ -262,8 +287,10 @@ const styles = {
     backgroundColor: 'white',
     borderRadius: '10px',
     boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-    padding: '2rem',
-    marginBottom: '2rem'
+    padding: 'clamp(1rem, 4vw, 2rem)',
+    marginBottom: 'clamp(1rem, 4vw, 2rem)',
+    width: '100%',
+    boxSizing: 'border-box'
   },
   cardHeader: {
     display: 'flex',
@@ -275,13 +302,14 @@ const styles = {
   },
   cardTitle: {
     color: '#2c3e50',
-    fontSize: '1.8rem',
-    marginBottom: '1rem'
+    fontSize: 'clamp(1.3rem, 4vw, 1.8rem)',
+    marginBottom: '1rem',
+    wordWrap: 'break-word'
   },
   profileGrid: {
     display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-    gap: '1rem'
+    gridTemplateColumns: 'repeat(auto-fit, minmax(min(200px, 100%), 1fr))',
+    gap: 'clamp(0.75rem, 2vw, 1rem)'
   },
   profileItem: {
     display: 'flex',
@@ -324,15 +352,19 @@ const styles = {
   generateBtn: {
     backgroundColor: '#3498db',
     color: 'white',
-    padding: '1rem 2rem',
+    padding: 'clamp(0.875rem, 2vw, 1rem) clamp(1.5rem, 4vw, 2rem)',
     border: 'none',
     borderRadius: '8px',
-    fontSize: '1.1rem',
+    fontSize: 'clamp(0.95rem, 3vw, 1.1rem)',
     fontWeight: 'bold',
     cursor: 'pointer',
     display: 'inline-flex',
     alignItems: 'center',
-    gap: '0.5rem'
+    gap: '0.5rem',
+    minHeight: '44px',
+    width: '100%',
+    maxWidth: '400px',
+    justifyContent: 'center'
   },
   regenerateBtn: {
     backgroundColor: '#9b59b6',
@@ -397,8 +429,8 @@ const styles = {
   },
   workoutGrid: {
     display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
-    gap: '1.5rem'
+    gridTemplateColumns: 'repeat(auto-fill, minmax(min(280px, 100%), 1fr))',
+    gap: 'clamp(1rem, 3vw, 1.5rem)'
   },
   workoutDay: {
     border: '2px solid #ecf0f1',
@@ -480,19 +512,21 @@ const styles = {
   },
   actions: {
     display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-    gap: '1rem'
+    gridTemplateColumns: 'repeat(auto-fit, minmax(min(150px, 100%), 1fr))',
+    gap: 'clamp(0.75rem, 2vw, 1rem)'
   },
   actionBtn: {
     backgroundColor: '#ecf0f1',
     color: '#2c3e50',
-    padding: '1rem',
+    padding: 'clamp(0.875rem, 2vw, 1rem)',
     border: 'none',
     borderRadius: '6px',
-    fontSize: '1rem',
+    fontSize: 'clamp(0.9rem, 2.5vw, 1rem)',
     fontWeight: '600',
     cursor: 'pointer',
-    transition: 'background-color 0.2s'
+    transition: 'background-color 0.2s',
+    minHeight: '44px',
+    wordWrap: 'break-word'
   },exerciseHeader: {
   marginBottom: '0.5rem'
 },
@@ -516,5 +550,7 @@ try {
 } catch (e) {
   // Animation already exists
 }
+
+Dashboard.displayName = 'Dashboard';
 
 export default Dashboard;

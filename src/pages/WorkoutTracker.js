@@ -166,7 +166,7 @@ const WorkoutTracker = () => {
         </div>
         {error && <div style={styles.error}>{error}</div>}
 
-        <div style={styles.mainGrid}>
+        <div style={styles.mainGrid} className="workout-tracker-grid">
           {/* Left Side - Day Selection */}
           <div style={styles.sidebar}>
             <h3 style={styles.sidebarTitle}>Select Workout Day</h3>
@@ -319,28 +319,31 @@ const styles = {
   container: {
     minHeight: 'calc(100vh - 70px)',
     backgroundColor: '#f5f5f5',
-    padding: '2rem'
+    padding: 'clamp(1rem, 4vw, 2rem)'
   },
   content: {
     maxWidth: '1400px',
-    margin: '0 auto'
+    margin: '0 auto',
+    width: '100%'
   },
   header: {
-    marginBottom: '2rem'
+    marginBottom: 'clamp(1rem, 4vw, 2rem)'
   },
   backBtn: {
     backgroundColor: '#95a5a6',
     color: 'white',
-    padding: '0.5rem 1rem',
+    padding: 'clamp(0.5rem, 1.5vw, 0.75rem) clamp(0.75rem, 2vw, 1rem)',
     border: 'none',
     borderRadius: '6px',
-    fontSize: '1rem',
+    fontSize: 'clamp(0.9rem, 2.5vw, 1rem)',
     cursor: 'pointer',
-    marginBottom: '1rem'
+    marginBottom: '1rem',
+    minHeight: '44px'
   },
   title: {
     color: '#2c3e50',
-    fontSize: '2.5rem'
+    fontSize: 'clamp(1.5rem, 5vw, 2.5rem)',
+    wordWrap: 'break-word'
   },
   error: {
     backgroundColor: '#fee',
@@ -369,19 +372,16 @@ const styles = {
   },
   mainGrid: {
     display: 'grid',
-    gridTemplateColumns: '300px 1fr',
-    gap: '2rem',
-    '@media (max-width: 968px)': {
-      gridTemplateColumns: '1fr'
-    }
+    gridTemplateColumns: 'minmax(250px, 300px) 1fr',
+    gap: 'clamp(1rem, 3vw, 2rem)'
   },
   sidebar: {
     backgroundColor: 'white',
     borderRadius: '10px',
-    padding: '1.5rem',
+    padding: 'clamp(1rem, 3vw, 1.5rem)',
     height: 'fit-content',
     position: 'sticky',
-    top: '2rem'
+    top: 'clamp(1rem, 3vw, 2rem)'
   },
   sidebarTitle: {
     color: '#2c3e50',
@@ -425,8 +425,10 @@ const styles = {
   card: {
     backgroundColor: 'white',
     borderRadius: '10px',
-    padding: '2rem',
-    boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+    padding: 'clamp(1rem, 4vw, 2rem)',
+    boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+    width: '100%',
+    boxSizing: 'border-box'
   },
   cardHeader: {
     display: 'flex',
@@ -518,8 +520,8 @@ const styles = {
   },
   formGrid: {
     display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-    gap: '1rem',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(min(200px, 100%), 1fr))',
+    gap: 'clamp(0.75rem, 2vw, 1rem)',
     marginBottom: '1.5rem'
   },
   formGroup: {
@@ -534,25 +536,34 @@ const styles = {
     fontSize: '1rem'
   },
   input: {
-    padding: '0.75rem',
+    padding: 'clamp(0.75rem, 2vw, 0.875rem)',
     border: '1px solid #ddd',
     borderRadius: '6px',
-    fontSize: '1rem'
+    fontSize: '16px', /* Prevents zoom on iOS */
+    width: '100%',
+    boxSizing: 'border-box',
+    minHeight: '44px'
   },
   select: {
-    padding: '0.75rem',
+    padding: 'clamp(0.75rem, 2vw, 0.875rem)',
     border: '1px solid #ddd',
     borderRadius: '6px',
-    fontSize: '1rem',
-    backgroundColor: 'white'
+    fontSize: '16px', /* Prevents zoom on iOS */
+    backgroundColor: 'white',
+    width: '100%',
+    boxSizing: 'border-box',
+    minHeight: '44px'
   },
   textarea: {
-    padding: '0.75rem',
+    padding: 'clamp(0.75rem, 2vw, 0.875rem)',
     border: '1px solid #ddd',
     borderRadius: '6px',
-    fontSize: '1rem',
+    fontSize: '16px', /* Prevents zoom on iOS */
     fontFamily: 'inherit',
-    resize: 'vertical'
+    resize: 'vertical',
+    width: '100%',
+    boxSizing: 'border-box',
+    minHeight: '100px'
   },
   ratingContainer: {
     display: 'flex',
@@ -581,13 +592,14 @@ const styles = {
     width: '100%',
     backgroundColor: '#27ae60',
     color: 'white',
-    padding: '1rem',
+    padding: 'clamp(0.875rem, 2vw, 1rem)',
     border: 'none',
     borderRadius: '8px',
-    fontSize: '1.1rem',
+    fontSize: 'clamp(1rem, 3vw, 1.1rem)',
     fontWeight: 'bold',
     cursor: 'pointer',
-    marginTop: '1rem'
+    marginTop: '1rem',
+    minHeight: '44px'
   }
 };
 export default WorkoutTracker;

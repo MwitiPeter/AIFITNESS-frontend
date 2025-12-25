@@ -61,68 +61,76 @@ const styles = {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    padding: '2rem'
+    padding: 'clamp(1rem, 4vw, 2rem)'
   },
   hero: {
     textAlign: 'center',
     color: 'white',
-    maxWidth: '1000px'
+    maxWidth: '1000px',
+    width: '100%'
   },
   title: {
-    fontSize: '3rem',
+    fontSize: 'clamp(1.75rem, 6vw, 3rem)',
     marginBottom: '1rem',
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    wordWrap: 'break-word'
   },
   subtitle: {
-    fontSize: '1.5rem',
-    marginBottom: '3rem',
+    fontSize: 'clamp(1rem, 3vw, 1.5rem)',
+    marginBottom: 'clamp(2rem, 6vw, 3rem)',
     opacity: 0.9
   },
   features: {
     display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-    gap: '2rem',
-    marginBottom: '3rem'
+    gridTemplateColumns: 'repeat(auto-fit, minmax(min(250px, 100%), 1fr))',
+    gap: 'clamp(1rem, 4vw, 2rem)',
+    marginBottom: 'clamp(2rem, 6vw, 3rem)'
   },
   feature: {
     backgroundColor: 'rgba(255, 255, 255, 0.1)',
-    padding: '2rem',
+    padding: 'clamp(1.5rem, 4vw, 2rem)',
     borderRadius: '10px',
     backdropFilter: 'blur(10px)'
   },
   icon: {
-    fontSize: '3rem',
+    fontSize: 'clamp(2rem, 6vw, 3rem)',
     display: 'block',
     marginBottom: '1rem'
   },
   cta: {
     display: 'flex',
-    gap: '1rem',
+    gap: 'clamp(0.75rem, 2vw, 1rem)',
     justifyContent: 'center',
     flexWrap: 'wrap'
   },
   primaryBtn: {
     backgroundColor: '#3498db',
     color: 'white',
-    padding: '1rem 2rem',
+    padding: 'clamp(0.875rem, 2vw, 1rem) clamp(1.5rem, 4vw, 2rem)',
     borderRadius: '8px',
     textDecoration: 'none',
-    fontSize: '1.1rem',
+    fontSize: 'clamp(0.95rem, 3vw, 1.1rem)',
     fontWeight: 'bold',
     transition: 'transform 0.2s',
-    display: 'inline-block'
+    display: 'inline-block',
+    minHeight: '44px',
+    minWidth: '120px',
+    textAlign: 'center'
   },
   secondaryBtn: {
     backgroundColor: 'transparent',
     color: 'white',
-    padding: '1rem 2rem',
+    padding: 'clamp(0.875rem, 2vw, 1rem) clamp(1.5rem, 4vw, 2rem)',
     borderRadius: '8px',
     textDecoration: 'none',
-    fontSize: '1.1rem',
+    fontSize: 'clamp(0.95rem, 3vw, 1.1rem)',
     fontWeight: 'bold',
     border: '2px solid white',
     transition: 'transform 0.2s',
-    display: 'inline-block'
+    display: 'inline-block',
+    minHeight: '44px',
+    minWidth: '120px',
+    textAlign: 'center'
   }
 };
 

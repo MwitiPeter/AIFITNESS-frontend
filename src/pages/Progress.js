@@ -289,28 +289,30 @@ const styles = {
   container: {
     minHeight: 'calc(100vh - 70px)',
     backgroundColor: '#f5f5f5',
-    padding: '2rem'
+    padding: 'clamp(1rem, 4vw, 2rem)'
   },
   content: {
     maxWidth: '1200px',
-    margin: '0 auto'
+    margin: '0 auto',
+    width: '100%'
   },
   header: {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
-    marginBottom: '2rem',
+    marginBottom: 'clamp(1rem, 4vw, 2rem)',
     flexWrap: 'wrap',
     gap: '1rem'
   },
   title: {
     color: '#2c3e50',
-    fontSize: '2.5rem',
-    marginBottom: '0.5rem'
+    fontSize: 'clamp(1.5rem, 5vw, 2.5rem)',
+    marginBottom: '0.5rem',
+    wordWrap: 'break-word'
   },
   subtitle: {
     color: '#7f8c8d',
-    fontSize: '1.1rem'
+    fontSize: 'clamp(0.9rem, 3vw, 1.1rem)'
   },
   backBtn: {
     backgroundColor: '#95a5a6',
@@ -365,9 +367,9 @@ const styles = {
   },
   statsGrid: {
     display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-    gap: '1rem',
-    marginBottom: '2rem'
+    gridTemplateColumns: 'repeat(auto-fit, minmax(min(150px, 100%), 1fr))',
+    gap: 'clamp(0.75rem, 2vw, 1rem)',
+    marginBottom: 'clamp(1rem, 4vw, 2rem)'
   },
   statCard: {
     backgroundColor: 'white',
@@ -398,19 +400,22 @@ const styles = {
   card: {
     backgroundColor: 'white',
     borderRadius: '10px',
-    padding: '2rem',
-    marginBottom: '2rem',
-    boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+    padding: 'clamp(1rem, 4vw, 2rem)',
+    marginBottom: 'clamp(1rem, 4vw, 2rem)',
+    boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+    width: '100%',
+    boxSizing: 'border-box'
   },
   cardTitle: {
     color: '#2c3e50',
-    fontSize: '1.8rem',
-    marginBottom: '1.5rem'
+    fontSize: 'clamp(1.3rem, 4vw, 1.8rem)',
+    marginBottom: 'clamp(1rem, 3vw, 1.5rem)',
+    wordWrap: 'break-word'
   },
   averagesGrid: {
     display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-    gap: '1rem'
+    gridTemplateColumns: 'repeat(auto-fit, minmax(min(200px, 100%), 1fr))',
+    gap: 'clamp(0.75rem, 2vw, 1rem)'
   },
   averageItem: {
     display: 'flex',
@@ -502,8 +507,8 @@ const styles = {
   },
   logStats: {
     display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
-    gap: '1rem',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(min(120px, 100%), 1fr))',
+    gap: 'clamp(0.75rem, 2vw, 1rem)',
     marginBottom: '1rem'
   },
   logStat: {

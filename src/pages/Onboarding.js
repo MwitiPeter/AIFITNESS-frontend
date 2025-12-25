@@ -380,7 +380,7 @@ const styles = {
   container: {
     minHeight: 'calc(100vh - 70px)',
     backgroundColor: '#f5f5f5',
-    padding: '2rem',
+    padding: 'clamp(1rem, 4vw, 2rem)',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center'
@@ -389,9 +389,10 @@ const styles = {
     backgroundColor: 'white',
     borderRadius: '10px',
     boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
-    padding: '2rem',
+    padding: 'clamp(1.5rem, 4vw, 2rem)',
     maxWidth: '600px',
-    width: '100%'
+    width: '100%',
+    boxSizing: 'border-box'
   },
   progress: {
     width: '100%',
@@ -409,13 +410,15 @@ const styles = {
   title: {
     textAlign: 'center',
     color: '#2c3e50',
-    fontSize: '2rem',
-    marginBottom: '0.5rem'
+    fontSize: 'clamp(1.5rem, 4vw, 2rem)',
+    marginBottom: '0.5rem',
+    wordWrap: 'break-word'
   },
   subtitle: {
     textAlign: 'center',
     color: '#7f8c8d',
-    marginBottom: '2rem'
+    marginBottom: 'clamp(1.5rem, 4vw, 2rem)',
+    fontSize: 'clamp(0.9rem, 2.5vw, 1rem)'
   },
   error: {
     backgroundColor: '#fee',
@@ -426,12 +429,13 @@ const styles = {
     textAlign: 'center'
   },
   stepContent: {
-    minHeight: '400px'
+    minHeight: 'auto'
   },
   stepTitle: {
     color: '#34495e',
-    marginBottom: '1.5rem',
-    fontSize: '1.5rem'
+    marginBottom: 'clamp(1rem, 3vw, 1.5rem)',
+    fontSize: 'clamp(1.2rem, 3.5vw, 1.5rem)',
+    wordWrap: 'break-word'
   },
   formGroup: {
     marginBottom: '1.5rem'
@@ -444,20 +448,22 @@ const styles = {
   },
   input: {
     width: '100%',
-    padding: '0.75rem',
+    padding: 'clamp(0.75rem, 2vw, 0.875rem)',
     border: '1px solid #ddd',
     borderRadius: '4px',
-    fontSize: '1rem',
-    boxSizing: 'border-box'
+    fontSize: '16px', /* Prevents zoom on iOS */
+    boxSizing: 'border-box',
+    minHeight: '44px'
   },
   select: {
     width: '100%',
-    padding: '0.75rem',
+    padding: 'clamp(0.75rem, 2vw, 0.875rem)',
     border: '1px solid #ddd',
     borderRadius: '4px',
-    fontSize: '1rem',
+    fontSize: '16px', /* Prevents zoom on iOS */
     boxSizing: 'border-box',
-    backgroundColor: 'white'
+    backgroundColor: 'white',
+    minHeight: '44px'
   },
   inputGroup: {
     display: 'flex',
@@ -486,8 +492,8 @@ const styles = {
   },
   checkboxGroup: {
     display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-    gap: '0.75rem'
+    gridTemplateColumns: 'repeat(auto-fit, minmax(min(180px, 100%), 1fr))',
+    gap: 'clamp(0.5rem, 1.5vw, 0.75rem)'
   },
   checkboxLabel: {
     display: 'flex',
@@ -520,13 +526,14 @@ const styles = {
   },
   textarea: {
     width: '100%',
-    padding: '0.75rem',
+    padding: 'clamp(0.75rem, 2vw, 0.875rem)',
     border: '1px solid #ddd',
     borderRadius: '4px',
-    fontSize: '1rem',
+    fontSize: '16px', /* Prevents zoom on iOS */
     fontFamily: 'inherit',
     resize: 'vertical',
-    boxSizing: 'border-box'
+    boxSizing: 'border-box',
+    minHeight: '80px'
   },
   buttonGroup: {
     display: 'flex',
@@ -535,37 +542,40 @@ const styles = {
   },
   backBtn: {
     flex: '1',
-    padding: '0.75rem',
+    padding: 'clamp(0.75rem, 2vw, 0.875rem)',
     backgroundColor: '#95a5a6',
     color: 'white',
     border: 'none',
     borderRadius: '4px',
-    fontSize: '1rem',
+    fontSize: 'clamp(0.95rem, 2.5vw, 1rem)',
     fontWeight: 'bold',
-    cursor: 'pointer'
+    cursor: 'pointer',
+    minHeight: '44px'
   },
   nextBtn: {
     width: '100%',
-    padding: '0.75rem',
+    padding: 'clamp(0.75rem, 2vw, 0.875rem)',
     backgroundColor: '#3498db',
     color: 'white',
     border: 'none',
     borderRadius: '4px',
-    fontSize: '1rem',
+    fontSize: 'clamp(0.95rem, 2.5vw, 1rem)',
     fontWeight: 'bold',
     cursor: 'pointer',
-    marginTop: '2rem'
+    marginTop: 'clamp(1.5rem, 4vw, 2rem)',
+    minHeight: '44px'
   },
   submitBtn: {
     flex: '1',
-    padding: '0.75rem',
+    padding: 'clamp(0.75rem, 2vw, 0.875rem)',
     backgroundColor: '#27ae60',
     color: 'white',
     border: 'none',
     borderRadius: '4px',
-    fontSize: '1rem',
+    fontSize: 'clamp(0.95rem, 2.5vw, 1rem)',
     fontWeight: 'bold',
-    cursor: 'pointer'
+    cursor: 'pointer',
+    minHeight: '44px'
   }
 };
 

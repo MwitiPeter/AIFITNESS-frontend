@@ -140,21 +140,22 @@ const styles = {
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#f5f5f5',
-    padding: '2rem'
+    padding: 'clamp(1rem, 4vw, 2rem)'
   },
   formCard: {
     backgroundColor: 'white',
-    padding: '2rem',
+    padding: 'clamp(1.5rem, 4vw, 2rem)',
     borderRadius: '10px',
     boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
     width: '100%',
-    maxWidth: '400px'
+    maxWidth: '400px',
+    boxSizing: 'border-box'
   },
   title: {
     textAlign: 'center',
-    marginBottom: '2rem',
+    marginBottom: 'clamp(1.5rem, 4vw, 2rem)',
     color: '#2c3e50',
-    fontSize: '2rem'
+    fontSize: 'clamp(1.5rem, 4vw, 2rem)'
   },
   error: {
     backgroundColor: '#fee',
@@ -179,21 +180,26 @@ const styles = {
     fontWeight: '500'
   },
   input: {
-    padding: '0.75rem',
+    padding: 'clamp(0.75rem, 2vw, 0.875rem)',
     border: '1px solid #ddd',
     borderRadius: '4px',
-    fontSize: '1rem'
+    fontSize: '16px', /* Prevents zoom on iOS */
+    width: '100%',
+    boxSizing: 'border-box',
+    minHeight: '44px'
   },
   submitBtn: {
     backgroundColor: '#3498db',
     color: 'white',
-    padding: '0.75rem',
+    padding: 'clamp(0.75rem, 2vw, 0.875rem)',
     border: 'none',
     borderRadius: '4px',
-    fontSize: '1rem',
+    fontSize: 'clamp(0.95rem, 2.5vw, 1rem)',
     fontWeight: 'bold',
     cursor: 'pointer',
-    marginTop: '1rem'
+    marginTop: '1rem',
+    width: '100%',
+    minHeight: '44px'
   },
   footer: {
     textAlign: 'center',

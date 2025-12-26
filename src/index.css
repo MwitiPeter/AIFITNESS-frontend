@@ -118,3 +118,105 @@ textarea {
 * {
   transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
+
+/* Global Theme Application - Override inline styles with theme-aware CSS variables */
+/* These styles will apply theme colors globally across the entire app */
+
+/* Body and root background colors */
+html[data-theme="beginner"] {
+  --theme-bg-primary: #f5f5f5;
+  --theme-bg-secondary: #e8e8e8;
+  --theme-bg-tertiary: #d1d1d1;
+  --theme-text-primary: #000000;
+  --theme-text-secondary: #333333;
+  --theme-accent: #a8d5ba;
+  --theme-card-bg: #ffffff;
+  --theme-border: #e0e0e0;
+}
+
+html[data-theme="intermediate"] {
+  --theme-bg-primary: #1f2937;
+  --theme-bg-secondary: #111827;
+  --theme-bg-tertiary: #0f172a;
+  --theme-text-primary: #ffffff;
+  --theme-text-secondary: #e5e7eb;
+  --theme-accent: #fbbf24;
+  --theme-card-bg: #374151;
+  --theme-border: #4b5563;
+}
+
+html[data-theme="advanced"] {
+  --theme-bg-primary: #0a0a0a;
+  --theme-bg-secondary: #1a1a1a;
+  --theme-bg-tertiary: #2d2d2d;
+  --theme-text-primary: #ffffff;
+  --theme-text-secondary: #cccccc;
+  --theme-accent: #ef4444;
+  --theme-card-bg: #1a1a1a;
+  --theme-border: #404040;
+}
+
+/* Apply theme colors to body */
+body {
+  background-color: var(--theme-bg-primary) !important;
+  color: var(--theme-text-primary) !important;
+}
+
+/* Override common background patterns */
+body,
+#root,
+.App {
+  background: var(--theme-bg-primary) !important;
+  color: var(--theme-text-primary) !important;
+}
+
+/* Theme-aware gradient backgrounds */
+[style*="background: linear-gradient"][style*="#000000"],
+[style*="background: linear-gradient"][style*="#1a1a1a"] {
+  background: linear-gradient(180deg, var(--theme-bg-primary) 0%, var(--theme-bg-secondary) 50%, var(--theme-bg-primary) 100%) !important;
+}
+
+/* Theme-aware card backgrounds */
+[style*="backgroundColor: '#1a1a1a'"],
+[style*="backgroundColor: '#0a0a0a'"],
+[style*="backgroundColor: '#2d2d2d'"] {
+  background-color: var(--theme-card-bg) !important;
+  border-color: var(--theme-border) !important;
+}
+
+/* Theme-aware text colors */
+[style*="color: '#ffffff'"],
+[style*="color: '#999'"],
+[style*="color: '#555'"] {
+  color: var(--theme-text-primary) !important;
+}
+
+/* Theme-aware secondary text */
+[style*="color: '#999'"] {
+  color: var(--theme-text-secondary) !important;
+}
+
+/* Theme-aware buttons */
+[style*="backgroundColor: '#FFD700'"] {
+  background-color: var(--theme-accent) !important;
+  color: var(--theme-text-primary) !important;
+}
+
+/* Apply theme to all divs with inline styles containing dark colors */
+div[style*="background"] {
+  background-color: inherit;
+}
+
+/* Navbar theme */
+nav[style*="background"] {
+  background: linear-gradient(180deg, var(--theme-bg-primary) 0%, var(--theme-bg-secondary) 50%, var(--theme-bg-primary) 100%) !important;
+  border-bottom-color: var(--theme-border) !important;
+}
+
+/* Make sure theme applies to all pages */
+.page-container,
+.container,
+.content {
+  background-color: var(--theme-bg-primary) !important;
+  color: var(--theme-text-primary) !important;
+}

@@ -251,7 +251,7 @@ const Dashboard = React.memo(() => {
 const styles = {
   container: {
     minHeight: 'calc(100vh - 70px)',
-    background: 'linear-gradient(180deg, #000000 0%, #1a1a1a 50%, #000000 100%)',
+    background: 'linear-gradient(180deg, var(--theme-bg-primary) 0%, var(--theme-bg-secondary) 50%, var(--theme-bg-primary) 100%)',
     padding: 'clamp(1rem, 4vw, 2rem)'
   },
   content: {
@@ -268,20 +268,20 @@ const styles = {
     gap: '1rem'
   },
   title: {
-    color: '#ffffff',
+    color: 'var(--theme-text-primary)',
     fontSize: 'clamp(1.5rem, 5vw, 2.5rem)',
     marginBottom: '0.5rem',
     wordWrap: 'break-word',
     fontWeight: '700',
-    textShadow: '0 2px 10px rgba(0,0,0,0.3)'
+    textShadow: '0 2px 10px rgba(0,0,0,0.2)'
   },
   subtitle: {
-    color: '#999',
+    color: 'var(--theme-text-secondary)',
     fontSize: 'clamp(0.9rem, 3vw, 1.1rem)',
     opacity: 0.9
   },
   error: {
-    backgroundColor: '#2d1a1a',
+    backgroundColor: 'var(--theme-card-bg)',
     color: '#ff6b6b',
     padding: '1rem',
     borderRadius: '12px',
@@ -290,14 +290,14 @@ const styles = {
     border: '1px solid #ff6b6b'
   },
   card: {
-    backgroundColor: '#1a1a1a',
+    backgroundColor: 'var(--theme-card-bg)',
     borderRadius: '20px',
-    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.8)',
+    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
     padding: 'clamp(1rem, 4vw, 2rem)',
     marginBottom: 'clamp(1rem, 4vw, 2rem)',
     width: '100%',
     boxSizing: 'border-box',
-    border: '1px solid #2d2d2d'
+    border: `1px solid var(--theme-border)`
   },
   cardHeader: {
     display: 'flex',
@@ -308,7 +308,7 @@ const styles = {
     gap: '1rem'
   },
   cardTitle: {
-    color: '#ffffff',
+    color: 'var(--theme-text-primary)',
     fontSize: 'clamp(1.3rem, 4vw, 1.8rem)',
     marginBottom: '1rem',
     wordWrap: 'break-word',
@@ -323,18 +323,18 @@ const styles = {
     display: 'flex',
     flexDirection: 'column',
     padding: '1rem',
-    backgroundColor: '#0a0a0a',
+    backgroundColor: 'var(--theme-bg-secondary)',
     borderRadius: '12px',
-    border: '1px solid #2d2d2d'
+    border: `1px solid var(--theme-border)`
   },
   profileLabel: {
-    color: '#999',
+    color: 'var(--theme-text-secondary)',
     fontSize: '0.9rem',
     marginBottom: '0.5rem',
     fontWeight: '500'
   },
   profileValue: {
-    color: '#FFD700',
+    color: 'var(--theme-accent)',
     fontSize: '1.1rem',
     fontWeight: '700'
   },
@@ -348,21 +348,21 @@ const styles = {
     marginBottom: '1rem'
   },
   emptyTitle: {
-    color: '#ffffff',
+    color: 'var(--theme-text-primary)',
     fontSize: '2rem',
     marginBottom: '1rem',
     fontWeight: '700'
   },
   emptyText: {
-    color: '#999',
+    color: 'var(--theme-text-secondary)',
     fontSize: '1.1rem',
     marginBottom: '2rem',
     maxWidth: '500px',
     margin: '0 auto 2rem'
   },
   generateBtn: {
-    backgroundColor: '#FFD700',
-    color: '#000000',
+    backgroundColor: 'var(--theme-accent)',
+    color: 'var(--theme-text-primary)',
     padding: 'clamp(0.875rem, 2vw, 1rem) clamp(1.5rem, 4vw, 2rem)',
     border: 'none',
     borderRadius: '12px',
@@ -376,19 +376,19 @@ const styles = {
     width: '100%',
     maxWidth: '400px',
     justifyContent: 'center',
-    boxShadow: '0 4px 20px rgba(255, 215, 0, 0.4)',
+    boxShadow: '0 4px 20px rgba(0, 0, 0, 0.3)',
     transition: 'all 0.3s ease'
   },
   regenerateBtn: {
-    backgroundColor: '#FFD700',
-    color: '#000000',
+    backgroundColor: 'var(--theme-accent)',
+    color: 'var(--theme-text-primary)',
     padding: '0.875rem 1.5rem',
     border: 'none',
     borderRadius: '12px',
     fontSize: '1rem',
     fontWeight: '700',
     cursor: 'pointer',
-    boxShadow: '0 4px 20px rgba(255, 215, 0, 0.4)',
+    boxShadow: '0 4px 20px rgba(0, 0, 0, 0.3)',
     transition: 'all 0.3s ease',
     minHeight: '48px'
   },

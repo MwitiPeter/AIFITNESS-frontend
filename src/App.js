@@ -29,7 +29,7 @@ function App() {
     <Router>
       <AuthProvider>
         <ThemeProvider>
-          <div className="App">
+          <div className="App" style={{ minHeight: '100vh', backgroundColor: 'var(--theme-bg-primary)', color: 'var(--theme-text-primary)' }}>
             <Navbar />
             <Suspense fallback={<Loading message="Loading..." />}>
               <Routes>

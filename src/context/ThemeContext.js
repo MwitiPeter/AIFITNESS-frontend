@@ -116,6 +116,10 @@ export const ThemeProvider = ({ children }) => {
       document.documentElement.setAttribute('data-theme', currentTheme);
       // Also set it on body for better compatibility
       document.body.setAttribute('data-theme', currentTheme);
+      // Force a style recalculation to ensure CSS variables update
+      document.documentElement.style.setProperty('--current-theme', currentTheme);
+      // Trigger a repaint
+      window.dispatchEvent(new Event('themechange'));
     }
   }, [currentTheme]);
 

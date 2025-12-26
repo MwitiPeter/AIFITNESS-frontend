@@ -173,13 +173,13 @@ const Navbar = memo(() => {
 
 const styles = {
   navbar: {
-    background: 'linear-gradient(180deg, #000000 0%, #1a1a1a 50%, #000000 100%)',
+    background: 'linear-gradient(180deg, var(--theme-bg-primary) 0%, var(--theme-bg-secondary) 50%, var(--theme-bg-primary) 100%)',
     padding: '1rem 0',
-    boxShadow: '0 4px 20px rgba(0, 0, 0, 0.8)',
+    boxShadow: '0 4px 20px rgba(0, 0, 0, 0.3)',
     position: 'sticky',
     top: 0,
     zIndex: 1000,
-    borderBottom: '1px solid #2d2d2d'
+    borderBottom: '1px solid var(--theme-border)'
   },
   container: {
     maxWidth: '1200px',
@@ -192,12 +192,12 @@ const styles = {
     position: 'relative'
   },
   brand: {
-    color: '#ffffff',
+    color: 'var(--theme-text-primary)',
     fontSize: 'clamp(1.1rem, 4vw, 1.5rem)',
     fontWeight: '700',
     textDecoration: 'none',
     whiteSpace: 'nowrap',
-    textShadow: '0 2px 4px rgba(0,0,0,0.3)'
+    textShadow: '0 2px 4px rgba(0,0,0,0.2)'
   },
   mobileMenuButton: {
     backgroundColor: '#2d2d2d',
@@ -236,7 +236,7 @@ const styles = {
     display: 'none'
   },
   link: {
-    color: '#ffffff',
+    color: 'var(--theme-text-primary)',
     textDecoration: 'none',
     fontSize: 'clamp(0.9rem, 2.5vw, 1rem)',
     transition: 'all 0.3s ease',
@@ -248,19 +248,19 @@ const styles = {
     fontWeight: '500'
   },
   userName: {
-    color: '#FFD700',
+    color: 'var(--theme-accent)',
     fontWeight: '600',
     fontSize: 'clamp(0.85rem, 2.5vw, 1rem)',
     whiteSpace: 'nowrap',
     padding: '0.5rem 0.75rem',
-    backgroundColor: '#1a1a00',
+    backgroundColor: 'var(--theme-card-bg)',
     borderRadius: '8px',
-    border: '1px solid rgba(255, 215, 0, 0.3)'
+    border: `1px solid var(--theme-accent)`
   },
   logoutBtn: {
-    backgroundColor: '#2d2d2d',
-    color: '#ffffff',
-    border: '1px solid #404040',
+    backgroundColor: 'var(--theme-card-bg)',
+    color: 'var(--theme-text-primary)',
+    border: `1px solid var(--theme-border)`,
     padding: '0.75rem 1rem',
     borderRadius: '10px',
     cursor: 'pointer',

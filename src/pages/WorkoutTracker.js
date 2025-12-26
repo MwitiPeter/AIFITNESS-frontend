@@ -318,7 +318,7 @@ const WorkoutTracker = () => {
 const styles = {
   container: {
     minHeight: 'calc(100vh - 70px)',
-    background: 'linear-gradient(180deg, #000000 0%, #1a1a1a 50%, #000000 100%)',
+    background: 'linear-gradient(180deg, var(--theme-bg-primary) 0%, var(--theme-bg-secondary) 50%, var(--theme-bg-primary) 100%)',
     padding: 'clamp(1rem, 4vw, 2rem)'
   },
   content: {
@@ -330,10 +330,10 @@ const styles = {
     marginBottom: 'clamp(1rem, 4vw, 2rem)'
   },
   backBtn: {
-    backgroundColor: '#2d2d2d',
-    color: '#ffffff',
+    backgroundColor: 'var(--theme-card-bg)',
+    color: 'var(--theme-text-primary)',
     padding: 'clamp(0.5rem, 1.5vw, 0.75rem) clamp(0.75rem, 2vw, 1rem)',
-    border: '1px solid #404040',
+    border: `1px solid var(--theme-border)`,
     borderRadius: '10px',
     fontSize: 'clamp(0.9rem, 2.5vw, 1rem)',
     cursor: 'pointer',
@@ -343,11 +343,11 @@ const styles = {
     transition: 'all 0.3s ease'
   },
   title: {
-    color: '#ffffff',
+    color: 'var(--theme-text-primary)',
     fontSize: 'clamp(1.5rem, 5vw, 2.5rem)',
     wordWrap: 'break-word',
     fontWeight: '700',
-    textShadow: '0 2px 10px rgba(0,0,0,0.5)'
+    textShadow: '0 2px 10px rgba(0,0,0,0.3)'
   },
   error: {
     backgroundColor: '#2d1a1a',
@@ -358,18 +358,18 @@ const styles = {
     border: '1px solid #ff6b6b'
   },
   errorCard: {
-    backgroundColor: '#1a1a1a',
+    backgroundColor: 'var(--theme-card-bg)',
     padding: '3rem',
     borderRadius: '20px',
     textAlign: 'center',
     maxWidth: '500px',
     margin: '0 auto',
-    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.8)',
-    border: '1px solid #2d2d2d'
+    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
+    border: `1px solid var(--theme-border)`
   },
   button: {
-    backgroundColor: '#FFD700',
-    color: '#000000',
+    backgroundColor: 'var(--theme-accent)',
+    color: 'var(--theme-text-primary)',
     padding: '0.75rem 1.5rem',
     border: 'none',
     borderRadius: '10px',
@@ -377,7 +377,7 @@ const styles = {
     cursor: 'pointer',
     marginTop: '1rem',
     fontWeight: '700',
-    boxShadow: '0 4px 20px rgba(255, 215, 0, 0.4)'
+    boxShadow: '0 4px 20px rgba(0, 0, 0, 0.3)'
   },
   mainGrid: {
     display: 'grid',
@@ -385,17 +385,17 @@ const styles = {
     gap: 'clamp(1rem, 3vw, 2rem)'
   },
   sidebar: {
-    backgroundColor: '#1a1a1a',
+    backgroundColor: 'var(--theme-card-bg)',
     borderRadius: '20px',
     padding: 'clamp(1rem, 3vw, 1.5rem)',
     height: 'fit-content',
     position: 'sticky',
     top: 'clamp(1rem, 3vw, 2rem)',
-    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.8)',
-    border: '1px solid #2d2d2d'
+    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
+    border: `1px solid var(--theme-border)`
   },
   sidebarTitle: {
-    color: '#ffffff',
+    color: 'var(--theme-text-primary)',
     fontSize: '1.2rem',
     marginBottom: '1rem',
     fontWeight: '700'
@@ -406,8 +406,8 @@ const styles = {
     gap: '0.75rem'
   },
   dayButton: {
-    backgroundColor: '#0a0a0a',
-    border: '1px solid #2d2d2d',
+    backgroundColor: 'var(--theme-bg-secondary)',
+    border: `1px solid var(--theme-border)`,
     borderRadius: '12px',
     padding: '1rem',
     cursor: 'pointer',
@@ -416,13 +416,13 @@ const styles = {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-    color: '#ffffff'
+    color: 'var(--theme-text-primary)'
   },
   dayButtonActive: {
-    backgroundColor: '#FFD700',
-    borderColor: '#FFD700',
-    color: '#000000',
-    boxShadow: '0 4px 20px rgba(255, 215, 0, 0.4)'
+    backgroundColor: 'var(--theme-accent)',
+    borderColor: 'var(--theme-accent)',
+    color: 'var(--theme-text-primary)',
+    boxShadow: '0 4px 20px rgba(0, 0, 0, 0.3)'
   },
   dayButtonText: {
     fontWeight: '600',
@@ -437,13 +437,13 @@ const styles = {
     flexDirection: 'column'
   },
   card: {
-    backgroundColor: '#1a1a1a',
+    backgroundColor: 'var(--theme-card-bg)',
     borderRadius: '20px',
     padding: 'clamp(1rem, 4vw, 2rem)',
-    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.8)',
+    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
     width: '100%',
     boxSizing: 'border-box',
-    border: '1px solid #2d2d2d'
+    border: `1px solid var(--theme-border)`
   },
   cardHeader: {
     display: 'flex',
@@ -454,29 +454,29 @@ const styles = {
     borderBottom: '1px solid #2d2d2d'
   },
   cardTitle: {
-    color: '#ffffff',
+    color: 'var(--theme-text-primary)',
     fontSize: '1.8rem',
     marginBottom: '0.5rem',
     fontWeight: '700'
   },
   cardSubtitle: {
-    color: '#999',
+    color: 'var(--theme-text-secondary)',
     fontSize: '1rem'
   },
   completionBadge: {
-    backgroundColor: '#FFD700',
-    color: '#000000',
+    backgroundColor: 'var(--theme-accent)',
+    color: 'var(--theme-text-primary)',
     padding: '0.5rem 1rem',
     borderRadius: '20px',
     fontSize: '1rem',
     fontWeight: '700',
-    boxShadow: '0 2px 8px rgba(255, 215, 0, 0.3)'
+    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.3)'
   },
   exerciseSection: {
     marginBottom: '2rem'
   },
   sectionTitle: {
-    color: '#ffffff',
+    color: 'var(--theme-text-primary)',
     fontSize: '1.5rem',
     marginBottom: '1rem',
     fontWeight: '700'
@@ -487,16 +487,16 @@ const styles = {
     gap: '1rem'
   },
   exerciseCard: {
-    border: '1px solid #2d2d2d',
+    border: `1px solid var(--theme-border)`,
     borderRadius: '12px',
     padding: '1rem',
     transition: 'all 0.3s ease',
-    backgroundColor: '#0a0a0a'
+    backgroundColor: 'var(--theme-bg-secondary)'
   },
   exerciseCardCompleted: {
-    backgroundColor: '#1a1a00',
-    borderColor: '#FFD700',
-    boxShadow: '0 2px 8px rgba(255, 215, 0, 0.2)'
+    backgroundColor: 'var(--theme-card-bg)',
+    borderColor: 'var(--theme-accent)',
+    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.2)'
   },
   exerciseHeader: {
     marginBottom: '0.75rem'
@@ -515,7 +515,7 @@ const styles = {
   exerciseName: {
     fontSize: '1.1rem',
     fontWeight: '600',
-    color: '#ffffff'
+    color: 'var(--theme-text-primary)'
   },
   exerciseDetails: {
     display: 'flex',
@@ -550,41 +550,41 @@ const styles = {
     marginBottom: '1.5rem'
   },
   label: {
-    color: '#ffffff',
+    color: 'var(--theme-text-primary)',
     fontWeight: '600',
     marginBottom: '0.5rem',
     fontSize: '1rem'
   },
   input: {
     padding: 'clamp(0.875rem, 2vw, 1rem)',
-    border: '1px solid #2d2d2d',
+    border: `1px solid var(--theme-border)`,
     borderRadius: '12px',
     fontSize: '16px',
     width: '100%',
     boxSizing: 'border-box',
     minHeight: '48px',
-    backgroundColor: '#0a0a0a',
+    backgroundColor: 'var(--theme-bg-secondary)',
     transition: 'all 0.3s ease',
-    color: '#ffffff',
+    color: 'var(--theme-text-primary)',
     fontFamily: 'inherit'
   },
   select: {
     padding: 'clamp(0.875rem, 2vw, 1rem)',
-    border: '1px solid #2d2d2d',
+    border: `1px solid var(--theme-border)`,
     borderRadius: '12px',
     fontSize: '16px',
-    backgroundColor: '#0a0a0a',
+    backgroundColor: 'var(--theme-bg-secondary)',
     width: '100%',
     boxSizing: 'border-box',
     minHeight: '48px',
     transition: 'all 0.3s ease',
-    color: '#ffffff',
+    color: 'var(--theme-text-primary)',
     fontFamily: 'inherit',
     cursor: 'pointer'
   },
   textarea: {
     padding: 'clamp(0.875rem, 2vw, 1rem)',
-    border: '1px solid #2d2d2d',
+    border: `1px solid var(--theme-border)`,
     borderRadius: '12px',
     fontSize: '16px',
     fontFamily: 'inherit',
@@ -592,9 +592,9 @@ const styles = {
     width: '100%',
     boxSizing: 'border-box',
     minHeight: '120px',
-    backgroundColor: '#0a0a0a',
+    backgroundColor: 'var(--theme-bg-secondary)',
     transition: 'all 0.3s ease',
-    color: '#ffffff',
+    color: 'var(--theme-text-primary)',
     lineHeight: '1.5'
   },
   ratingContainer: {
@@ -623,8 +623,8 @@ const styles = {
   },
   submitBtn: {
     width: '100%',
-    backgroundColor: '#FFD700',
-    color: '#000000',
+    backgroundColor: 'var(--theme-accent)',
+    color: 'var(--theme-text-primary)',
     padding: 'clamp(0.875rem, 2vw, 1rem)',
     border: 'none',
     borderRadius: '12px',
@@ -633,7 +633,7 @@ const styles = {
     cursor: 'pointer',
     marginTop: '1.5rem',
     minHeight: '48px',
-    boxShadow: '0 4px 20px rgba(255, 215, 0, 0.4)',
+    boxShadow: '0 4px 20px rgba(0, 0, 0, 0.3)',
     transition: 'all 0.3s ease'
   }
 };

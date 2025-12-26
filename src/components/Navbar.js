@@ -7,6 +7,9 @@ const Navbar = memo(() => {
   const navigate = useNavigate();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+  const [deferredPrompt, setDeferredPrompt] = useState(null);
+  const [isInstalled, setIsInstalled] = useState(false);
+  const [isInstallHovered, setIsInstallHovered] = useState(false);
 
   useEffect(() => {
     const handleResize = () => {
@@ -19,6 +22,55 @@ const Navbar = memo(() => {
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
+
+  // PWA Install Prompt Logic
+  useEffect(() => {
+    // Check if app is already installed
+    if (window.matchMedia('(display-mode: standalone)').matches || 
+        window.navigator.standalone === true) {
+      setIsInstalled(true);
+      return;
+    }
+
+    // Listen for beforeinstallprompt event
+    const handleBeforeInstallPrompt = (e) => {
+      e.preventDefault();
+      setDeferredPrompt(e);
+    };
+
+    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+
+    // Check if app was installed
+    window.addEventListener('appinstalled', () => {
+      setIsInstalled(true);
+      setDeferredPrompt(null);
+    });
+
+    return () => {
+      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+    };
+  }, []);
+
+  const handleInstallClick = useCallback(async () => {
+    if (!deferredPrompt) {
+      return;
+    }
+
+    // Show the install prompt
+    deferredPrompt.prompt();
+
+    // Wait for the user to respond
+    const { outcome } = await deferredPrompt.userChoice;
+
+    if (outcome === 'accepted') {
+      console.log('User accepted the install prompt');
+      setIsInstalled(true);
+    } else {
+      console.log('User dismissed the install prompt');
+    }
+
+    setDeferredPrompt(null);
+  }, [deferredPrompt]);
 
 
   const handleLogout = useCallback(() => {
@@ -65,6 +117,23 @@ const Navbar = memo(() => {
               <Link to="/dashboard" style={styles.link} onClick={closeMobileMenu}>Dashboard</Link>
               <Link to="/workout-tracker" style={styles.link} onClick={closeMobileMenu}>Track Workout</Link>
               <Link to="/progress" style={styles.link} onClick={closeMobileMenu}>Progress</Link>
+              {!isInstalled && deferredPrompt && (
+                <button 
+                  onClick={() => {
+                    handleInstallClick();
+                    closeMobileMenu();
+                  }} 
+                  onMouseEnter={() => setIsInstallHovered(true)}
+                  onMouseLeave={() => setIsInstallHovered(false)}
+                  style={{
+                    ...styles.installBtn,
+                    ...(isInstallHovered ? styles.installBtnHover : {})
+                  }}
+                  title="Install App"
+                >
+                  📱 Install App
+                </button>
+              )}
               <span style={styles.userName}>Hi, {user?.name}!</span>
               <button onClick={handleLogout} style={styles.logoutBtn}>
                 Logout
@@ -74,6 +143,23 @@ const Navbar = memo(() => {
             <>
               <Link to="/login" style={styles.link} onClick={closeMobileMenu}>Login</Link>
               <Link to="/register" style={styles.link} onClick={closeMobileMenu}>Register</Link>
+              {!isInstalled && deferredPrompt && (
+                <button 
+                  onClick={() => {
+                    handleInstallClick();
+                    closeMobileMenu();
+                  }} 
+                  onMouseEnter={() => setIsInstallHovered(true)}
+                  onMouseLeave={() => setIsInstallHovered(false)}
+                  style={{
+                    ...styles.installBtn,
+                    ...(isInstallHovered ? styles.installBtnHover : {})
+                  }}
+                  title="Install App"
+                >
+                  📱 Install App
+                </button>
+              )}
             </>
           )}
         </div>
@@ -180,6 +266,25 @@ const styles = {
     minWidth: '80px',
     transition: 'all 0.3s ease',
     fontWeight: '600'
+  },
+  installBtn: {
+    backgroundColor: '#27ae60',
+    color: '#ffffff',
+    border: 'none',
+    padding: '0.75rem 1rem',
+    borderRadius: '10px',
+    cursor: 'pointer',
+    fontSize: 'clamp(0.9rem, 2.5vw, 1rem)',
+    minHeight: '44px',
+    whiteSpace: 'nowrap',
+    transition: 'all 0.3s ease',
+    fontWeight: '600',
+    boxShadow: '0 2px 8px rgba(39, 174, 96, 0.3)'
+  },
+  installBtnHover: {
+    backgroundColor: '#229954',
+    transform: 'scale(1.05)',
+    boxShadow: '0 4px 12px rgba(39, 174, 96, 0.5)'
   }
 };
 

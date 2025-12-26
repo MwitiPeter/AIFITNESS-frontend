@@ -1,6 +1,7 @@
 import React, { lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
+import { ThemeProvider } from './context/ThemeContext';
 
 // Components
 import Navbar from './components/Navbar';
@@ -27,61 +28,63 @@ function App() {
   return (
     <Router>
       <AuthProvider>
-        <div className="App">
-          <Navbar />
-          <Suspense fallback={<Loading message="Loading..." />}>
-            <Routes>
-              {/* Public Routes */}
-              <Route path="/" element={<Home />} />
-              <Route path="/register" element={<Register />} />
-              <Route path="/login" element={<Login />} />
-              
-              {/* Onboarding - requires authentication but NOT profile completion */}
-              <Route 
-                path="/onboarding" 
-                element={
-                  <ProtectedRoute>
-                    <Onboarding />
-                  </ProtectedRoute>
-                } 
-              />
-              
-              {/* Dashboard - requires authentication AND completed profile */}
-              <Route 
-                path="/dashboard" 
-                element={
-                  <PrivateRoute requireProfile={true}>
-                    <Dashboard />
-                  </PrivateRoute>
-                } 
-              />
+        <ThemeProvider>
+          <div className="App">
+            <Navbar />
+            <Suspense fallback={<Loading message="Loading..." />}>
+              <Routes>
+                {/* Public Routes */}
+                <Route path="/" element={<Home />} />
+                <Route path="/register" element={<Register />} />
+                <Route path="/login" element={<Login />} />
+                
+                {/* Onboarding - requires authentication but NOT profile completion */}
+                <Route 
+                  path="/onboarding" 
+                  element={
+                    <ProtectedRoute>
+                      <Onboarding />
+                    </ProtectedRoute>
+                  } 
+                />
+                
+                {/* Dashboard - requires authentication AND completed profile */}
+                <Route 
+                  path="/dashboard" 
+                  element={
+                    <PrivateRoute requireProfile={true}>
+                      <Dashboard />
+                    </PrivateRoute>
+                  } 
+                />
 
-              {/* Workout Tracker - requires authentication AND completed profile */}
-              <Route 
-                path="/workout-tracker" 
-                element={
-                  <PrivateRoute requireProfile={true}>
-                    <WorkoutTracker />
-                  </PrivateRoute>
-                } 
-              />
+                {/* Workout Tracker - requires authentication AND completed profile */}
+                <Route 
+                  path="/workout-tracker" 
+                  element={
+                    <PrivateRoute requireProfile={true}>
+                      <WorkoutTracker />
+                    </PrivateRoute>
+                  } 
+                />
 
-              {/* Progress Page - requires authentication AND completed profile */}
-              <Route 
-                path="/progress" 
-                element={
-                  <PrivateRoute requireProfile={true}>
-                    <Progress />
-                  </PrivateRoute>
-                } 
-              />
+                {/* Progress Page - requires authentication AND completed profile */}
+                <Route 
+                  path="/progress" 
+                  element={
+                    <PrivateRoute requireProfile={true}>
+                      <Progress />
+                    </PrivateRoute>
+                  } 
+                />
 
-              {/* Catch all - redirect to home */}
-              <Route path="*" element={<Navigate to="/" />} />
-            </Routes>
-          </Suspense>
-          <PWAInstallPrompt />
-        </div>
+                {/* Catch all - redirect to home */}
+                <Route path="*" element={<Navigate to="/" />} />
+              </Routes>
+            </Suspense>
+            <PWAInstallPrompt />
+          </div>
+        </ThemeProvider>
       </AuthProvider>
     </Router>
   );

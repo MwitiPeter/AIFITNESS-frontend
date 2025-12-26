@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback, memo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import ThemeToggle from './ThemeToggle';
 
 const Navbar = memo(() => {
   const { isAuthenticated, user, logout } = useAuth();
@@ -117,6 +118,7 @@ const Navbar = memo(() => {
               <Link to="/dashboard" style={styles.link} onClick={closeMobileMenu}>Dashboard</Link>
               <Link to="/workout-tracker" style={styles.link} onClick={closeMobileMenu}>Track Workout</Link>
               <Link to="/progress" style={styles.link} onClick={closeMobileMenu}>Progress</Link>
+              <ThemeToggle />
               {!isInstalled && deferredPrompt && (
                 <button 
                   onClick={() => {
@@ -143,6 +145,7 @@ const Navbar = memo(() => {
             <>
               <Link to="/login" style={styles.link} onClick={closeMobileMenu}>Login</Link>
               <Link to="/register" style={styles.link} onClick={closeMobileMenu}>Register</Link>
+              <ThemeToggle />
               {!isInstalled && deferredPrompt && (
                 <button 
                   onClick={() => {

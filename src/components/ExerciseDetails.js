@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 
 const ExerciseDetails = ({ exercise }) => {
   const [isExpanded, setIsExpanded] = useState(false);
+  const [imageError, setImageError] = useState(false);
 
   // Parse the instructions to extract detailed sections
   const parseInstructions = (instructions) => {
@@ -95,6 +96,36 @@ const ExerciseDetails = ({ exercise }) => {
       {/* Detailed Instructions - Expandable */}
       {isExpanded && sections && (
         <div style={styles.details}>
+          {/* Demo Media (GIF/Image) */}
+          {exercise.demoMediaUrl && !imageError ? (
+            <div style={styles.demoMediaSection}>
+              <h4 style={styles.sectionTitle}>🎬 Exercise Demo</h4>
+              <div style={styles.demoMediaContainer}>
+                <img
+                  src={exercise.demoMediaUrl}
+                  alt={`${exercise.name} demonstration`}
+                  style={styles.demoMedia}
+                  onError={() => {
+                    // Handle broken image URLs gracefully
+                    setImageError(true);
+                  }}
+                  loading="lazy"
+                />
+              </div>
+            </div>
+          ) : (
+            <div style={styles.demoMediaSection}>
+              <h4 style={styles.sectionTitle}>🎬 Exercise Demo</h4>
+              <div style={styles.noDemoContainer}>
+                <p style={styles.noDemoText}>
+                  {imageError 
+                    ? '⚠️ Demo image unavailable or failed to load' 
+                    : 'No demo media available for this exercise'}
+                </p>
+              </div>
+            </div>
+          )}
+
           {/* Step-by-Step */}
           {stepByStepList.length > 0 && (
             <div style={styles.section}>
@@ -290,6 +321,42 @@ const styles = {
     fontSize: '0.85rem',
     color: '#555',
     lineHeight: '1.5'
+  },
+  demoMediaSection: {
+    marginBottom: '1.5rem',
+    padding: '0.75rem',
+    backgroundColor: 'white',
+    borderRadius: '6px',
+    border: '1px solid #e0e0e0'
+  },
+  demoMediaContainer: {
+    position: 'relative',
+    width: '100%',
+    maxWidth: '400px',
+    margin: '0 auto',
+    borderRadius: '8px',
+    overflow: 'hidden',
+    backgroundColor: '#f5f5f5'
+  },
+  demoMedia: {
+    width: '100%',
+    height: 'auto',
+    display: 'block',
+    objectFit: 'contain',
+    maxHeight: '300px'
+  },
+  noDemoContainer: {
+    padding: '1.5rem',
+    textAlign: 'center',
+    backgroundColor: '#f5f5f5',
+    borderRadius: '8px',
+    border: '1px dashed #ccc'
+  },
+  noDemoText: {
+    margin: 0,
+    color: '#999',
+    fontSize: '0.9rem',
+    fontStyle: 'italic'
   }
 };
 

@@ -1,10 +1,12 @@
-import React, { useState, useEffect, useCallback, memo } from 'react';
+import React, { useState, useEffect, useCallback, memo, useMemo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useTheme } from '../context/ThemeContext';
 import ThemeToggle from './ThemeToggle';
 
 const Navbar = memo(() => {
   const { isAuthenticated, user, logout } = useAuth();
+  const { currentTheme } = useTheme();
   const navigate = useNavigate();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
@@ -88,8 +90,121 @@ const Navbar = memo(() => {
     setIsMobileMenuOpen(false);
   }, []);
 
+  // Get dynamic styles based on current theme
+  const themeStyles = useMemo(() => {
+    const themeColors = {
+      beginner: {
+        bgPrimary: '#f5f5f5',
+        bgSecondary: '#e8e8e8',
+        textPrimary: '#000000',
+        accent: '#a8d5ba',
+        cardBg: '#ffffff',
+        border: '#e0e0e0'
+      },
+      intermediate: {
+        bgPrimary: '#1f2937',
+        bgSecondary: '#111827',
+        textPrimary: '#ffffff',
+        accent: '#fbbf24',
+        cardBg: '#374151',
+        border: '#4b5563'
+      },
+      advanced: {
+        bgPrimary: '#0a0a0a',
+        bgSecondary: '#1a1a1a',
+        textPrimary: '#ffffff',
+        accent: '#ef4444',
+        cardBg: '#1a1a1a',
+        border: '#404040'
+      }
+    };
+    const colors = themeColors[currentTheme] || themeColors.beginner;
+    
+    return {
+      navbar: {
+        background: `linear-gradient(180deg, ${colors.bgPrimary} 0%, ${colors.bgSecondary} 50%, ${colors.bgPrimary} 100%)`,
+        padding: '1rem 0',
+        boxShadow: '0 4px 20px rgba(0, 0, 0, 0.3)',
+        position: 'sticky',
+        top: 0,
+        zIndex: 1000,
+        borderBottom: `1px solid ${colors.border}`
+      },
+      brand: {
+        color: colors.textPrimary,
+        fontSize: 'clamp(1.1rem, 4vw, 1.5rem)',
+        fontWeight: '700',
+        textDecoration: 'none',
+        whiteSpace: 'nowrap',
+        textShadow: '0 2px 4px rgba(0,0,0,0.2)'
+      },
+      link: {
+        color: colors.textPrimary,
+        textDecoration: 'none',
+        fontSize: 'clamp(0.9rem, 2.5vw, 1rem)',
+        transition: 'all 0.3s ease',
+        padding: '0.5rem 0.75rem',
+        minHeight: '44px',
+        display: 'flex',
+        alignItems: 'center',
+        borderRadius: '8px',
+        fontWeight: '500'
+      },
+      userName: {
+        color: colors.accent,
+        fontWeight: '600',
+        fontSize: 'clamp(0.85rem, 2.5vw, 1rem)',
+        whiteSpace: 'nowrap',
+        padding: '0.5rem 0.75rem',
+        backgroundColor: colors.cardBg,
+        borderRadius: '8px',
+        border: `1px solid ${colors.accent}`
+      },
+      logoutBtn: {
+        backgroundColor: colors.cardBg,
+        color: colors.textPrimary,
+        border: `1px solid ${colors.border}`,
+        padding: '0.75rem 1rem',
+        borderRadius: '10px',
+        cursor: 'pointer',
+        fontSize: 'clamp(0.9rem, 2.5vw, 1rem)',
+        minHeight: '44px',
+        minWidth: '80px',
+        transition: 'all 0.3s ease',
+        fontWeight: '600'
+      },
+      navLinksOpen: {
+        display: 'flex',
+        flexDirection: 'column',
+        position: 'absolute',
+        top: '100%',
+        left: 0,
+        right: 0,
+        background: `linear-gradient(180deg, ${colors.bgPrimary} 0%, ${colors.bgSecondary} 100%)`,
+        padding: '1rem',
+        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
+        width: '100%',
+        gap: '0.75rem',
+        borderRadius: '0 0 16px 16px',
+        borderTop: `1px solid ${colors.border}`
+      },
+      mobileMenuButton: {
+        backgroundColor: colors.cardBg,
+        border: `1px solid ${colors.border}`,
+        color: colors.textPrimary,
+        fontSize: '1.5rem',
+        cursor: 'pointer',
+        padding: '0.5rem',
+        minWidth: '44px',
+        minHeight: '44px',
+        borderRadius: '8px',
+        transition: 'all 0.3s ease'
+      }
+    };
+  }, [currentTheme]);
+
   return (
-    <nav style={styles.navbar}>
+    <nav style={themeStyles.navbar}>
       <div style={styles.container}>
         <Link to="/" style={styles.brand} onClick={closeMobileMenu}>
           💪 AI Fitness App
@@ -99,7 +214,7 @@ const Navbar = memo(() => {
         {isMobile && (
           <button 
             onClick={toggleMobileMenu} 
-            style={styles.mobileMenuButton}
+            style={themeStyles.mobileMenuButton}
             aria-label="Toggle menu"
           >
             {isMobileMenuOpen ? '✕' : '☰'}
@@ -109,15 +224,15 @@ const Navbar = memo(() => {
         <div 
           style={{
             ...styles.navLinks,
-            ...(isMobile && isMobileMenuOpen ? styles.navLinksOpen : {}),
+            ...(isMobile && isMobileMenuOpen ? themeStyles.navLinksOpen : {}),
             ...(isMobile && !isMobileMenuOpen ? styles.navLinksClosed : {})
           }}
         >
           {isAuthenticated ? (
             <>
-              <Link to="/dashboard" style={styles.link} onClick={closeMobileMenu}>Dashboard</Link>
-              <Link to="/workout-tracker" style={styles.link} onClick={closeMobileMenu}>Track Workout</Link>
-              <Link to="/progress" style={styles.link} onClick={closeMobileMenu}>Progress</Link>
+              <Link to="/dashboard" style={themeStyles.link} onClick={closeMobileMenu}>Dashboard</Link>
+              <Link to="/workout-tracker" style={themeStyles.link} onClick={closeMobileMenu}>Track Workout</Link>
+              <Link to="/progress" style={themeStyles.link} onClick={closeMobileMenu}>Progress</Link>
               <ThemeToggle />
               {!isInstalled && deferredPrompt && (
                 <button 
@@ -136,15 +251,15 @@ const Navbar = memo(() => {
                   📱 Install App
                 </button>
               )}
-              <span style={styles.userName}>Hi, {user?.name}!</span>
-              <button onClick={handleLogout} style={styles.logoutBtn}>
+              <span style={themeStyles.userName}>Hi, {user?.name}!</span>
+              <button onClick={handleLogout} style={themeStyles.logoutBtn}>
                 Logout
               </button>
             </>
           ) : (
             <>
-              <Link to="/login" style={styles.link} onClick={closeMobileMenu}>Login</Link>
-              <Link to="/register" style={styles.link} onClick={closeMobileMenu}>Register</Link>
+              <Link to="/login" style={themeStyles.link} onClick={closeMobileMenu}>Login</Link>
+              <Link to="/register" style={themeStyles.link} onClick={closeMobileMenu}>Register</Link>
               <ThemeToggle />
               {!isInstalled && deferredPrompt && (
                 <button 
@@ -172,15 +287,6 @@ const Navbar = memo(() => {
 });
 
 const styles = {
-  navbar: {
-    background: 'linear-gradient(180deg, var(--theme-bg-primary) 0%, var(--theme-bg-secondary) 50%, var(--theme-bg-primary) 100%)',
-    padding: '1rem 0',
-    boxShadow: '0 4px 20px rgba(0, 0, 0, 0.3)',
-    position: 'sticky',
-    top: 0,
-    zIndex: 1000,
-    borderBottom: '1px solid var(--theme-border)'
-  },
   container: {
     maxWidth: '1200px',
     margin: '0 auto',
@@ -191,84 +297,14 @@ const styles = {
     flexWrap: 'wrap',
     position: 'relative'
   },
-  brand: {
-    color: 'var(--theme-text-primary)',
-    fontSize: 'clamp(1.1rem, 4vw, 1.5rem)',
-    fontWeight: '700',
-    textDecoration: 'none',
-    whiteSpace: 'nowrap',
-    textShadow: '0 2px 4px rgba(0,0,0,0.2)'
-  },
-  mobileMenuButton: {
-    backgroundColor: '#2d2d2d',
-    border: '1px solid #404040',
-    color: 'white',
-    fontSize: '1.5rem',
-    cursor: 'pointer',
-    padding: '0.5rem',
-    minWidth: '44px',
-    minHeight: '44px',
-    borderRadius: '8px',
-    transition: 'all 0.3s ease'
-  },
   navLinks: {
     display: 'flex',
     gap: '1.5rem',
     alignItems: 'center',
     flexWrap: 'wrap'
   },
-  navLinksOpen: {
-    display: 'flex',
-    flexDirection: 'column',
-    position: 'absolute',
-    top: '100%',
-    left: 0,
-    right: 0,
-    background: 'linear-gradient(180deg, #000000 0%, #1a1a1a 100%)',
-    padding: '1rem',
-    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.8)',
-    width: '100%',
-    gap: '0.75rem',
-    borderRadius: '0 0 16px 16px',
-    borderTop: '1px solid #2d2d2d'
-  },
   navLinksClosed: {
     display: 'none'
-  },
-  link: {
-    color: 'var(--theme-text-primary)',
-    textDecoration: 'none',
-    fontSize: 'clamp(0.9rem, 2.5vw, 1rem)',
-    transition: 'all 0.3s ease',
-    padding: '0.5rem 0.75rem',
-    minHeight: '44px',
-    display: 'flex',
-    alignItems: 'center',
-    borderRadius: '8px',
-    fontWeight: '500'
-  },
-  userName: {
-    color: 'var(--theme-accent)',
-    fontWeight: '600',
-    fontSize: 'clamp(0.85rem, 2.5vw, 1rem)',
-    whiteSpace: 'nowrap',
-    padding: '0.5rem 0.75rem',
-    backgroundColor: 'var(--theme-card-bg)',
-    borderRadius: '8px',
-    border: `1px solid var(--theme-accent)`
-  },
-  logoutBtn: {
-    backgroundColor: 'var(--theme-card-bg)',
-    color: 'var(--theme-text-primary)',
-    border: `1px solid var(--theme-border)`,
-    padding: '0.75rem 1rem',
-    borderRadius: '10px',
-    cursor: 'pointer',
-    fontSize: 'clamp(0.9rem, 2.5vw, 1rem)',
-    minHeight: '44px',
-    minWidth: '80px',
-    transition: 'all 0.3s ease',
-    fontWeight: '600'
   },
   installBtn: {
     backgroundColor: '#27ae60',

@@ -1,12 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { workoutAPI, progressAPI } from '../utils/api';
+import { useTheme } from '../context/ThemeContext';
 import Loading from '../components/Loading';
 import VoicePlayer from '../components/VoicePlayer'; // ADDED
 import ExerciseDetails from '../components/ExerciseDetails';
 const WorkoutTracker = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const { currentTheme } = useTheme();
 
   const [workoutPlan, setWorkoutPlan] = useState(null);
   const [selectedDay, setSelectedDay] = useState(null);
@@ -136,19 +138,253 @@ const WorkoutTracker = () => {
       setSaving(false);
     }
   };
+  
+  // Get dynamic styles based on current theme
+  const themeStyles = useMemo(() => {
+    const themeColors = {
+      beginner: {
+        bgPrimary: '#f5f5f5',
+        bgSecondary: '#e8e8e8',
+        textPrimary: '#000000',
+        textSecondary: '#333333',
+        accent: '#a8d5ba',
+        cardBg: '#ffffff',
+        border: '#e0e0e0'
+      },
+      intermediate: {
+        bgPrimary: '#1f2937',
+        bgSecondary: '#111827',
+        textPrimary: '#ffffff',
+        textSecondary: '#e5e7eb',
+        accent: '#fbbf24',
+        cardBg: '#374151',
+        border: '#4b5563'
+      },
+      advanced: {
+        bgPrimary: '#0a0a0a',
+        bgSecondary: '#1a1a1a',
+        textPrimary: '#ffffff',
+        textSecondary: '#cccccc',
+        accent: '#ef4444',
+        cardBg: '#1a1a1a',
+        border: '#404040'
+      }
+    };
+    const colors = themeColors[currentTheme] || themeColors.beginner;
+    
+    return {
+      container: {
+        minHeight: 'calc(100vh - 70px)',
+        background: `linear-gradient(180deg, ${colors.bgPrimary} 0%, ${colors.bgSecondary} 50%, ${colors.bgPrimary} 100%)`,
+        padding: 'clamp(1rem, 4vw, 2rem)'
+      },
+      title: {
+        color: colors.textPrimary,
+        fontSize: 'clamp(1.5rem, 5vw, 2.5rem)',
+        wordWrap: 'break-word',
+        fontWeight: '700',
+        textShadow: '0 2px 10px rgba(0,0,0,0.3)'
+      },
+      card: {
+        backgroundColor: colors.cardBg,
+        borderRadius: '20px',
+        padding: 'clamp(1rem, 4vw, 2rem)',
+        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
+        width: '100%',
+        boxSizing: 'border-box',
+        border: `1px solid ${colors.border}`
+      },
+      sidebar: {
+        backgroundColor: colors.cardBg,
+        borderRadius: '20px',
+        padding: 'clamp(1rem, 3vw, 1.5rem)',
+        height: 'fit-content',
+        position: 'sticky',
+        top: 'clamp(1rem, 3vw, 2rem)',
+        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
+        border: `1px solid ${colors.border}`
+      },
+      sidebarTitle: {
+        color: colors.textPrimary,
+        fontSize: '1.2rem',
+        marginBottom: '1rem',
+        fontWeight: '700'
+      },
+      dayButton: {
+        backgroundColor: colors.bgSecondary,
+        border: `1px solid ${colors.border}`,
+        borderRadius: '12px',
+        padding: '1rem',
+        cursor: 'pointer',
+        textAlign: 'left',
+        transition: 'all 0.3s ease',
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        color: colors.textPrimary
+      },
+      dayButtonActive: {
+        backgroundColor: colors.accent,
+        borderColor: colors.accent,
+        color: colors.textPrimary,
+        boxShadow: '0 4px 20px rgba(0, 0, 0, 0.3)'
+      },
+      cardTitle: {
+        color: colors.textPrimary,
+        fontSize: '1.8rem',
+        marginBottom: '0.5rem',
+        fontWeight: '700'
+      },
+      cardSubtitle: {
+        color: colors.textSecondary,
+        fontSize: '1rem'
+      },
+      completionBadge: {
+        backgroundColor: colors.accent,
+        color: colors.textPrimary,
+        padding: '0.5rem 1rem',
+        borderRadius: '20px',
+        fontSize: '1rem',
+        fontWeight: '700',
+        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.3)'
+      },
+      exerciseCard: {
+        border: `1px solid ${colors.border}`,
+        borderRadius: '12px',
+        padding: '1rem',
+        transition: 'all 0.3s ease',
+        backgroundColor: colors.bgSecondary
+      },
+      exerciseCardCompleted: {
+        backgroundColor: colors.cardBg,
+        borderColor: colors.accent,
+        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.2)'
+      },
+      exerciseName: {
+        fontSize: '1.1rem',
+        fontWeight: '600',
+        color: colors.textPrimary
+      },
+      label: {
+        color: colors.textPrimary,
+        fontWeight: '600',
+        marginBottom: '0.5rem',
+        fontSize: '1rem'
+      },
+      input: {
+        padding: 'clamp(0.875rem, 2vw, 1rem)',
+        border: `1px solid ${colors.border}`,
+        borderRadius: '12px',
+        fontSize: '16px',
+        width: '100%',
+        boxSizing: 'border-box',
+        minHeight: '48px',
+        backgroundColor: colors.bgSecondary,
+        transition: 'all 0.3s ease',
+        color: colors.textPrimary,
+        fontFamily: 'inherit'
+      },
+      select: {
+        padding: 'clamp(0.875rem, 2vw, 1rem)',
+        border: `1px solid ${colors.border}`,
+        borderRadius: '12px',
+        fontSize: '16px',
+        backgroundColor: colors.bgSecondary,
+        width: '100%',
+        boxSizing: 'border-box',
+        minHeight: '48px',
+        transition: 'all 0.3s ease',
+        color: colors.textPrimary,
+        fontFamily: 'inherit',
+        cursor: 'pointer'
+      },
+      textarea: {
+        padding: 'clamp(0.875rem, 2vw, 1rem)',
+        border: `1px solid ${colors.border}`,
+        borderRadius: '12px',
+        fontSize: '16px',
+        fontFamily: 'inherit',
+        resize: 'vertical',
+        width: '100%',
+        boxSizing: 'border-box',
+        minHeight: '120px',
+        backgroundColor: colors.bgSecondary,
+        transition: 'all 0.3s ease',
+        color: colors.textPrimary,
+        lineHeight: '1.5'
+      },
+      submitBtn: {
+        width: '100%',
+        backgroundColor: colors.accent,
+        color: colors.textPrimary,
+        padding: 'clamp(0.875rem, 2vw, 1rem)',
+        border: 'none',
+        borderRadius: '12px',
+        fontSize: 'clamp(1rem, 3vw, 1.1rem)',
+        fontWeight: '700',
+        cursor: 'pointer',
+        marginTop: '1.5rem',
+        minHeight: '48px',
+        boxShadow: '0 4px 20px rgba(0, 0, 0, 0.3)',
+        transition: 'all 0.3s ease'
+      },
+      backBtn: {
+        backgroundColor: colors.cardBg,
+        color: colors.textPrimary,
+        padding: 'clamp(0.5rem, 1.5vw, 0.75rem) clamp(0.75rem, 2vw, 1rem)',
+        border: `1px solid ${colors.border}`,
+        borderRadius: '10px',
+        fontSize: 'clamp(0.9rem, 2.5vw, 1rem)',
+        cursor: 'pointer',
+        marginBottom: '1rem',
+        minHeight: '44px',
+        fontWeight: '600',
+        transition: 'all 0.3s ease'
+      },
+      errorCard: {
+        backgroundColor: colors.cardBg,
+        padding: '3rem',
+        borderRadius: '20px',
+        textAlign: 'center',
+        maxWidth: '500px',
+        margin: '0 auto',
+        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
+        border: `1px solid ${colors.border}`
+      },
+      button: {
+        backgroundColor: colors.accent,
+        color: colors.textPrimary,
+        padding: '0.75rem 1.5rem',
+        border: 'none',
+        borderRadius: '10px',
+        fontSize: '1rem',
+        cursor: 'pointer',
+        marginTop: '1rem',
+        fontWeight: '700',
+        boxShadow: '0 4px 20px rgba(0, 0, 0, 0.3)'
+      },
+      sectionTitle: {
+        color: colors.textPrimary,
+        fontSize: '1.5rem',
+        marginBottom: '1rem',
+        fontWeight: '700'
+      }
+    };
+  }, [currentTheme]);
+  
   if (loading) {
     return <Loading message="Loading workout..." />;
   }
   if (!workoutPlan || !selectedDay) {
     return (
-      <div style={styles.container}>
-        <div style={styles.errorCard}>
-          <h2>No Workout Plan Found</h2>
-          <p>{error || 'Please generate a workout plan first'}</p>
-          <button onClick={() => navigate('/dashboard')} style={styles.button}>
-            Go to Dashboard
-          </button>
-        </div>
+      <div style={themeStyles.container}>
+      <div style={themeStyles.errorCard}>
+        <h2>No Workout Plan Found</h2>
+        <p>{error || 'Please generate a workout plan first'}</p>
+        <button onClick={() => navigate('/dashboard')} style={themeStyles.button}>
+          Go to Dashboard
+        </button>
+      </div>
       </div>
     );
   }
@@ -156,28 +392,28 @@ const WorkoutTracker = () => {
     ? Math.round((logData.completedExercises.length / selectedDay.exercises.length) * 100)
     : 0;
   return (
-    <div style={styles.container}>
+    <div style={themeStyles.container}>
       <div style={styles.content}>
         <div style={styles.header}>
-          <button onClick={() => navigate('/dashboard')} style={styles.backBtn}>
+          <button onClick={() => navigate('/dashboard')} style={themeStyles.backBtn}>
             ← Back to Dashboard
           </button>
-          <h1 style={styles.title}>Track Your Workout</h1>
+          <h1 style={themeStyles.title}>Track Your Workout</h1>
         </div>
-        {error && <div style={styles.error}>{error}</div>}
+        {error && <div style={{...themeStyles.errorCard, padding: '1rem', marginBottom: '1rem'}}>{error}</div>}
 
         <div style={styles.mainGrid} className="workout-tracker-grid">
           {/* Left Side - Day Selection */}
-          <div style={styles.sidebar}>
-            <h3 style={styles.sidebarTitle}>Select Workout Day</h3>
+          <div style={themeStyles.sidebar}>
+            <h3 style={themeStyles.sidebarTitle}>Select Workout Day</h3>
             <div style={styles.dayList}>
               {workoutPlan.dailyWorkouts.map((day, index) => (
                 <button
                   key={index}
                   onClick={() => handleDaySelect(day)}
                   style={{
-                    ...styles.dayButton,
-                    ...(selectedDay.day === day.day ? styles.dayButtonActive : {})
+                    ...themeStyles.dayButton,
+                    ...(selectedDay.day === day.day ? themeStyles.dayButtonActive : {})
                   }}
                 >
                   <span style={styles.dayButtonText}>{day.day}</span>
@@ -189,15 +425,15 @@ const WorkoutTracker = () => {
 
           {/* Right Side - Workout Tracking */}
           <div style={styles.main}>
-            <div style={styles.card}>
+            <div style={themeStyles.card}>
               <div style={styles.cardHeader}>
                 <div>
-                  <h2 style={styles.cardTitle}>{selectedDay.day}</h2>
-                  <p style={styles.cardSubtitle}>
+                  <h2 style={themeStyles.cardTitle}>{selectedDay.day}</h2>
+                  <p style={themeStyles.cardSubtitle}>
                     {selectedDay.exercises.length} exercises • {selectedDay.totalDuration} minutes
                   </p>
                 </div>
-                <div style={styles.completionBadge}>
+                <div style={themeStyles.completionBadge}>
                   {completionPercentage}% Complete
                 </div>
               </div>
@@ -207,8 +443,8 @@ const WorkoutTracker = () => {
                 <div
                   key={index}
                   style={{
-                    ...styles.exerciseCard,
-                    ...(isExerciseCompleted(exercise.name) ? styles.exerciseCardCompleted : {})
+                    ...themeStyles.exerciseCard,
+                    ...(isExerciseCompleted(exercise.name) ? themeStyles.exerciseCardCompleted : {})
                   }}
                 >
                   <div style={styles.exerciseHeader}>
@@ -219,7 +455,7 @@ const WorkoutTracker = () => {
                         onChange={() => handleExerciseToggle(exercise)}
                         style={styles.checkbox}
                       />
-                      <span style={styles.exerciseName}>{exercise.name}</span>
+                      <span style={themeStyles.exerciseName}>{exercise.name}</span>
                     </label>
                   </div>
 
@@ -233,16 +469,16 @@ const WorkoutTracker = () => {
               
               {/* Workout Details Form */}
               <form onSubmit={handleSubmit} style={styles.form}>
-                <h3 style={styles.sectionTitle}>Workout Details</h3>
+                <h3 style={themeStyles.sectionTitle}>Workout Details</h3>
 
                 <div style={styles.formGrid}>
                   <div style={styles.formGroup}>
-                    <label style={styles.label}>Duration (minutes) *</label>
+                    <label style={themeStyles.label}>Duration (minutes) *</label>
                     <input
                       type="number"
                       value={logData.totalDuration}
                       onChange={(e) => setLogData({ ...logData, totalDuration: e.target.value })}
-                      style={styles.input}
+                      style={themeStyles.input}
                       placeholder="e.g., 45"
                       min="1"
                       required
@@ -250,11 +486,11 @@ const WorkoutTracker = () => {
                   </div>
 
                   <div style={styles.formGroup}>
-                    <label style={styles.label}>How was it? *</label>
+                    <label style={themeStyles.label}>How was it? *</label>
                     <select
                       value={logData.mood}
                       onChange={(e) => setLogData({ ...logData, mood: e.target.value })}
-                      style={styles.select}
+                      style={themeStyles.select}
                       required
                     >
                       <option value="">Select mood</option>
@@ -268,7 +504,7 @@ const WorkoutTracker = () => {
                 </div>
 
                 <div style={styles.formGroup}>
-                  <label style={styles.label}>Difficulty Rating: {logData.difficultyRating}/5</label>
+                  <label style={themeStyles.label}>Difficulty Rating: {logData.difficultyRating}/5</label>
                   <div style={styles.ratingContainer}>
                     {[1, 2, 3, 4, 5].map(rating => (
                       <button
@@ -290,11 +526,11 @@ const WorkoutTracker = () => {
                 </div>
 
                 <div style={styles.formGroup}>
-                  <label style={styles.label}>Notes (Optional)</label>
+                  <label style={themeStyles.label}>Notes (Optional)</label>
                   <textarea
                     value={logData.notes}
                     onChange={(e) => setLogData({ ...logData, notes: e.target.value })}
-                    style={styles.textarea}
+                    style={themeStyles.textarea}
                     placeholder="Any comments about this workout? (e.g., felt strong, need to increase weight, etc.)"
                     rows="4"
                   />
@@ -302,7 +538,7 @@ const WorkoutTracker = () => {
 
                 <button
                   type="submit"
-                  style={styles.submitBtn}
+                  style={themeStyles.submitBtn}
                   disabled={saving}
                 >
                   {saving ? 'Saving...' : '✅ Complete & Save Workout'}
@@ -316,11 +552,6 @@ const WorkoutTracker = () => {
   );
 };
 const styles = {
-  container: {
-    minHeight: 'calc(100vh - 70px)',
-    background: 'linear-gradient(180deg, var(--theme-bg-primary) 0%, var(--theme-bg-secondary) 50%, var(--theme-bg-primary) 100%)',
-    padding: 'clamp(1rem, 4vw, 2rem)'
-  },
   content: {
     maxWidth: '1400px',
     margin: '0 auto',

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { workoutAPI, profileAPI } from '../utils/api';
 import { useAuth } from '../context/AuthContext';
+import { useTheme } from '../context/ThemeContext';
 import Loading from '../components/Loading';
 import VoicePlayer from '../components/VoicePlayer';
 import ExerciseDetails from '../components/ExerciseDetails';
@@ -13,6 +14,7 @@ const Dashboard = React.memo(() => {
   const [generating, setGenerating] = useState(false);
   const [error, setError] = useState('');
   const { user } = useAuth();
+  const { currentTheme } = useTheme();
   const navigate = useNavigate();
 
   const fetchData = useCallback(async () => {
@@ -63,6 +65,9 @@ const Dashboard = React.memo(() => {
   if (loading) {
     return <Loading message="Loading your dashboard..." />;
   }
+
+  // Get dynamic styles based on current theme
+  const styles = useMemo(() => getStyles(currentTheme), [currentTheme]);
 
   return (
     <div style={styles.container}>
@@ -248,323 +253,358 @@ const Dashboard = React.memo(() => {
   );
 });
 
-const styles = {
-  container: {
-    minHeight: 'calc(100vh - 70px)',
-    background: 'linear-gradient(180deg, var(--theme-bg-primary) 0%, var(--theme-bg-secondary) 50%, var(--theme-bg-primary) 100%)',
-    padding: 'clamp(1rem, 4vw, 2rem)'
-  },
-  content: {
-    maxWidth: '1200px',
-    margin: '0 auto',
-    width: '100%'
-  },
-  header: {
-    marginBottom: 'clamp(1rem, 4vw, 2rem)',
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    flexWrap: 'wrap',
-    gap: '1rem'
-  },
-  title: {
-    color: 'var(--theme-text-primary)',
-    fontSize: 'clamp(1.5rem, 5vw, 2.5rem)',
-    marginBottom: '0.5rem',
-    wordWrap: 'break-word',
-    fontWeight: '700',
-    textShadow: '0 2px 10px rgba(0,0,0,0.2)'
-  },
-  subtitle: {
-    color: 'var(--theme-text-secondary)',
-    fontSize: 'clamp(0.9rem, 3vw, 1.1rem)',
-    opacity: 0.9
-  },
-  error: {
-    backgroundColor: 'var(--theme-card-bg)',
-    color: '#ff6b6b',
-    padding: '1rem',
-    borderRadius: '12px',
-    marginBottom: '1rem',
-    textAlign: 'center',
-    border: '1px solid #ff6b6b'
-  },
-  card: {
-    backgroundColor: 'var(--theme-card-bg)',
-    borderRadius: '20px',
-    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
-    padding: 'clamp(1rem, 4vw, 2rem)',
-    marginBottom: 'clamp(1rem, 4vw, 2rem)',
-    width: '100%',
-    boxSizing: 'border-box',
-    border: `1px solid var(--theme-border)`
-  },
-  cardHeader: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: '1.5rem',
-    flexWrap: 'wrap',
-    gap: '1rem'
-  },
-  cardTitle: {
-    color: 'var(--theme-text-primary)',
-    fontSize: 'clamp(1.3rem, 4vw, 1.8rem)',
-    marginBottom: '1rem',
-    wordWrap: 'break-word',
-    fontWeight: '700'
-  },
-  profileGrid: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(min(200px, 100%), 1fr))',
-    gap: 'clamp(0.75rem, 2vw, 1rem)'
-  },
-  profileItem: {
-    display: 'flex',
-    flexDirection: 'column',
-    padding: '1rem',
-    backgroundColor: 'var(--theme-bg-secondary)',
-    borderRadius: '12px',
-    border: `1px solid var(--theme-border)`
-  },
-  profileLabel: {
-    color: 'var(--theme-text-secondary)',
-    fontSize: '0.9rem',
-    marginBottom: '0.5rem',
-    fontWeight: '500'
-  },
-  profileValue: {
-    color: 'var(--theme-accent)',
-    fontSize: '1.1rem',
-    fontWeight: '700'
-  },
-  emptyState: {
-    textAlign: 'center',
-    padding: '3rem 1rem'
-  },
-  emptyIcon: {
-    fontSize: '5rem',
-    display: 'block',
-    marginBottom: '1rem'
-  },
-  emptyTitle: {
-    color: 'var(--theme-text-primary)',
-    fontSize: '2rem',
-    marginBottom: '1rem',
-    fontWeight: '700'
-  },
-  emptyText: {
-    color: 'var(--theme-text-secondary)',
-    fontSize: '1.1rem',
-    marginBottom: '2rem',
-    maxWidth: '500px',
-    margin: '0 auto 2rem'
-  },
-  generateBtn: {
-    backgroundColor: 'var(--theme-accent)',
-    color: 'var(--theme-text-primary)',
-    padding: 'clamp(0.875rem, 2vw, 1rem) clamp(1.5rem, 4vw, 2rem)',
-    border: 'none',
-    borderRadius: '12px',
-    fontSize: 'clamp(0.95rem, 3vw, 1.1rem)',
-    fontWeight: '700',
-    cursor: 'pointer',
-    display: 'inline-flex',
-    alignItems: 'center',
-    gap: '0.5rem',
-    minHeight: '48px',
-    width: '100%',
-    maxWidth: '400px',
-    justifyContent: 'center',
-    boxShadow: '0 4px 20px rgba(0, 0, 0, 0.3)',
-    transition: 'all 0.3s ease'
-  },
-  regenerateBtn: {
-    backgroundColor: 'var(--theme-accent)',
-    color: 'var(--theme-text-primary)',
-    padding: '0.875rem 1.5rem',
-    border: 'none',
-    borderRadius: '12px',
-    fontSize: '1rem',
-    fontWeight: '700',
-    cursor: 'pointer',
-    boxShadow: '0 4px 20px rgba(0, 0, 0, 0.3)',
-    transition: 'all 0.3s ease',
-    minHeight: '48px'
-  },
-  spinner: {
-    border: '3px solid rgba(255,255,255,0.3)',
-    borderTop: '3px solid white',
-    borderRadius: '50%',
-    width: '20px',
-    height: '20px',
-    animation: 'spin 1s linear infinite',
-    display: 'inline-block'
-  },
-  planInfo: {
-    marginBottom: '2rem',
-    paddingBottom: '1.5rem',
-    borderBottom: '1px solid #2d2d2d'
-  },
-  planName: {
-    color: '#ffffff',
-    fontSize: '1.5rem',
-    marginBottom: '0.5rem',
-    fontWeight: '700'
-  },
-  planDescription: {
-    color: '#999',
-    fontSize: '1rem',
-    marginBottom: '1rem'
-  },
-  planStats: {
-    display: 'flex',
-    gap: '2rem',
-    flexWrap: 'wrap'
-  },
-  stat: {
-    display: 'flex',
-    flexDirection: 'column'
-  },
-  statLabel: {
-    color: '#999',
-    fontSize: '0.9rem',
-    marginBottom: '0.25rem',
-    fontWeight: '500'
-  },
-  statValue: {
-    color: '#FFD700',
-    fontSize: '1.1rem',
-    fontWeight: '700'
-  },
-  workoutsContainer: {
-    marginTop: '2rem'
-  },
-  sectionTitle: {
-    color: '#ffffff',
-    fontSize: '1.5rem',
-    marginBottom: '1.5rem',
-    fontWeight: '700'
-  },
-  workoutGrid: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fill, minmax(min(280px, 100%), 1fr))',
-    gap: 'clamp(1rem, 3vw, 1.5rem)'
-  },
-  workoutDay: {
-    border: '1px solid #2d2d2d',
-    borderRadius: '16px',
-    padding: '1.5rem',
-    backgroundColor: '#0a0a0a',
-    transition: 'transform 0.2s, box-shadow 0.2s, border-color 0.2s',
-    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.5)'
-  },
-  dayHeader: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: '1rem',
-    paddingBottom: '0.75rem',
-    borderBottom: '1px solid #2d2d2d'
-  },
-  dayTitle: {
-    color: '#ffffff',
-    fontSize: '1.2rem',
-    margin: 0,
-    fontWeight: '700'
-  },
-  dayDuration: {
-    color: '#FFD700',
-    fontSize: '0.9rem',
-    fontWeight: '600'
-  },
-  exerciseList: {
-    marginBottom: '1rem'
-  },
-  exerciseCount: {
-    color: '#999',
-    fontSize: '0.9rem',
-    marginBottom: '0.5rem',
-    fontWeight: '500'
-  },
-  exercises: {
-    listStyle: 'none',
-    padding: 0,
-    margin: 0
-  },
-  exerciseItem: {
-    marginBottom: '1rem',
-    paddingBottom: '0.75rem',
-    borderBottom: '1px solid #2d2d2d'
-  },
-  exerciseListItem: {
-    color: '#ffffff',
-    fontSize: '0.95rem',
-    padding: '0.25rem 0',
-    lineHeight: '1.5',
-    marginBottom: '0.5rem'
-  },
-  moreExercises: {
-    color: '#FFD700',
-    fontSize: '0.9rem',
-    fontStyle: 'italic',
-    marginTop: '0.5rem',
-    fontWeight: '600'
-  },
-  startBtn: {
-    width: '100%',
-    backgroundColor: '#FFD700',
-    color: '#000000',
-    padding: '0.875rem',
-    border: 'none',
-    borderRadius: '12px',
-    fontSize: '1rem',
-    fontWeight: '700',
-    cursor: 'pointer',
-    boxShadow: '0 4px 20px rgba(255, 215, 0, 0.4)',
-    transition: 'all 0.3s ease',
-    minHeight: '48px',
-    marginTop: '1rem'
-  },
-  actionsCard: {
-    backgroundColor: '#1a1a1a',
-    borderRadius: '20px',
-    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.8)',
-    padding: '1.5rem',
-    border: '1px solid #2d2d2d'
-  },
-  actionsTitle: {
-    color: '#ffffff',
-    fontSize: '1.3rem',
-    marginBottom: '1rem',
-    fontWeight: '700'
-  },
-  actions: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(min(150px, 100%), 1fr))',
-    gap: 'clamp(0.75rem, 2vw, 1rem)'
-  },
-  actionBtn: {
-    backgroundColor: '#0a0a0a',
-    color: '#ffffff',
-    padding: 'clamp(0.875rem, 2vw, 1rem)',
-    border: '1px solid #2d2d2d',
-    borderRadius: '12px',
-    fontSize: 'clamp(0.9rem, 2.5vw, 1rem)',
-    fontWeight: '600',
-    cursor: 'pointer',
-    transition: 'all 0.3s ease',
-    minHeight: '48px',
-    wordWrap: 'break-word'
-  },
-  exerciseHeader: {
-    marginBottom: '0.5rem'
-  },
-  exerciseName: {
-    fontSize: '1rem',
-    fontWeight: '600',
-    color: '#ffffff'
-  }
+// Get theme-aware styles
+const getStyles = (theme) => {
+  const themeColors = {
+    beginner: {
+      bgPrimary: '#f5f5f5',
+      bgSecondary: '#e8e8e8',
+      textPrimary: '#000000',
+      textSecondary: '#333333',
+      accent: '#a8d5ba',
+      cardBg: '#ffffff',
+      border: '#e0e0e0'
+    },
+    intermediate: {
+      bgPrimary: '#1f2937',
+      bgSecondary: '#111827',
+      textPrimary: '#ffffff',
+      textSecondary: '#e5e7eb',
+      accent: '#fbbf24',
+      cardBg: '#374151',
+      border: '#4b5563'
+    },
+    advanced: {
+      bgPrimary: '#0a0a0a',
+      bgSecondary: '#1a1a1a',
+      textPrimary: '#ffffff',
+      textSecondary: '#cccccc',
+      accent: '#ef4444',
+      cardBg: '#1a1a1a',
+      border: '#404040'
+    }
+  };
+  
+  const colors = themeColors[theme] || themeColors.beginner;
+  
+  return {
+    container: {
+      minHeight: 'calc(100vh - 70px)',
+      background: `linear-gradient(180deg, ${colors.bgPrimary} 0%, ${colors.bgSecondary} 50%, ${colors.bgPrimary} 100%)`,
+      padding: 'clamp(1rem, 4vw, 2rem)'
+    },
+    content: {
+      maxWidth: '1200px',
+      margin: '0 auto',
+      width: '100%'
+    },
+    header: {
+      marginBottom: 'clamp(1rem, 4vw, 2rem)',
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      flexWrap: 'wrap',
+      gap: '1rem'
+    },
+    title: {
+      color: colors.textPrimary,
+      fontSize: 'clamp(1.5rem, 5vw, 2.5rem)',
+      marginBottom: '0.5rem',
+      wordWrap: 'break-word',
+      fontWeight: '700',
+      textShadow: '0 2px 10px rgba(0,0,0,0.2)'
+    },
+    subtitle: {
+      color: colors.textSecondary,
+      fontSize: 'clamp(0.9rem, 3vw, 1.1rem)',
+      opacity: 0.9
+    },
+    error: {
+      backgroundColor: colors.cardBg,
+      color: '#ff6b6b',
+      padding: '1rem',
+      borderRadius: '12px',
+      marginBottom: '1rem',
+      textAlign: 'center',
+      border: '1px solid #ff6b6b'
+    },
+    card: {
+      backgroundColor: colors.cardBg,
+      borderRadius: '20px',
+      boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
+      padding: 'clamp(1rem, 4vw, 2rem)',
+      marginBottom: 'clamp(1rem, 4vw, 2rem)',
+      width: '100%',
+      boxSizing: 'border-box',
+      border: `1px solid ${colors.border}`
+    },
+    cardHeader: {
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      marginBottom: '1.5rem',
+      flexWrap: 'wrap',
+      gap: '1rem'
+    },
+    cardTitle: {
+      color: colors.textPrimary,
+      fontSize: 'clamp(1.3rem, 4vw, 1.8rem)',
+      marginBottom: '1rem',
+      wordWrap: 'break-word',
+      fontWeight: '700'
+    },
+    profileGrid: {
+      display: 'grid',
+      gridTemplateColumns: 'repeat(auto-fit, minmax(min(200px, 100%), 1fr))',
+      gap: 'clamp(0.75rem, 2vw, 1rem)'
+    },
+    profileItem: {
+      display: 'flex',
+      flexDirection: 'column',
+      padding: '1rem',
+      backgroundColor: colors.bgSecondary,
+      borderRadius: '12px',
+      border: `1px solid ${colors.border}`
+    },
+    profileLabel: {
+      color: colors.textSecondary,
+      fontSize: '0.9rem',
+      marginBottom: '0.5rem',
+      fontWeight: '500'
+    },
+    profileValue: {
+      color: colors.accent,
+      fontSize: '1.1rem',
+      fontWeight: '700'
+    },
+    emptyState: {
+      textAlign: 'center',
+      padding: '3rem 1rem'
+    },
+    emptyIcon: {
+      fontSize: '5rem',
+      display: 'block',
+      marginBottom: '1rem'
+    },
+    emptyTitle: {
+      color: colors.textPrimary,
+      fontSize: '2rem',
+      marginBottom: '1rem',
+      fontWeight: '700'
+    },
+    emptyText: {
+      color: colors.textSecondary,
+      fontSize: '1.1rem',
+      marginBottom: '2rem',
+      maxWidth: '500px',
+      margin: '0 auto 2rem'
+    },
+    generateBtn: {
+      backgroundColor: colors.accent,
+      color: colors.textPrimary,
+      padding: 'clamp(0.875rem, 2vw, 1rem) clamp(1.5rem, 4vw, 2rem)',
+      border: 'none',
+      borderRadius: '12px',
+      fontSize: 'clamp(0.95rem, 3vw, 1.1rem)',
+      fontWeight: '700',
+      cursor: 'pointer',
+      display: 'inline-flex',
+      alignItems: 'center',
+      gap: '0.5rem',
+      minHeight: '48px',
+      width: '100%',
+      maxWidth: '400px',
+      justifyContent: 'center',
+      boxShadow: '0 4px 20px rgba(0, 0, 0, 0.3)',
+      transition: 'all 0.3s ease'
+    },
+    regenerateBtn: {
+      backgroundColor: colors.accent,
+      color: colors.textPrimary,
+      padding: '0.875rem 1.5rem',
+      border: 'none',
+      borderRadius: '12px',
+      fontSize: '1rem',
+      fontWeight: '700',
+      cursor: 'pointer',
+      boxShadow: '0 4px 20px rgba(0, 0, 0, 0.3)',
+      transition: 'all 0.3s ease',
+      minHeight: '48px'
+    },
+    spinner: {
+      border: `3px solid ${colors.textPrimary}33`,
+      borderTop: `3px solid ${colors.textPrimary}`,
+      borderRadius: '50%',
+      width: '20px',
+      height: '20px',
+      animation: 'spin 1s linear infinite',
+      display: 'inline-block'
+    },
+    planInfo: {
+      marginBottom: '2rem',
+      paddingBottom: '1.5rem',
+      borderBottom: `1px solid ${colors.border}`
+    },
+    planName: {
+      color: colors.textPrimary,
+      fontSize: '1.5rem',
+      marginBottom: '0.5rem',
+      fontWeight: '700'
+    },
+    planDescription: {
+      color: colors.textSecondary,
+      fontSize: '1rem',
+      marginBottom: '1rem'
+    },
+    planStats: {
+      display: 'flex',
+      gap: '2rem',
+      flexWrap: 'wrap'
+    },
+    stat: {
+      display: 'flex',
+      flexDirection: 'column'
+    },
+    statLabel: {
+      color: colors.textSecondary,
+      fontSize: '0.9rem',
+      marginBottom: '0.25rem',
+      fontWeight: '500'
+    },
+    statValue: {
+      color: colors.accent,
+      fontSize: '1.1rem',
+      fontWeight: '700'
+    },
+    workoutsContainer: {
+      marginTop: '2rem'
+    },
+    sectionTitle: {
+      color: colors.textPrimary,
+      fontSize: '1.5rem',
+      marginBottom: '1.5rem',
+      fontWeight: '700'
+    },
+    workoutGrid: {
+      display: 'grid',
+      gridTemplateColumns: 'repeat(auto-fill, minmax(min(280px, 100%), 1fr))',
+      gap: 'clamp(1rem, 3vw, 1.5rem)'
+    },
+    workoutDay: {
+      border: `1px solid ${colors.border}`,
+      borderRadius: '16px',
+      padding: '1.5rem',
+      backgroundColor: colors.bgSecondary,
+      transition: 'transform 0.2s, box-shadow 0.2s, border-color 0.2s',
+      boxShadow: '0 4px 12px rgba(0, 0, 0, 0.5)'
+    },
+    dayHeader: {
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      marginBottom: '1rem',
+      paddingBottom: '0.75rem',
+      borderBottom: `1px solid ${colors.border}`
+    },
+    dayTitle: {
+      color: colors.textPrimary,
+      fontSize: '1.2rem',
+      margin: 0,
+      fontWeight: '700'
+    },
+    dayDuration: {
+      color: colors.accent,
+      fontSize: '0.9rem',
+      fontWeight: '600'
+    },
+    exerciseList: {
+      marginBottom: '1rem'
+    },
+    exerciseCount: {
+      color: colors.textSecondary,
+      fontSize: '0.9rem',
+      marginBottom: '0.5rem',
+      fontWeight: '500'
+    },
+    exercises: {
+      listStyle: 'none',
+      padding: 0,
+      margin: 0
+    },
+    exerciseItem: {
+      marginBottom: '1rem',
+      paddingBottom: '0.75rem',
+      borderBottom: `1px solid ${colors.border}`
+    },
+    exerciseListItem: {
+      color: colors.textPrimary,
+      fontSize: '0.95rem',
+      padding: '0.25rem 0',
+      lineHeight: '1.5',
+      marginBottom: '0.5rem'
+    },
+    moreExercises: {
+      color: colors.accent,
+      fontSize: '0.9rem',
+      fontStyle: 'italic',
+      marginTop: '0.5rem',
+      fontWeight: '600'
+    },
+    startBtn: {
+      width: '100%',
+      backgroundColor: colors.accent,
+      color: colors.textPrimary,
+      padding: '0.875rem',
+      border: 'none',
+      borderRadius: '12px',
+      fontSize: '1rem',
+      fontWeight: '700',
+      cursor: 'pointer',
+      boxShadow: '0 4px 20px rgba(0, 0, 0, 0.3)',
+      transition: 'all 0.3s ease',
+      minHeight: '48px',
+      marginTop: '1rem'
+    },
+    actionsCard: {
+      backgroundColor: colors.cardBg,
+      borderRadius: '20px',
+      boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
+      padding: '1.5rem',
+      border: `1px solid ${colors.border}`
+    },
+    actionsTitle: {
+      color: colors.textPrimary,
+      fontSize: '1.3rem',
+      marginBottom: '1rem',
+      fontWeight: '700'
+    },
+    actions: {
+      display: 'grid',
+      gridTemplateColumns: 'repeat(auto-fit, minmax(min(150px, 100%), 1fr))',
+      gap: 'clamp(0.75rem, 2vw, 1rem)'
+    },
+    actionBtn: {
+      backgroundColor: colors.bgSecondary,
+      color: colors.textPrimary,
+      padding: 'clamp(0.875rem, 2vw, 1rem)',
+      border: `1px solid ${colors.border}`,
+      borderRadius: '12px',
+      fontSize: 'clamp(0.9rem, 2.5vw, 1rem)',
+      fontWeight: '600',
+      cursor: 'pointer',
+      transition: 'all 0.3s ease',
+      minHeight: '48px',
+      wordWrap: 'break-word'
+    },
+    exerciseHeader: {
+      marginBottom: '0.5rem'
+    },
+    exerciseName: {
+      fontSize: '1rem',
+      fontWeight: '600',
+      color: colors.textPrimary
+    }
+  };
 };
 
 // Add spinner animation

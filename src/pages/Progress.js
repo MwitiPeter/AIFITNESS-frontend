@@ -1,7 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { progressAPI } from '../utils/api';
 import Loading from '../components/Loading';
+import { useTheme } from '../context/ThemeContext';
+
+// Helper function to get CSS variable
+const getCSSVar = (varName, fallback) => {
+  if (typeof window === 'undefined') return fallback;
+  try {
+    const root = document.documentElement;
+    const value = getComputedStyle(root).getPropertyValue(varName).trim();
+    return value || fallback;
+  } catch {
+    return fallback;
+  }
+};
 
 const Progress = () => {
   const [stats, setStats] = useState(null);
@@ -9,7 +22,177 @@ const Progress = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [timeframe, setTimeframe] = useState(30); // days
+  const { currentTheme } = useTheme();
   const navigate = useNavigate();
+
+  // Get dynamic styles based on current theme
+  const styles = useMemo(() => {
+    const bgPrimary = getCSSVar('--theme-bg-primary', '#f5f7fa');
+    const bgSecondary = getCSSVar('--theme-bg-secondary', '#e8edf2');
+    const textPrimary = getCSSVar('--theme-text-primary', '#2c3e50');
+    const textSecondary = getCSSVar('--theme-text-secondary', '#5a6c7d');
+    const accent = getCSSVar('--theme-accent', '#a8c5d9');
+    const cardBg = getCSSVar('--theme-card-bg', '#ffffff');
+    const border = getCSSVar('--theme-border', '#d1d9e0');
+    const shadow = getCSSVar('--theme-shadow', 'rgba(0, 0, 0, 0.1)');
+    const buttonPrimary = getCSSVar('--theme-button-primary', accent);
+    const buttonPrimaryText = getCSSVar('--theme-button-primary-text', textPrimary);
+
+    return {
+      container: {
+        minHeight: 'calc(100vh - 70px)',
+        background: `linear-gradient(180deg, ${bgPrimary} 0%, ${bgSecondary} 50%, ${bgPrimary} 100%)`,
+        padding: 'clamp(1rem, 4vw, 2rem)',
+        transition: 'background 0.3s ease'
+      },
+      content: {
+        maxWidth: '1200px',
+        margin: '0 auto',
+        width: '100%'
+      },
+      header: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'flex-start',
+        marginBottom: 'clamp(1rem, 4vw, 2rem)',
+        flexWrap: 'wrap',
+        gap: '1rem'
+      },
+      title: {
+        color: textPrimary,
+        fontSize: 'clamp(1.5rem, 5vw, 2.5rem)',
+        marginBottom: '0.5rem',
+        wordWrap: 'break-word',
+        fontWeight: '700',
+        textShadow: `0 2px 10px ${shadow}`,
+        transition: 'color 0.3s ease'
+      },
+      subtitle: {
+        color: textSecondary,
+        fontSize: 'clamp(0.9rem, 3vw, 1.1rem)',
+        opacity: 0.9,
+        transition: 'color 0.3s ease'
+      },
+      backBtn: {
+        backgroundColor: bgSecondary,
+        color: textPrimary,
+        padding: '0.75rem 1.5rem',
+        border: `1px solid ${border}`,
+        borderRadius: '10px',
+        fontSize: '1rem',
+        cursor: 'pointer',
+        fontWeight: '600',
+        transition: 'all 0.3s ease'
+      },
+      error: {
+        backgroundColor: '#2d1a1a',
+        color: '#ff6b6b',
+        padding: '1rem',
+        borderRadius: '12px',
+        marginBottom: '1rem',
+        textAlign: 'center',
+        border: '1px solid #ff6b6b'
+      },
+      timeframeCard: {
+        backgroundColor: cardBg,
+        borderRadius: '20px',
+        padding: '1.5rem',
+        marginBottom: '2rem',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '1rem',
+        flexWrap: 'wrap',
+        boxShadow: `0 8px 32px ${shadow}`,
+        border: `1px solid ${border}`,
+        transition: 'background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease'
+      },
+      timeframeLabel: {
+        color: textPrimary,
+        fontWeight: '600',
+        fontSize: '1rem',
+        transition: 'color 0.3s ease'
+      },
+      timeframeButtons: {
+        display: 'flex',
+        gap: '0.5rem'
+      },
+      timeframeBtn: {
+        backgroundColor: bgSecondary,
+        color: textPrimary,
+        padding: '0.5rem 1rem',
+        border: `1px solid ${border}`,
+        borderRadius: '8px',
+        fontSize: '0.9rem',
+        cursor: 'pointer',
+        transition: 'all 0.3s ease',
+        fontWeight: '500'
+      },
+      timeframeBtnActive: {
+        backgroundColor: buttonPrimary,
+        color: buttonPrimaryText,
+        borderColor: buttonPrimary,
+        fontWeight: '700'
+      },
+      statsGrid: {
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(min(250px, 100%), 1fr))',
+        gap: 'clamp(1rem, 3vw, 1.5rem)',
+        marginBottom: '2rem'
+      },
+      statCard: {
+        backgroundColor: cardBg,
+        borderRadius: '20px',
+        padding: '1.5rem',
+        boxShadow: `0 8px 32px ${shadow}`,
+        border: `1px solid ${border}`,
+        transition: 'background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease'
+      },
+      statLabel: {
+        color: textSecondary,
+        fontSize: '0.9rem',
+        marginBottom: '0.5rem',
+        fontWeight: '500',
+        transition: 'color 0.3s ease'
+      },
+      statValue: {
+        color: accent,
+        fontSize: '2rem',
+        fontWeight: '700',
+        transition: 'color 0.3s ease'
+      },
+      logsCard: {
+        backgroundColor: cardBg,
+        borderRadius: '20px',
+        padding: '1.5rem',
+        boxShadow: `0 8px 32px ${shadow}`,
+        border: `1px solid ${border}`,
+        transition: 'background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease'
+      },
+      logItem: {
+        padding: '1rem',
+        borderBottom: `1px solid ${border}`,
+        transition: 'border-color 0.3s ease'
+      },
+      logDate: {
+        color: textSecondary,
+        fontSize: '0.9rem',
+        marginBottom: '0.5rem',
+        transition: 'color 0.3s ease'
+      },
+      logWorkout: {
+        color: textPrimary,
+        fontSize: '1rem',
+        fontWeight: '600',
+        marginBottom: '0.25rem',
+        transition: 'color 0.3s ease'
+      },
+      logDetails: {
+        color: textSecondary,
+        fontSize: '0.85rem',
+        transition: 'color 0.3s ease'
+      }
+    };
+  }, [currentTheme]);
 
   useEffect(() => {
     fetchProgressData();
@@ -283,367 +466,6 @@ const Progress = () => {
       </div>
     </div>
   );
-};
-
-const styles = {
-  container: {
-    minHeight: 'calc(100vh - 70px)',
-    background: 'linear-gradient(180deg, #000000 0%, #1a1a1a 50%, #000000 100%)',
-    padding: 'clamp(1rem, 4vw, 2rem)'
-  },
-  content: {
-    maxWidth: '1200px',
-    margin: '0 auto',
-    width: '100%'
-  },
-  header: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    marginBottom: 'clamp(1rem, 4vw, 2rem)',
-    flexWrap: 'wrap',
-    gap: '1rem'
-  },
-  title: {
-    color: '#ffffff',
-    fontSize: 'clamp(1.5rem, 5vw, 2.5rem)',
-    marginBottom: '0.5rem',
-    wordWrap: 'break-word',
-    fontWeight: '700',
-    textShadow: '0 2px 10px rgba(0,0,0,0.3)'
-  },
-  subtitle: {
-    color: '#999',
-    fontSize: 'clamp(0.9rem, 3vw, 1.1rem)',
-    opacity: 0.9
-  },
-  backBtn: {
-    backgroundColor: '#2d2d2d',
-    color: '#ffffff',
-    padding: '0.75rem 1.5rem',
-    border: '1px solid #404040',
-    borderRadius: '10px',
-    fontSize: '1rem',
-    cursor: 'pointer',
-    fontWeight: '600',
-    transition: 'all 0.3s ease'
-  },
-  error: {
-    backgroundColor: '#2d1a1a',
-    color: '#ff6b6b',
-    padding: '1rem',
-    borderRadius: '12px',
-    marginBottom: '1rem',
-    textAlign: 'center',
-    border: '1px solid #ff6b6b'
-  },
-  timeframeCard: {
-    backgroundColor: '#1a1a1a',
-    borderRadius: '20px',
-    padding: '1.5rem',
-    marginBottom: '2rem',
-    display: 'flex',
-    alignItems: 'center',
-    gap: '1rem',
-    flexWrap: 'wrap',
-    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.8)',
-    border: '1px solid #2d2d2d'
-  },
-  timeframeLabel: {
-    color: '#ffffff',
-    fontWeight: '600',
-    fontSize: '1rem'
-  },
-  timeframeButtons: {
-    display: 'flex',
-    gap: '0.5rem'
-  },
-  timeframeBtn: {
-    backgroundColor: '#0a0a0a',
-    color: '#ffffff',
-    padding: '0.5rem 1rem',
-    border: '1px solid #2d2d2d',
-    borderRadius: '10px',
-    fontSize: '0.95rem',
-    cursor: 'pointer',
-    transition: 'all 0.3s ease',
-    fontWeight: '500'
-  },
-  timeframeBtnActive: {
-    backgroundColor: '#FFD700',
-    color: '#000000',
-    borderColor: '#FFD700',
-    boxShadow: '0 2px 8px rgba(255, 215, 0, 0.3)'
-  },
-  statsGrid: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(min(150px, 100%), 1fr))',
-    gap: 'clamp(0.75rem, 2vw, 1rem)',
-    marginBottom: 'clamp(1rem, 4vw, 2rem)'
-  },
-  statCard: {
-    backgroundColor: '#1a1a1a',
-    borderRadius: '16px',
-    padding: '1.5rem',
-    display: 'flex',
-    alignItems: 'center',
-    gap: '1rem',
-    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.8)',
-    border: '1px solid #2d2d2d',
-    transition: 'transform 0.3s ease'
-  },
-  statIcon: {
-    fontSize: '2.5rem'
-  },
-  statContent: {
-    flex: 1
-  },
-  statValue: {
-    color: '#FFD700',
-    fontSize: '2rem',
-    fontWeight: '700',
-    margin: '0 0 0.25rem 0'
-  },
-  statLabel: {
-    color: '#999',
-    fontSize: '0.9rem',
-    margin: 0,
-    fontWeight: '500'
-  },
-  card: {
-    backgroundColor: '#1a1a1a',
-    borderRadius: '20px',
-    padding: 'clamp(1rem, 4vw, 2rem)',
-    marginBottom: 'clamp(1rem, 4vw, 2rem)',
-    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.8)',
-    width: '100%',
-    boxSizing: 'border-box',
-    border: '1px solid #2d2d2d'
-  },
-  cardTitle: {
-    color: '#ffffff',
-    fontSize: 'clamp(1.3rem, 4vw, 1.8rem)',
-    marginBottom: 'clamp(1rem, 3vw, 1.5rem)',
-    wordWrap: 'break-word',
-    fontWeight: '700'
-  },
-  averagesGrid: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(min(200px, 100%), 1fr))',
-    gap: 'clamp(0.75rem, 2vw, 1rem)'
-  },
-  averageItem: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: '1rem',
-    backgroundColor: '#0a0a0a',
-    borderRadius: '12px',
-    border: '1px solid #2d2d2d'
-  },
-  averageLabel: {
-    color: '#999',
-    fontWeight: '600'
-  },
-  averageValue: {
-    color: '#FFD700',
-    fontSize: '1.2rem',
-    fontWeight: '700'
-  },
-  emptyState: {
-    textAlign: 'center',
-    padding: '3rem'
-  },
-  emptyText: {
-    color: '#999',
-    fontSize: '1.1rem',
-    marginBottom: '1.5rem'
-  },
-  primaryBtn: {
-    backgroundColor: '#FFD700',
-    color: '#000000',
-    padding: '0.875rem 1.5rem',
-    border: 'none',
-    borderRadius: '12px',
-    fontSize: '1rem',
-    cursor: 'pointer',
-    fontWeight: '700',
-    boxShadow: '0 4px 20px rgba(255, 215, 0, 0.4)',
-    transition: 'all 0.3s ease',
-    minHeight: '48px'
-  },
-  logsList: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '1.5rem'
-  },
-  logCard: {
-    border: '1px solid #2d2d2d',
-    borderRadius: '16px',
-    padding: '1.5rem',
-    backgroundColor: '#0a0a0a',
-    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.5)'
-  },
-  logHeader: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    marginBottom: '1rem',
-    paddingBottom: '1rem',
-    borderBottom: '1px solid rgba(76, 175, 80, 0.2)',
-    flexWrap: 'wrap',
-    gap: '1rem'
-  },
-  logDay: {
-    color: '#ffffff',
-    fontSize: '1.3rem',
-    margin: '0 0 0.25rem 0',
-    fontWeight: '700'
-  },
-  logDate: {
-    color: '#999',
-    fontSize: '0.9rem',
-    margin: 0
-  },
-  logBadges: {
-    display: 'flex',
-    gap: '0.5rem',
-    flexWrap: 'wrap'
-  },
-  completedBadge: {
-    backgroundColor: '#FFD700',
-    color: '#000000',
-    padding: '0.25rem 0.75rem',
-    borderRadius: '15px',
-    fontSize: '0.85rem',
-    fontWeight: '600',
-    boxShadow: '0 2px 4px rgba(255, 215, 0, 0.3)'
-  },
-  moodBadge: {
-    backgroundColor: '#FFD700',
-    color: '#000000',
-    padding: '0.25rem 0.75rem',
-    borderRadius: '15px',
-    fontSize: '0.85rem',
-    fontWeight: '600',
-    boxShadow: '0 2px 4px rgba(255, 215, 0, 0.3)'
-  },
-  logStats: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(min(120px, 100%), 1fr))',
-    gap: 'clamp(0.75rem, 2vw, 1rem)',
-    marginBottom: '1rem'
-  },
-  logStat: {
-    display: 'flex',
-    flexDirection: 'column'
-  },
-  logStatLabel: {
-    color: '#999',
-    fontSize: '0.85rem',
-    marginBottom: '0.25rem',
-    fontWeight: '500'
-  },
-  logStatValue: {
-    color: '#FFD700',
-    fontSize: '1.1rem',
-    fontWeight: '700'
-  },
-  logRating: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '0.5rem',
-    marginBottom: '1rem'
-  },
-  logRatingLabel: {
-    color: '#999',
-    fontSize: '0.9rem',
-    fontWeight: '600'
-  },
-  stars: {
-    display: 'flex',
-    gap: '0.25rem'
-  },
-  star: {
-    fontSize: '1rem',
-    opacity: 0.3
-  },
-  starFilled: {
-    opacity: 1
-  },
-  exercisesSummary: {
-    marginBottom: '1rem'
-  },
-  exercisesSummaryTitle: {
-    color: '#999',
-    fontSize: '0.9rem',
-    fontWeight: '600',
-    marginBottom: '0.5rem'
-  },
-  exercisesTags: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    gap: '0.5rem'
-  },
-  exerciseTag: {
-    backgroundColor: '#1a1a00',
-    color: '#FFD700',
-    padding: '0.25rem 0.75rem',
-    borderRadius: '15px',
-    fontSize: '0.85rem',
-    fontWeight: '500',
-    border: '1px solid rgba(255, 215, 0, 0.3)'
-  },
-  logNotes: {
-    backgroundColor: '#1a1a1a',
-    padding: '1rem',
-    borderRadius: '10px',
-    marginTop: '1rem',
-    border: '1px solid #2d2d2d'
-  },
-  logNotesLabel: {
-    color: '#ffffff',
-    fontSize: '0.9rem',
-    fontWeight: '600',
-    marginBottom: '0.5rem'
-  },
-  logNotesText: {
-    color: '#ffffff',
-    fontSize: '0.95rem',
-    margin: 0,
-    lineHeight: '1.5'
-  },
-  actionsCard: {
-    backgroundColor: '#1a1a1a',
-    borderRadius: '20px',
-    padding: '1.5rem',
-    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.8)',
-    border: '1px solid #2d2d2d'
-  },
-  actionsTitle: {
-    color: '#ffffff',
-    fontSize: '1.3rem',
-    marginBottom: '1rem',
-    fontWeight: '700'
-  },
-  actions: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-    gap: '1rem'
-  },
-  actionBtn: {
-    backgroundColor: '#FFD700',
-    color: '#000000',
-    padding: '1rem',
-    border: 'none',
-    borderRadius: '12px',
-    fontSize: '1rem',
-    fontWeight: '700',
-    cursor: 'pointer',
-    transition: 'all 0.3s ease',
-    boxShadow: '0 4px 20px rgba(255, 215, 0, 0.4)',
-    minHeight: '48px'
-  }
 };
 
 export default Progress;

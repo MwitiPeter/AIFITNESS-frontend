@@ -1,11 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { profileAPI } from '../utils/api';
+import { useTheme } from '../context/ThemeContext';
+
+// Helper function to get CSS variable
+const getCSSVar = (varName, fallback) => {
+  if (typeof window === 'undefined') return fallback;
+  try {
+    const root = document.documentElement;
+    const value = getComputedStyle(root).getPropertyValue(varName).trim();
+    return value || fallback;
+  } catch {
+    return fallback;
+  }
+};
 
 const Onboarding = () => {
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const { currentTheme } = useTheme();
   
   const [formData, setFormData] = useState({
     age: '',
@@ -22,6 +36,229 @@ const Onboarding = () => {
   });
 
   const navigate = useNavigate();
+
+  // Get dynamic styles based on current theme
+  const styles = useMemo(() => {
+    const bgPrimary = getCSSVar('--theme-bg-primary', '#f5f7fa');
+    const bgSecondary = getCSSVar('--theme-bg-secondary', '#e8edf2');
+    const textPrimary = getCSSVar('--theme-text-primary', '#2c3e50');
+    const textSecondary = getCSSVar('--theme-text-secondary', '#5a6c7d');
+    const accent = getCSSVar('--theme-accent', '#a8c5d9');
+    const cardBg = getCSSVar('--theme-card-bg', '#ffffff');
+    const border = getCSSVar('--theme-border', '#d1d9e0');
+    const shadow = getCSSVar('--theme-shadow', 'rgba(0, 0, 0, 0.1)');
+    const inputBg = getCSSVar('--theme-input-bg', cardBg);
+    const inputBorder = getCSSVar('--theme-input-border', border);
+    const buttonPrimary = getCSSVar('--theme-button-primary', accent);
+    const buttonPrimaryText = getCSSVar('--theme-button-primary-text', textPrimary);
+
+    return {
+      container: {
+        minHeight: 'calc(100vh - 70px)',
+        background: `linear-gradient(180deg, ${bgPrimary} 0%, ${bgSecondary} 50%, ${bgPrimary} 100%)`,
+        padding: 'clamp(1rem, 4vw, 2rem)',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        transition: 'background 0.3s ease'
+      },
+      card: {
+        backgroundColor: cardBg,
+        borderRadius: '20px',
+        boxShadow: `0 8px 32px ${shadow}`,
+        padding: 'clamp(1.5rem, 4vw, 2.5rem)',
+        maxWidth: '650px',
+        width: '100%',
+        boxSizing: 'border-box',
+        border: `1px solid ${border}`,
+        transition: 'background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease'
+      },
+      progress: {
+        width: '100%',
+        height: '10px',
+        backgroundColor: bgSecondary,
+        borderRadius: '10px',
+        marginBottom: '2rem',
+        overflow: 'hidden',
+        border: `1px solid ${border}`,
+        transition: 'background-color 0.3s ease, border-color 0.3s ease'
+      },
+      progressBar: {
+        height: '100%',
+        background: `linear-gradient(90deg, ${accent} 0%, ${buttonPrimary} 100%)`,
+        transition: 'width 0.3s ease, background 0.3s ease',
+        borderRadius: '10px'
+      },
+      title: {
+        textAlign: 'center',
+        color: textPrimary,
+        fontSize: 'clamp(1.5rem, 4vw, 2rem)',
+        marginBottom: '0.5rem',
+        wordWrap: 'break-word',
+        fontWeight: '700',
+        transition: 'color 0.3s ease'
+      },
+      subtitle: {
+        textAlign: 'center',
+        color: textSecondary,
+        marginBottom: 'clamp(1.5rem, 4vw, 2rem)',
+        fontSize: 'clamp(0.9rem, 2.5vw, 1rem)',
+        transition: 'color 0.3s ease'
+      },
+      stepContent: {
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '1.5rem'
+      },
+      stepTitle: {
+        color: textPrimary,
+        fontSize: 'clamp(1.2rem, 3vw, 1.5rem)',
+        marginBottom: '1rem',
+        fontWeight: '700',
+        transition: 'color 0.3s ease'
+      },
+      formGroup: {
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '0.75rem'
+      },
+      label: {
+        color: textPrimary,
+        fontWeight: '600',
+        fontSize: '0.95rem',
+        transition: 'color 0.3s ease'
+      },
+      input: {
+        padding: 'clamp(0.875rem, 2vw, 1rem)',
+        border: `1px solid ${inputBorder}`,
+        borderRadius: '12px',
+        fontSize: '16px',
+        width: '100%',
+        boxSizing: 'border-box',
+        minHeight: '48px',
+        transition: 'all 0.3s ease',
+        backgroundColor: inputBg,
+        color: textPrimary,
+        fontFamily: 'inherit'
+      },
+      select: {
+        padding: 'clamp(0.875rem, 2vw, 1rem)',
+        border: `1px solid ${inputBorder}`,
+        borderRadius: '12px',
+        fontSize: '16px',
+        width: '100%',
+        boxSizing: 'border-box',
+        minHeight: '48px',
+        transition: 'all 0.3s ease',
+        backgroundColor: inputBg,
+        color: textPrimary,
+        fontFamily: 'inherit',
+        cursor: 'pointer'
+      },
+      textarea: {
+        padding: 'clamp(0.875rem, 2vw, 1rem)',
+        border: `1px solid ${inputBorder}`,
+        borderRadius: '12px',
+        fontSize: '16px',
+        fontFamily: 'inherit',
+        resize: 'vertical',
+        width: '100%',
+        boxSizing: 'border-box',
+        minHeight: '120px',
+        backgroundColor: inputBg,
+        color: textPrimary,
+        transition: 'all 0.3s ease',
+        lineHeight: '1.5'
+      },
+      radioGroup: {
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '0.75rem'
+      },
+      radioLabel: {
+        display: 'flex',
+        alignItems: 'center',
+        gap: '0.75rem',
+        padding: '0.75rem',
+        borderRadius: '12px',
+        border: `1px solid ${border}`,
+        backgroundColor: bgSecondary,
+        cursor: 'pointer',
+        transition: 'all 0.3s ease'
+      },
+      checkboxGroup: {
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(min(150px, 100%), 1fr))',
+        gap: '0.75rem'
+      },
+      checkboxLabel: {
+        display: 'flex',
+        alignItems: 'center',
+        gap: '0.75rem',
+        padding: '0.75rem',
+        borderRadius: '12px',
+        border: `1px solid ${border}`,
+        backgroundColor: bgSecondary,
+        cursor: 'pointer',
+        transition: 'all 0.3s ease'
+      },
+      buttonGroup: {
+        display: 'flex',
+        gap: '1rem',
+        justifyContent: 'space-between',
+        marginTop: '2rem'
+      },
+      backBtn: {
+        backgroundColor: bgSecondary,
+        color: textPrimary,
+        padding: 'clamp(0.875rem, 2vw, 1rem)',
+        border: `1px solid ${border}`,
+        borderRadius: '12px',
+        fontSize: 'clamp(0.95rem, 2.5vw, 1rem)',
+        fontWeight: '600',
+        cursor: 'pointer',
+        minHeight: '48px',
+        transition: 'all 0.3s ease'
+      },
+      nextBtn: {
+        backgroundColor: buttonPrimary,
+        color: buttonPrimaryText,
+        padding: 'clamp(0.875rem, 2vw, 1rem)',
+        border: 'none',
+        borderRadius: '12px',
+        fontSize: 'clamp(0.95rem, 2.5vw, 1rem)',
+        fontWeight: '700',
+        cursor: 'pointer',
+        minHeight: '48px',
+        boxShadow: `0 4px 20px ${shadow}`,
+        transition: 'all 0.3s ease'
+      },
+      submitBtn: {
+        backgroundColor: buttonPrimary,
+        color: buttonPrimaryText,
+        padding: 'clamp(0.875rem, 2vw, 1rem)',
+        border: 'none',
+        borderRadius: '12px',
+        fontSize: 'clamp(0.95rem, 2.5vw, 1rem)',
+        fontWeight: '700',
+        cursor: 'pointer',
+        width: '100%',
+        minHeight: '48px',
+        boxShadow: `0 4px 20px ${shadow}`,
+        transition: 'all 0.3s ease'
+      },
+      error: {
+        backgroundColor: '#2d1a1a',
+        color: '#ff6b6b',
+        padding: '0.75rem',
+        borderRadius: '8px',
+        marginBottom: '1rem',
+        textAlign: 'center',
+        border: '1px solid #ff6b6b',
+        fontSize: '0.9rem'
+      }
+    };
+  }, [currentTheme]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -374,244 +611,6 @@ const Onboarding = () => {
       </div>
     </div>
   );
-};
-
-const styles = {
-  container: {
-    minHeight: 'calc(100vh - 70px)',
-    background: 'linear-gradient(180deg, #000000 0%, #1a1a1a 50%, #000000 100%)',
-    padding: 'clamp(1rem, 4vw, 2rem)',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  card: {
-    backgroundColor: '#1a1a1a',
-    borderRadius: '20px',
-    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.8)',
-    padding: 'clamp(1.5rem, 4vw, 2.5rem)',
-    maxWidth: '650px',
-    width: '100%',
-    boxSizing: 'border-box',
-    border: '1px solid #2d2d2d'
-  },
-  progress: {
-    width: '100%',
-    height: '10px',
-    backgroundColor: '#0a0a0a',
-    borderRadius: '10px',
-    marginBottom: '2rem',
-    overflow: 'hidden',
-    border: '1px solid #2d2d2d'
-  },
-  progressBar: {
-    height: '100%',
-    background: 'linear-gradient(90deg, #FFD700 0%, #FFC107 100%)',
-    transition: 'width 0.3s ease',
-    borderRadius: '10px'
-  },
-  title: {
-    textAlign: 'center',
-    color: '#ffffff',
-    fontSize: 'clamp(1.5rem, 4vw, 2rem)',
-    marginBottom: '0.5rem',
-    wordWrap: 'break-word',
-    fontWeight: '700'
-  },
-  subtitle: {
-    textAlign: 'center',
-    color: '#999',
-    marginBottom: 'clamp(1.5rem, 4vw, 2rem)',
-    fontSize: 'clamp(0.9rem, 2.5vw, 1rem)'
-  },
-  error: {
-    backgroundColor: '#2d1a1a',
-    color: '#ff6b6b',
-    padding: '0.75rem',
-    borderRadius: '8px',
-    marginBottom: '1rem',
-    textAlign: 'center',
-    border: '1px solid #ff6b6b',
-    fontSize: '0.9rem'
-  },
-  stepContent: {
-    minHeight: 'auto'
-  },
-  stepTitle: {
-    color: '#ffffff',
-    marginBottom: 'clamp(1rem, 3vw, 1.5rem)',
-    fontSize: 'clamp(1.2rem, 3.5vw, 1.5rem)',
-    wordWrap: 'break-word',
-    fontWeight: '600'
-  },
-  formGroup: {
-    marginBottom: '1.5rem'
-  },
-  label: {
-    display: 'block',
-    marginBottom: '0.5rem',
-    color: '#ffffff',
-    fontWeight: '600',
-    fontSize: '0.95rem'
-  },
-  input: {
-    width: '100%',
-    padding: 'clamp(0.875rem, 2vw, 1rem)',
-    border: '1px solid #2d2d2d',
-    borderRadius: '12px',
-    fontSize: '16px',
-    boxSizing: 'border-box',
-    minHeight: '48px',
-    backgroundColor: '#0a0a0a',
-    transition: 'all 0.3s ease',
-    color: '#ffffff',
-    fontFamily: 'inherit'
-  },
-  select: {
-    width: '100%',
-    padding: 'clamp(0.875rem, 2vw, 1rem)',
-    border: '1px solid #2d2d2d',
-    borderRadius: '12px',
-    fontSize: '16px',
-    boxSizing: 'border-box',
-    backgroundColor: '#0a0a0a',
-    minHeight: '48px',
-    transition: 'all 0.3s ease',
-    color: '#ffffff',
-    fontFamily: 'inherit',
-    cursor: 'pointer'
-  },
-  inputGroup: {
-    display: 'flex',
-    gap: '0.5rem'
-  },
-  radioGroup: {
-    display: 'flex',
-    gap: '1rem',
-    flexWrap: 'wrap'
-  },
-  radioLabel: {
-    display: 'flex',
-    alignItems: 'center',
-    padding: '0.75rem 1rem',
-    border: '1px solid #2d2d2d',
-    borderRadius: '10px',
-    cursor: 'pointer',
-    flex: '1',
-    minWidth: '150px',
-    backgroundColor: '#0a0a0a',
-    transition: 'all 0.3s ease',
-    color: '#ffffff'
-  },
-  radio: {
-    marginRight: '0.5rem'
-  },
-  radioText: {
-    fontSize: '1rem',
-    color: '#ffffff'
-  },
-  checkboxGroup: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(min(180px, 100%), 1fr))',
-    gap: 'clamp(0.5rem, 1.5vw, 0.75rem)'
-  },
-  checkboxLabel: {
-    display: 'flex',
-    alignItems: 'center',
-    padding: '0.75rem',
-    border: '1px solid #2d2d2d',
-    borderRadius: '10px',
-    cursor: 'pointer',
-    backgroundColor: '#0a0a0a',
-    transition: 'all 0.3s ease',
-    color: '#ffffff'
-  },
-  checkbox: {
-    marginRight: '0.5rem',
-    width: '18px',
-    height: '18px',
-    cursor: 'pointer'
-  },
-  checkboxText: {
-    fontSize: '0.95rem',
-    color: '#ffffff'
-  },
-  slider: {
-    width: '100%',
-    height: '10px',
-    borderRadius: '10px',
-    outline: 'none',
-    backgroundColor: '#2d2d2d'
-  },
-  sliderValue: {
-    textAlign: 'center',
-    marginTop: '0.5rem',
-    fontSize: '1.1rem',
-    fontWeight: 'bold',
-    color: '#FFD700'
-  },
-  textarea: {
-    width: '100%',
-    padding: 'clamp(0.875rem, 2vw, 1rem)',
-    border: '1px solid #2d2d2d',
-    borderRadius: '12px',
-    fontSize: '16px',
-    fontFamily: 'inherit',
-    resize: 'vertical',
-    boxSizing: 'border-box',
-    minHeight: '100px',
-    backgroundColor: '#0a0a0a',
-    transition: 'all 0.3s ease',
-    color: '#ffffff',
-    lineHeight: '1.5'
-  },
-  buttonGroup: {
-    display: 'flex',
-    gap: '1rem',
-    marginTop: '2rem'
-  },
-  backBtn: {
-    flex: '1',
-    padding: 'clamp(0.875rem, 2vw, 1rem)',
-    backgroundColor: '#2d2d2d',
-    color: '#ffffff',
-    border: '1px solid #404040',
-    borderRadius: '12px',
-    fontSize: 'clamp(0.95rem, 2.5vw, 1rem)',
-    fontWeight: '600',
-    cursor: 'pointer',
-    minHeight: '48px',
-    transition: 'all 0.3s ease'
-  },
-  nextBtn: {
-    width: '100%',
-    padding: 'clamp(0.875rem, 2vw, 1rem)',
-    backgroundColor: '#FFD700',
-    color: '#000000',
-    border: 'none',
-    borderRadius: '12px',
-    fontSize: 'clamp(0.95rem, 2.5vw, 1rem)',
-    fontWeight: '700',
-    cursor: 'pointer',
-    marginTop: 'clamp(1.5rem, 4vw, 2rem)',
-    minHeight: '48px',
-    transition: 'all 0.3s ease',
-    boxShadow: '0 4px 20px rgba(255, 215, 0, 0.4)'
-  },
-  submitBtn: {
-    flex: '1',
-    padding: 'clamp(0.875rem, 2vw, 1rem)',
-    backgroundColor: '#FFD700',
-    color: '#000000',
-    border: 'none',
-    borderRadius: '12px',
-    fontSize: 'clamp(0.95rem, 2.5vw, 1rem)',
-    fontWeight: '700',
-    cursor: 'pointer',
-    minHeight: '48px',
-    transition: 'all 0.3s ease',
-    boxShadow: '0 4px 20px rgba(255, 215, 0, 0.4)'
-  }
 };
 
 export default Onboarding;

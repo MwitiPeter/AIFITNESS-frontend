@@ -26,7 +26,7 @@ const Register = () => {
   const [loading, setLoading] = useState(false);
   
   const { register } = useAuth();
-  const { currentTheme } = useTheme();
+  const { currentTheme, themeVersion } = useTheme();
   const navigate = useNavigate();
 
   // Get dynamic styles based on current theme
@@ -149,7 +149,7 @@ const Register = () => {
         transition: 'color 0.3s ease'
       }
     };
-  }, [currentTheme]);
+  }, [currentTheme, themeVersion]);
 
   const handleChange = (e) => {
     setFormData({

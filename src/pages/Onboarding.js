@@ -19,7 +19,7 @@ const Onboarding = () => {
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const { currentTheme } = useTheme();
+  const { currentTheme, themeVersion } = useTheme();
   
   const [formData, setFormData] = useState({
     age: '',
@@ -258,7 +258,7 @@ const Onboarding = () => {
         fontSize: '0.9rem'
       }
     };
-  }, [currentTheme]);
+  }, [currentTheme, themeVersion]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;

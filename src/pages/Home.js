@@ -17,7 +17,7 @@ const getCSSVar = (varName, fallback) => {
 
 const Home = () => {
   const { isAuthenticated } = useAuth();
-  const { currentTheme } = useTheme();
+  const { currentTheme, themeVersion } = useTheme();
 
   // Get dynamic styles based on current theme
   const styles = useMemo(() => {
@@ -146,7 +146,7 @@ const Home = () => {
         textAlign: 'center'
       }
     };
-  }, [currentTheme]);
+  }, [currentTheme, themeVersion]); // Add themeVersion to dependencies
 
   return (
     <div style={styles.container}>

@@ -6,7 +6,7 @@ import ThemeToggle from './ThemeToggle';
 
 const Navbar = memo(() => {
   const { isAuthenticated, user, logout } = useAuth();
-  const { currentTheme } = useTheme();
+  const { currentTheme, themeVersion } = useTheme();
   const navigate = useNavigate();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
@@ -198,7 +198,7 @@ const Navbar = memo(() => {
         transition: 'all 0.3s ease'
       }
     };
-  }, [currentTheme]);
+  }, [currentTheme, themeVersion]);
 
   return (
     <nav style={themeStyles.navbar}>

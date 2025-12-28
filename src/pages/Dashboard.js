@@ -14,11 +14,11 @@ const Dashboard = React.memo(() => {
   const [generating, setGenerating] = useState(false);
   const [error, setError] = useState('');
   const { user } = useAuth();
-  const { currentTheme } = useTheme();
+  const { currentTheme, themeVersion } = useTheme();
   const navigate = useNavigate();
   
   // Get styles using CSS variables (theme-agnostic)
-  const styles = useMemo(() => getStyles(), [currentTheme]);
+  const styles = useMemo(() => getStyles(), [currentTheme, themeVersion]);
 
   const fetchData = useCallback(async () => {
     try {

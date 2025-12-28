@@ -21,6 +21,7 @@ const DEFAULT_THEME = 'calm';
 
 export const ThemeProvider = ({ children }) => {
   const [currentTheme, setCurrentTheme] = useState(DEFAULT_THEME);
+  const [themeVersion, setThemeVersion] = useState(0); // Increment to force re-renders
 
   // Load saved theme preference on mount
   useEffect(() => {
@@ -37,27 +38,34 @@ export const ThemeProvider = ({ children }) => {
   // Apply theme to document with smooth transitions
   useEffect(() => {
     if (currentTheme) {
-      // Add transition class to enable smooth theme changes
-      document.documentElement.classList.add('theme-transition');
-      document.body.classList.add('theme-transition');
-      
-      // Set theme attribute
-      document.documentElement.setAttribute('data-theme', currentTheme);
-      document.body.setAttribute('data-theme', currentTheme);
-      
-      // Set CSS custom property for theme
-      document.documentElement.style.setProperty('--current-theme', currentTheme);
-      
-      // Trigger theme change event for components that need it
-      window.dispatchEvent(new Event('themechange'));
-      
-      // Remove transition class after transition completes to avoid performance issues
-      const timeout = setTimeout(() => {
-        document.documentElement.classList.remove('theme-transition');
-        document.body.classList.remove('theme-transition');
-      }, 350);
-      
-      return () => clearTimeout(timeout);
+      // Use requestAnimationFrame to ensure DOM is ready
+      requestAnimationFrame(() => {
+        // Add transition class to enable smooth theme changes
+        document.documentElement.classList.add('theme-transition');
+        document.body.classList.add('theme-transition');
+        
+        // Set theme attribute
+        document.documentElement.setAttribute('data-theme', currentTheme);
+        document.body.setAttribute('data-theme', currentTheme);
+        
+        // Set CSS custom property for theme
+        document.documentElement.style.setProperty('--current-theme', currentTheme);
+        
+        // Force a reflow to ensure CSS variables are applied
+        document.documentElement.offsetHeight;
+        
+        // Increment theme version to force all components to re-render
+        setThemeVersion(prev => prev + 1);
+        
+        // Trigger theme change event for components that need it
+        window.dispatchEvent(new Event('themechange'));
+        
+        // Remove transition class after transition completes to avoid performance issues
+        setTimeout(() => {
+          document.documentElement.classList.remove('theme-transition');
+          document.body.classList.remove('theme-transition');
+        }, 350);
+      });
     }
   }, [currentTheme]);
 
@@ -82,7 +90,8 @@ export const ThemeProvider = ({ children }) => {
     currentTheme,
     changeTheme,
     availableThemes: Object.values(THEMES),
-    themes: THEMES
+    themes: THEMES,
+    themeVersion // Expose this to trigger re-renders
   };
 
   return (

@@ -8,7 +8,7 @@ import ExerciseDetails from '../components/ExerciseDetails';
 const WorkoutTracker = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { currentTheme } = useTheme();
+  const { currentTheme, themeVersion } = useTheme();
 
   const [workoutPlan, setWorkoutPlan] = useState(null);
   const [selectedDay, setSelectedDay] = useState(null);
@@ -364,7 +364,7 @@ const WorkoutTracker = () => {
         fontWeight: '700'
       }
     };
-  }, [currentTheme]);
+  }, [currentTheme, themeVersion]);
   
   if (loading) {
     return <Loading message="Loading workout..." />;

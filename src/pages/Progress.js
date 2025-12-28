@@ -22,7 +22,7 @@ const Progress = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [timeframe, setTimeframe] = useState(30); // days
-  const { currentTheme } = useTheme();
+  const { currentTheme, themeVersion } = useTheme();
   const navigate = useNavigate();
 
   // Get dynamic styles based on current theme
@@ -192,7 +192,7 @@ const Progress = () => {
         transition: 'color 0.3s ease'
       }
     };
-  }, [currentTheme]);
+  }, [currentTheme, themeVersion]);
 
   useEffect(() => {
     fetchProgressData();

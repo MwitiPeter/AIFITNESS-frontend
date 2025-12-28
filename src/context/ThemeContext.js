@@ -1,6 +1,4 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
-import { useAuth } from './AuthContext';
-import { profileAPI } from '../utils/api';
 
 const ThemeContext = createContext();
 
@@ -12,156 +10,79 @@ export const useTheme = () => {
   return context;
 };
 
-// Theme mapping based on fitness level
-const FITNESS_LEVEL_THEMES = {
-  beginner: 'beginner',
-  intermediate: 'intermediate',
-  advanced: 'advanced'
+// Available themes
+const THEMES = {
+  calm: 'calm',
+  energetic: 'energetic',
+  intense: 'intense'
 };
 
-// Get theme based on day of week (for daily rotation)
-const getThemeForDay = (fitnessLevel, dayOfWeek) => {
-  // Map fitness level to base theme
-  const baseTheme = FITNESS_LEVEL_THEMES[fitnessLevel] || 'beginner';
-  
-  // For daily rotation, we can cycle through variations
-  // For now, we'll use the base theme, but this can be extended
-  return baseTheme;
-};
-
-// Get current day identifier (YYYY-MM-DD format)
-const getCurrentDayId = () => {
-  const today = new Date();
-  return today.toISOString().split('T')[0];
-};
+const DEFAULT_THEME = 'calm';
 
 export const ThemeProvider = ({ children }) => {
-  const { isAuthenticated, user } = useAuth();
-  const [currentTheme, setCurrentTheme] = useState('beginner');
-  const [fitnessLevel, setFitnessLevel] = useState(null);
-  const [manualOverride, setManualOverride] = useState(null);
-  const [lastDayId, setLastDayId] = useState(null);
+  const [currentTheme, setCurrentTheme] = useState(DEFAULT_THEME);
 
-  // Load saved theme preferences
+  // Load saved theme preference on mount
   useEffect(() => {
-    const savedOverride = localStorage.getItem('themeOverride');
-    const savedDayId = localStorage.getItem('themeDayId');
-    
-    if (savedOverride) {
-      setManualOverride(savedOverride);
-      setCurrentTheme(savedOverride);
-    }
-    
-    if (savedDayId) {
-      setLastDayId(savedDayId);
+    const savedTheme = localStorage.getItem('selectedTheme');
+    if (savedTheme && Object.values(THEMES).includes(savedTheme)) {
+      setCurrentTheme(savedTheme);
+    } else {
+      // Set default theme if none saved
+      setCurrentTheme(DEFAULT_THEME);
+      localStorage.setItem('selectedTheme', DEFAULT_THEME);
     }
   }, []);
 
-  // Fetch user profile to get fitness level
-  useEffect(() => {
-    const fetchProfile = async () => {
-      if (isAuthenticated && user) {
-        try {
-          const response = await profileAPI.getMyProfile();
-          const level = response.data.data?.fitnessLevel;
-          if (level) {
-            setFitnessLevel(level);
-          }
-        } catch (error) {
-          console.error('Error fetching profile for theme:', error);
-          // Default to beginner if profile fetch fails
-          setFitnessLevel('beginner');
-        }
-      } else {
-        // Default theme for unauthenticated users
-        setFitnessLevel('beginner');
-      }
-    };
-
-    fetchProfile();
-  }, [isAuthenticated, user]);
-
-  // Determine theme based on fitness level and day
-  useEffect(() => {
-    if (manualOverride) {
-      // Manual override takes precedence - don't auto-rotate
-      setCurrentTheme(manualOverride);
-      return;
-    }
-
-    if (!fitnessLevel) {
-      return;
-    }
-
-    const todayId = getCurrentDayId();
-    
-    // Check if it's a new day
-    if (lastDayId !== todayId) {
-      // New day - auto-rotate theme based on fitness level
-      const dayOfWeek = new Date().getDay();
-      const newTheme = getThemeForDay(fitnessLevel, dayOfWeek);
-      setCurrentTheme(newTheme);
-      setLastDayId(todayId);
-      localStorage.setItem('themeDayId', todayId);
-    } else {
-      // Same day - use fitness level theme
-      const theme = FITNESS_LEVEL_THEMES[fitnessLevel] || 'beginner';
-      setCurrentTheme(theme);
-    }
-  }, [fitnessLevel, manualOverride, lastDayId]);
-
-  // Apply theme to document
+  // Apply theme to document with smooth transitions
   useEffect(() => {
     if (currentTheme) {
+      // Add transition class to enable smooth theme changes
+      document.documentElement.classList.add('theme-transition');
+      document.body.classList.add('theme-transition');
+      
+      // Set theme attribute
       document.documentElement.setAttribute('data-theme', currentTheme);
-      // Also set it on body for better compatibility
       document.body.setAttribute('data-theme', currentTheme);
-      // Force a style recalculation to ensure CSS variables update
+      
+      // Set CSS custom property for theme
       document.documentElement.style.setProperty('--current-theme', currentTheme);
-      // Trigger a repaint
+      
+      // Trigger theme change event for components that need it
       window.dispatchEvent(new Event('themechange'));
+      
+      // Remove transition class after transition completes to avoid performance issues
+      const timeout = setTimeout(() => {
+        document.documentElement.classList.remove('theme-transition');
+        document.body.classList.remove('theme-transition');
+      }, 350);
+      
+      return () => clearTimeout(timeout);
     }
   }, [currentTheme]);
 
-  // Set initial theme on mount
+  // Set initial theme on mount to avoid flash
   useEffect(() => {
-    // Set a default theme immediately to avoid flash
+    const savedTheme = localStorage.getItem('selectedTheme') || DEFAULT_THEME;
     if (!document.documentElement.getAttribute('data-theme')) {
-      document.documentElement.setAttribute('data-theme', 'beginner');
-      document.body.setAttribute('data-theme', 'beginner');
+      document.documentElement.setAttribute('data-theme', savedTheme);
+      document.body.setAttribute('data-theme', savedTheme);
     }
   }, []);
 
-  // Manual theme change handler
+  // Theme change handler with persistence
   const changeTheme = useCallback((themeName) => {
-    setManualOverride(themeName);
-    setCurrentTheme(themeName);
-    localStorage.setItem('themeOverride', themeName);
-    localStorage.setItem('themeDayId', getCurrentDayId());
-    setLastDayId(getCurrentDayId());
-  }, []);
-
-  // Reset to auto theme
-  const resetToAutoTheme = useCallback(() => {
-    setManualOverride(null);
-    localStorage.removeItem('themeOverride');
-    const todayId = getCurrentDayId();
-    if (fitnessLevel) {
-      const dayOfWeek = new Date().getDay();
-      const theme = getThemeForDay(fitnessLevel, dayOfWeek);
-      setCurrentTheme(theme);
-      setLastDayId(todayId);
-      localStorage.setItem('themeDayId', todayId);
+    if (Object.values(THEMES).includes(themeName)) {
+      setCurrentTheme(themeName);
+      localStorage.setItem('selectedTheme', themeName);
     }
-  }, [fitnessLevel]);
+  }, []);
 
   const value = {
     currentTheme,
-    fitnessLevel,
-    manualOverride,
     changeTheme,
-    resetToAutoTheme,
-    availableThemes: ['beginner', 'intermediate', 'advanced']
+    availableThemes: Object.values(THEMES),
+    themes: THEMES
   };
 
   return (

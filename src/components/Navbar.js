@@ -90,45 +90,40 @@ const Navbar = memo(() => {
     setIsMobileMenuOpen(false);
   }, []);
 
-  // Get dynamic styles based on current theme
+  // Get dynamic styles based on current theme using CSS variables
   const themeStyles = useMemo(() => {
-    const themeColors = {
-      beginner: {
-        bgPrimary: '#f5f5f5',
-        bgSecondary: '#e8e8e8',
-        textPrimary: '#000000',
-        accent: '#a8d5ba',
-        cardBg: '#ffffff',
-        border: '#e0e0e0'
-      },
-      intermediate: {
-        bgPrimary: '#1f2937',
-        bgSecondary: '#111827',
-        textPrimary: '#ffffff',
-        accent: '#fbbf24',
-        cardBg: '#374151',
-        border: '#4b5563'
-      },
-      advanced: {
-        bgPrimary: '#0a0a0a',
-        bgSecondary: '#1a1a1a',
-        textPrimary: '#ffffff',
-        accent: '#ef4444',
-        cardBg: '#1a1a1a',
-        border: '#404040'
+    // Helper function to get CSS variable
+    const getCSSVar = (varName, fallback) => {
+      if (typeof window === 'undefined') return fallback;
+      try {
+        const root = document.documentElement;
+        const value = getComputedStyle(root).getPropertyValue(varName).trim();
+        return value || fallback;
+      } catch {
+        return fallback;
       }
     };
-    const colors = themeColors[currentTheme] || themeColors.beginner;
+
+    const colors = {
+      bgPrimary: getCSSVar('--theme-bg-primary', '#f5f7fa'),
+      bgSecondary: getCSSVar('--theme-bg-secondary', '#e8edf2'),
+      textPrimary: getCSSVar('--theme-text-primary', '#2c3e50'),
+      accent: getCSSVar('--theme-accent', '#a8c5d9'),
+      cardBg: getCSSVar('--theme-card-bg', '#ffffff'),
+      border: getCSSVar('--theme-border', '#d1d9e0'),
+      shadow: getCSSVar('--theme-shadow', 'rgba(0, 0, 0, 0.1)')
+    };
     
     return {
       navbar: {
         background: `linear-gradient(180deg, ${colors.bgPrimary} 0%, ${colors.bgSecondary} 50%, ${colors.bgPrimary} 100%)`,
         padding: '1rem 0',
-        boxShadow: '0 4px 20px rgba(0, 0, 0, 0.3)',
+        boxShadow: `0 4px 20px ${colors.shadow}`,
         position: 'sticky',
         top: 0,
         zIndex: 1000,
-        borderBottom: `1px solid ${colors.border}`
+        borderBottom: `1px solid ${colors.border}`,
+        transition: 'background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease'
       },
       brand: {
         color: colors.textPrimary,
@@ -148,7 +143,8 @@ const Navbar = memo(() => {
         display: 'flex',
         alignItems: 'center',
         borderRadius: '8px',
-        fontWeight: '500'
+        fontWeight: '500',
+        backgroundColor: 'transparent'
       },
       userName: {
         color: colors.accent,
@@ -182,11 +178,12 @@ const Navbar = memo(() => {
         right: 0,
         background: `linear-gradient(180deg, ${colors.bgPrimary} 0%, ${colors.bgSecondary} 100%)`,
         padding: '1rem',
-        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
+        boxShadow: `0 8px 32px ${colors.shadow}`,
         width: '100%',
         gap: '0.75rem',
         borderRadius: '0 0 16px 16px',
-        borderTop: `1px solid ${colors.border}`
+        borderTop: `1px solid ${colors.border}`,
+        transition: 'background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease'
       },
       mobileMenuButton: {
         backgroundColor: colors.cardBg,

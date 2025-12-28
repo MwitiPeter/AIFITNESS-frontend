@@ -115,45 +115,127 @@ textarea {
 }
 
 /* Theme-aware transitions for smooth theme changes */
-* {
-  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+/* Only apply transitions when theme-transition class is present to avoid performance issues */
+html.theme-transition *,
+html.theme-transition *::before,
+html.theme-transition *::after {
+  transition: background-color 0.3s ease, 
+              color 0.3s ease, 
+              border-color 0.3s ease,
+              box-shadow 0.3s ease,
+              opacity 0.3s ease !important;
+}
+
+/* Ensure smooth transitions for specific elements */
+.theme-transition button,
+.theme-transition input,
+.theme-transition select,
+.theme-transition textarea,
+.theme-transition a,
+.theme-transition [role="button"] {
+  transition: background-color 0.3s ease, 
+              color 0.3s ease, 
+              border-color 0.3s ease,
+              box-shadow 0.3s ease !important;
 }
 
 /* Global Theme Application - Override inline styles with theme-aware CSS variables */
 /* These styles will apply theme colors globally across the entire app */
 
-/* Body and root background colors */
-html[data-theme="beginner"] {
-  --theme-bg-primary: #f5f5f5;
-  --theme-bg-secondary: #e8e8e8;
-  --theme-bg-tertiary: #d1d1d1;
-  --theme-text-primary: #000000;
-  --theme-text-secondary: #333333;
-  --theme-accent: #a8d5ba;
+/* ============================================
+   CALM THEME - Soft, muted colors, relaxing feel
+   ============================================ */
+html[data-theme="calm"] {
+  --theme-bg-primary: #f5f7fa;
+  --theme-bg-secondary: #e8edf2;
+  --theme-bg-tertiary: #d1d9e0;
+  --theme-text-primary: #2c3e50;
+  --theme-text-secondary: #5a6c7d;
+  --theme-text-tertiary: #7f8c9a;
+  --theme-accent: #a8c5d9;
+  --theme-accent-hover: #8fb3cc;
+  --theme-accent-light: #d4e4f0;
   --theme-card-bg: #ffffff;
-  --theme-border: #e0e0e0;
+  --theme-card-hover: #fafbfc;
+  --theme-border: #d1d9e0;
+  --theme-border-light: #e8edf2;
+  --theme-button-primary: #a8c5d9;
+  --theme-button-primary-hover: #8fb3cc;
+  --theme-button-primary-text: #2c3e50;
+  --theme-button-secondary: #e8edf2;
+  --theme-button-secondary-hover: #d1d9e0;
+  --theme-button-secondary-text: #2c3e50;
+  --theme-modal-bg: rgba(255, 255, 255, 0.98);
+  --theme-modal-overlay: rgba(44, 62, 80, 0.3);
+  --theme-input-bg: #ffffff;
+  --theme-input-border: #d1d9e0;
+  --theme-input-focus: #a8c5d9;
+  --theme-shadow: rgba(44, 62, 80, 0.1);
+  --theme-shadow-hover: rgba(44, 62, 80, 0.15);
 }
 
-html[data-theme="intermediate"] {
-  --theme-bg-primary: #1f2937;
-  --theme-bg-secondary: #111827;
-  --theme-bg-tertiary: #0f172a;
-  --theme-text-primary: #ffffff;
-  --theme-text-secondary: #e5e7eb;
-  --theme-accent: #fbbf24;
-  --theme-card-bg: #374151;
-  --theme-border: #4b5563;
+/* ============================================
+   ENERGETIC THEME - Bright, lively colors, playful feel
+   ============================================ */
+html[data-theme="energetic"] {
+  --theme-bg-primary: #fff5e6;
+  --theme-bg-secondary: #ffe8cc;
+  --theme-bg-tertiary: #ffd9b3;
+  --theme-text-primary: #1a1a1a;
+  --theme-text-secondary: #4a4a4a;
+  --theme-text-tertiary: #6a6a6a;
+  --theme-accent: #ff6b35;
+  --theme-accent-hover: #ff5722;
+  --theme-accent-light: #ffb399;
+  --theme-card-bg: #ffffff;
+  --theme-card-hover: #fffaf0;
+  --theme-border: #ffd9b3;
+  --theme-border-light: #ffe8cc;
+  --theme-button-primary: #ff6b35;
+  --theme-button-primary-hover: #ff5722;
+  --theme-button-primary-text: #ffffff;
+  --theme-button-secondary: #ffe8cc;
+  --theme-button-secondary-hover: #ffd9b3;
+  --theme-button-secondary-text: #1a1a1a;
+  --theme-modal-bg: rgba(255, 255, 255, 0.98);
+  --theme-modal-overlay: rgba(26, 26, 26, 0.4);
+  --theme-input-bg: #ffffff;
+  --theme-input-border: #ffd9b3;
+  --theme-input-focus: #ff6b35;
+  --theme-shadow: rgba(255, 107, 53, 0.2);
+  --theme-shadow-hover: rgba(255, 107, 53, 0.3);
 }
 
-html[data-theme="advanced"] {
+/* ============================================
+   INTENSE THEME - Dark/saturated colors, bold and high-impact feel
+   ============================================ */
+html[data-theme="intense"] {
   --theme-bg-primary: #0a0a0a;
   --theme-bg-secondary: #1a1a1a;
   --theme-bg-tertiary: #2d2d2d;
   --theme-text-primary: #ffffff;
   --theme-text-secondary: #cccccc;
+  --theme-text-tertiary: #999999;
   --theme-accent: #ef4444;
+  --theme-accent-hover: #dc2626;
+  --theme-accent-light: #f87171;
   --theme-card-bg: #1a1a1a;
+  --theme-card-hover: #2d2d2d;
   --theme-border: #404040;
+  --theme-border-light: #2d2d2d;
+  --theme-button-primary: #ef4444;
+  --theme-button-primary-hover: #dc2626;
+  --theme-button-primary-text: #ffffff;
+  --theme-button-secondary: #2d2d2d;
+  --theme-button-secondary-hover: #404040;
+  --theme-button-secondary-text: #ffffff;
+  --theme-modal-bg: rgba(26, 26, 26, 0.98);
+  --theme-modal-overlay: rgba(0, 0, 0, 0.7);
+  --theme-input-bg: #1a1a1a;
+  --theme-input-border: #404040;
+  --theme-input-focus: #ef4444;
+  --theme-shadow: rgba(239, 68, 68, 0.3);
+  --theme-shadow-hover: rgba(239, 68, 68, 0.5);
 }
 
 /* Apply theme colors to body */
@@ -168,6 +250,73 @@ body,
 .App {
   background: var(--theme-bg-primary) !important;
   color: var(--theme-text-primary) !important;
+}
+
+/* Apply theme to all common UI elements */
+button {
+  background-color: var(--theme-button-primary, var(--theme-accent)) !important;
+  color: var(--theme-button-primary-text, var(--theme-text-primary)) !important;
+  border-color: var(--theme-border) !important;
+}
+
+button:hover:not(:disabled) {
+  background-color: var(--theme-button-primary-hover, var(--theme-accent-hover)) !important;
+  box-shadow: 0 4px 12px var(--theme-shadow-hover) !important;
+}
+
+button.secondary,
+button[type="button"]:not(.primary) {
+  background-color: var(--theme-button-secondary) !important;
+  color: var(--theme-button-secondary-text) !important;
+}
+
+button.secondary:hover:not(:disabled) {
+  background-color: var(--theme-button-secondary-hover) !important;
+}
+
+/* Cards */
+[class*="card"],
+.card,
+div[style*="card"] {
+  background-color: var(--theme-card-bg) !important;
+  border-color: var(--theme-border) !important;
+  color: var(--theme-text-primary) !important;
+}
+
+[class*="card"]:hover,
+.card:hover {
+  background-color: var(--theme-card-hover) !important;
+  box-shadow: 0 4px 16px var(--theme-shadow) !important;
+}
+
+/* Forms */
+input,
+select,
+textarea {
+  background-color: var(--theme-input-bg) !important;
+  border-color: var(--theme-input-border) !important;
+  color: var(--theme-text-primary) !important;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--theme-input-focus) !important;
+  box-shadow: 0 0 0 3px var(--theme-shadow) !important;
+}
+
+/* Modals */
+[class*="modal"],
+.modal,
+[role="dialog"] {
+  background-color: var(--theme-modal-bg) !important;
+  color: var(--theme-text-primary) !important;
+  border-color: var(--theme-border) !important;
+}
+
+[class*="overlay"],
+.overlay {
+  background-color: var(--theme-modal-overlay) !important;
 }
 
 /* Theme-aware gradient backgrounds */
@@ -219,4 +368,71 @@ nav[style*="background"] {
 .content {
   background-color: var(--theme-bg-primary) !important;
   color: var(--theme-text-primary) !important;
+}
+
+/* Ensure all text elements use theme colors */
+h1, h2, h3, h4, h5, h6,
+p, span, div, label {
+  color: var(--theme-text-primary);
+}
+
+/* Secondary text */
+small, .text-secondary {
+  color: var(--theme-text-secondary);
+}
+
+/* Links */
+a {
+  color: var(--theme-accent);
+  transition: color 0.3s ease;
+}
+
+a:hover {
+  color: var(--theme-accent-hover);
+}
+
+/* Focus states for accessibility */
+*:focus-visible {
+  outline: 2px solid var(--theme-accent);
+  outline-offset: 2px;
+}
+
+/* Ensure buttons maintain accessibility */
+button:focus-visible {
+  outline: 2px solid var(--theme-accent);
+  outline-offset: 2px;
+}
+
+/* Disabled states */
+button:disabled,
+input:disabled,
+select:disabled,
+textarea:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Selection colors */
+::selection {
+  background-color: var(--theme-accent-light);
+  color: var(--theme-text-primary);
+}
+
+/* Scrollbar styling (webkit browsers) */
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--theme-bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--theme-border);
+  border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--theme-accent);
 }

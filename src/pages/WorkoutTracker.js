@@ -139,80 +139,73 @@ const WorkoutTracker = () => {
     }
   };
   
-  // Get dynamic styles based on current theme
+  // Helper function to get CSS variable
+  const getCSSVar = (varName, fallback) => {
+    if (typeof window === 'undefined') return fallback;
+    try {
+      const root = document.documentElement;
+      const value = getComputedStyle(root).getPropertyValue(varName).trim();
+      return value || fallback;
+    } catch {
+      return fallback;
+    }
+  };
+
+  // Get dynamic styles based on current theme using CSS variables
   const themeStyles = useMemo(() => {
-    const themeColors = {
-      beginner: {
-        bgPrimary: '#f5f5f5',
-        bgSecondary: '#e8e8e8',
-        textPrimary: '#000000',
-        textSecondary: '#333333',
-        accent: '#a8d5ba',
-        cardBg: '#ffffff',
-        border: '#e0e0e0'
-      },
-      intermediate: {
-        bgPrimary: '#1f2937',
-        bgSecondary: '#111827',
-        textPrimary: '#ffffff',
-        textSecondary: '#e5e7eb',
-        accent: '#fbbf24',
-        cardBg: '#374151',
-        border: '#4b5563'
-      },
-      advanced: {
-        bgPrimary: '#0a0a0a',
-        bgSecondary: '#1a1a1a',
-        textPrimary: '#ffffff',
-        textSecondary: '#cccccc',
-        accent: '#ef4444',
-        cardBg: '#1a1a1a',
-        border: '#404040'
-      }
-    };
-    const colors = themeColors[currentTheme] || themeColors.beginner;
+    const bgPrimary = getCSSVar('--theme-bg-primary', '#f5f7fa');
+    const bgSecondary = getCSSVar('--theme-bg-secondary', '#e8edf2');
+    const textPrimary = getCSSVar('--theme-text-primary', '#2c3e50');
+    const textSecondary = getCSSVar('--theme-text-secondary', '#5a6c7d');
+    const accent = getCSSVar('--theme-accent', '#a8c5d9');
+    const cardBg = getCSSVar('--theme-card-bg', '#ffffff');
+    const border = getCSSVar('--theme-border', '#d1d9e0');
+    const shadow = getCSSVar('--theme-shadow', 'rgba(0, 0, 0, 0.1)');
     
     return {
       container: {
         minHeight: 'calc(100vh - 70px)',
-        background: `linear-gradient(180deg, ${colors.bgPrimary} 0%, ${colors.bgSecondary} 50%, ${colors.bgPrimary} 100%)`,
-        padding: 'clamp(1rem, 4vw, 2rem)'
+        background: `linear-gradient(180deg, ${bgPrimary} 0%, ${bgSecondary} 50%, ${bgPrimary} 100%)`,
+        padding: 'clamp(1rem, 4vw, 2rem)',
+        transition: 'background 0.3s ease'
       },
       title: {
-        color: colors.textPrimary,
+        color: textPrimary,
         fontSize: 'clamp(1.5rem, 5vw, 2.5rem)',
         wordWrap: 'break-word',
         fontWeight: '700',
         textShadow: '0 2px 10px rgba(0,0,0,0.3)'
       },
       card: {
-        backgroundColor: colors.cardBg,
+        backgroundColor: cardBg,
         borderRadius: '20px',
         padding: 'clamp(1rem, 4vw, 2rem)',
-        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
+        boxShadow: `0 8px 32px ${shadow}`,
         width: '100%',
         boxSizing: 'border-box',
-        border: `1px solid ${colors.border}`
+        border: `1px solid ${border}`,
+        transition: 'background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease'
       },
       sidebar: {
-        backgroundColor: colors.cardBg,
+        backgroundColor: cardBg,
         borderRadius: '20px',
         padding: 'clamp(1rem, 3vw, 1.5rem)',
         height: 'fit-content',
         position: 'sticky',
         top: 'clamp(1rem, 3vw, 2rem)',
-        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
-        border: `1px solid ${colors.border}`
+        boxShadow: `0 8px 32px ${shadow}`,
+        border: `1px solid ${border}`,
+        transition: 'background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease'
       },
       sidebarTitle: {
-        color: colors.textPrimary,
+        color: textPrimary,
         fontSize: '1.2rem',
         marginBottom: '1rem',
         fontWeight: '700'
       },
       dayButton: {
-        backgroundColor: colors.bgSecondary,
-        border: `1px solid ${colors.border}`,
+        backgroundColor: bgSecondary,
+        border: `1px solid ${border}`,
         borderRadius: '12px',
         padding: '1rem',
         cursor: 'pointer',
@@ -221,86 +214,86 @@ const WorkoutTracker = () => {
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
-        color: colors.textPrimary
+        color: textPrimary
       },
       dayButtonActive: {
-        backgroundColor: colors.accent,
-        borderColor: colors.accent,
-        color: colors.textPrimary,
-        boxShadow: '0 4px 20px rgba(0, 0, 0, 0.3)'
+        backgroundColor: accent,
+        borderColor: accent,
+        color: textPrimary,
+        boxShadow: `0 4px 20px ${shadow}`
       },
       cardTitle: {
-        color: colors.textPrimary,
+        color: textPrimary,
         fontSize: '1.8rem',
         marginBottom: '0.5rem',
         fontWeight: '700'
       },
       cardSubtitle: {
-        color: colors.textSecondary,
+        color: textSecondary,
         fontSize: '1rem'
       },
       completionBadge: {
-        backgroundColor: colors.accent,
-        color: colors.textPrimary,
+        backgroundColor: accent,
+        color: textPrimary,
         padding: '0.5rem 1rem',
         borderRadius: '20px',
         fontSize: '1rem',
         fontWeight: '700',
-        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.3)'
+        boxShadow: `0 2px 8px ${shadow}`
       },
       exerciseCard: {
-        border: `1px solid ${colors.border}`,
+        border: `1px solid ${border}`,
         borderRadius: '12px',
         padding: '1rem',
         transition: 'all 0.3s ease',
-        backgroundColor: colors.bgSecondary
+        backgroundColor: bgSecondary
       },
       exerciseCardCompleted: {
-        backgroundColor: colors.cardBg,
-        borderColor: colors.accent,
-        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.2)'
+        backgroundColor: cardBg,
+        borderColor: accent,
+        boxShadow: `0 2px 8px ${shadow}`
       },
       exerciseName: {
         fontSize: '1.1rem',
         fontWeight: '600',
-        color: colors.textPrimary
+        color: textPrimary
       },
       label: {
-        color: colors.textPrimary,
+        color: textPrimary,
         fontWeight: '600',
         marginBottom: '0.5rem',
         fontSize: '1rem'
       },
       input: {
         padding: 'clamp(0.875rem, 2vw, 1rem)',
-        border: `1px solid ${colors.border}`,
+        border: `1px solid ${border}`,
         borderRadius: '12px',
         fontSize: '16px',
         width: '100%',
         boxSizing: 'border-box',
         minHeight: '48px',
-        backgroundColor: colors.bgSecondary,
+        backgroundColor: bgSecondary,
         transition: 'all 0.3s ease',
-        color: colors.textPrimary,
+        color: textPrimary,
         fontFamily: 'inherit'
       },
       select: {
         padding: 'clamp(0.875rem, 2vw, 1rem)',
-        border: `1px solid ${colors.border}`,
+        border: `1px solid ${border}`,
         borderRadius: '12px',
         fontSize: '16px',
-        backgroundColor: colors.bgSecondary,
+        backgroundColor: bgSecondary,
         width: '100%',
         boxSizing: 'border-box',
         minHeight: '48px',
         transition: 'all 0.3s ease',
-        color: colors.textPrimary,
+        color: textPrimary,
         fontFamily: 'inherit',
         cursor: 'pointer'
       },
       textarea: {
         padding: 'clamp(0.875rem, 2vw, 1rem)',
-        border: `1px solid ${colors.border}`,
+        border: `1px solid ${border}`,
         borderRadius: '12px',
         fontSize: '16px',
         fontFamily: 'inherit',
@@ -308,15 +301,15 @@ const WorkoutTracker = () => {
         width: '100%',
         boxSizing: 'border-box',
         minHeight: '120px',
-        backgroundColor: colors.bgSecondary,
+        backgroundColor: bgSecondary,
         transition: 'all 0.3s ease',
-        color: colors.textPrimary,
+        color: textPrimary,
         lineHeight: '1.5'
       },
       submitBtn: {
         width: '100%',
-        backgroundColor: colors.accent,
-        color: colors.textPrimary,
+        backgroundColor: accent,
+        color: textPrimary,
         padding: 'clamp(0.875rem, 2vw, 1rem)',
         border: 'none',
         borderRadius: '12px',
@@ -325,14 +318,14 @@ const WorkoutTracker = () => {
         cursor: 'pointer',
         marginTop: '1.5rem',
         minHeight: '48px',
-        boxShadow: '0 4px 20px rgba(0, 0, 0, 0.3)',
+        boxShadow: `0 4px 20px ${shadow}`,
         transition: 'all 0.3s ease'
       },
       backBtn: {
-        backgroundColor: colors.cardBg,
-        color: colors.textPrimary,
+        backgroundColor: cardBg,
+        color: textPrimary,
         padding: 'clamp(0.5rem, 1.5vw, 0.75rem) clamp(0.75rem, 2vw, 1rem)',
-        border: `1px solid ${colors.border}`,
+        border: `1px solid ${border}`,
         borderRadius: '10px',
         fontSize: 'clamp(0.9rem, 2.5vw, 1rem)',
         cursor: 'pointer',
@@ -342,18 +335,19 @@ const WorkoutTracker = () => {
         transition: 'all 0.3s ease'
       },
       errorCard: {
-        backgroundColor: colors.cardBg,
+        backgroundColor: cardBg,
         padding: '3rem',
         borderRadius: '20px',
         textAlign: 'center',
         maxWidth: '500px',
         margin: '0 auto',
-        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
-        border: `1px solid ${colors.border}`
+        boxShadow: `0 8px 32px ${shadow}`,
+        border: `1px solid ${border}`,
+        transition: 'background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease'
       },
       button: {
-        backgroundColor: colors.accent,
-        color: colors.textPrimary,
+        backgroundColor: accent,
+        color: textPrimary,
         padding: '0.75rem 1.5rem',
         border: 'none',
         borderRadius: '10px',
@@ -361,10 +355,10 @@ const WorkoutTracker = () => {
         cursor: 'pointer',
         marginTop: '1rem',
         fontWeight: '700',
-        boxShadow: '0 4px 20px rgba(0, 0, 0, 0.3)'
+        boxShadow: `0 4px 20px ${shadow}`
       },
       sectionTitle: {
-        color: colors.textPrimary,
+        color: textPrimary,
         fontSize: '1.5rem',
         marginBottom: '1rem',
         fontWeight: '700'

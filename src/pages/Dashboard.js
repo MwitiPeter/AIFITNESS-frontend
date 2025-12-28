@@ -16,6 +16,9 @@ const Dashboard = React.memo(() => {
   const { user } = useAuth();
   const { currentTheme } = useTheme();
   const navigate = useNavigate();
+  
+  // Get styles using CSS variables (theme-agnostic)
+  const styles = useMemo(() => getStyles(), [currentTheme]);
 
   const fetchData = useCallback(async () => {
     try {
@@ -253,45 +256,35 @@ const Dashboard = React.memo(() => {
   );
 });
 
-// Get theme-aware styles
-const getStyles = (theme) => {
-  const themeColors = {
-    beginner: {
-      bgPrimary: '#f5f5f5',
-      bgSecondary: '#e8e8e8',
-      textPrimary: '#000000',
-      textSecondary: '#333333',
-      accent: '#a8d5ba',
-      cardBg: '#ffffff',
-      border: '#e0e0e0'
-    },
-    intermediate: {
-      bgPrimary: '#1f2937',
-      bgSecondary: '#111827',
-      textPrimary: '#ffffff',
-      textSecondary: '#e5e7eb',
-      accent: '#fbbf24',
-      cardBg: '#374151',
-      border: '#4b5563'
-    },
-    advanced: {
-      bgPrimary: '#0a0a0a',
-      bgSecondary: '#1a1a1a',
-      textPrimary: '#ffffff',
-      textSecondary: '#cccccc',
-      accent: '#ef4444',
-      cardBg: '#1a1a1a',
-      border: '#404040'
-    }
-  };
-  
-  const colors = themeColors[theme] || themeColors.beginner;
+// Helper function to get CSS variable
+const getCSSVar = (varName, fallback) => {
+  if (typeof window === 'undefined') return fallback;
+  try {
+    const root = document.documentElement;
+    const value = getComputedStyle(root).getPropertyValue(varName).trim();
+    return value || fallback;
+  } catch {
+    return fallback;
+  }
+};
+
+// Get theme-aware styles using CSS variables
+const getStyles = () => {
+  const bgPrimary = getCSSVar('--theme-bg-primary', '#f5f7fa');
+  const bgSecondary = getCSSVar('--theme-bg-secondary', '#e8edf2');
+  const textPrimary = getCSSVar('--theme-text-primary', '#2c3e50');
+  const textSecondary = getCSSVar('--theme-text-secondary', '#5a6c7d');
+  const accent = getCSSVar('--theme-accent', '#a8c5d9');
+  const cardBg = getCSSVar('--theme-card-bg', '#ffffff');
+  const border = getCSSVar('--theme-border', '#d1d9e0');
+  const shadow = getCSSVar('--theme-shadow', 'rgba(0, 0, 0, 0.1)');
   
   return {
     container: {
       minHeight: 'calc(100vh - 70px)',
-      background: `linear-gradient(180deg, ${colors.bgPrimary} 0%, ${colors.bgSecondary} 50%, ${colors.bgPrimary} 100%)`,
-      padding: 'clamp(1rem, 4vw, 2rem)'
+      background: `linear-gradient(180deg, ${bgPrimary} 0%, ${bgSecondary} 50%, ${bgPrimary} 100%)`,
+      padding: 'clamp(1rem, 4vw, 2rem)',
+      transition: 'background 0.3s ease'
     },
     content: {
       maxWidth: '1200px',
@@ -307,7 +300,7 @@ const getStyles = (theme) => {
       gap: '1rem'
     },
     title: {
-      color: colors.textPrimary,
+      color: textPrimary,
       fontSize: 'clamp(1.5rem, 5vw, 2.5rem)',
       marginBottom: '0.5rem',
       wordWrap: 'break-word',
@@ -315,12 +308,12 @@ const getStyles = (theme) => {
       textShadow: '0 2px 10px rgba(0,0,0,0.2)'
     },
     subtitle: {
-      color: colors.textSecondary,
+      color: textSecondary,
       fontSize: 'clamp(0.9rem, 3vw, 1.1rem)',
       opacity: 0.9
     },
     error: {
-      backgroundColor: colors.cardBg,
+      backgroundColor: cardBg,
       color: '#ff6b6b',
       padding: '1rem',
       borderRadius: '12px',
@@ -329,14 +322,15 @@ const getStyles = (theme) => {
       border: '1px solid #ff6b6b'
     },
     card: {
-      backgroundColor: colors.cardBg,
+      backgroundColor: cardBg,
       borderRadius: '20px',
-      boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
+      boxShadow: `0 8px 32px ${shadow}`,
       padding: 'clamp(1rem, 4vw, 2rem)',
       marginBottom: 'clamp(1rem, 4vw, 2rem)',
       width: '100%',
       boxSizing: 'border-box',
-      border: `1px solid ${colors.border}`
+      border: `1px solid ${border}`,
+      transition: 'background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease'
     },
     cardHeader: {
       display: 'flex',
@@ -347,7 +341,7 @@ const getStyles = (theme) => {
       gap: '1rem'
     },
     cardTitle: {
-      color: colors.textPrimary,
+      color: textPrimary,
       fontSize: 'clamp(1.3rem, 4vw, 1.8rem)',
       marginBottom: '1rem',
       wordWrap: 'break-word',
@@ -362,18 +356,19 @@ const getStyles = (theme) => {
       display: 'flex',
       flexDirection: 'column',
       padding: '1rem',
-      backgroundColor: colors.bgSecondary,
+      backgroundColor: bgSecondary,
       borderRadius: '12px',
-      border: `1px solid ${colors.border}`
+      border: `1px solid ${border}`,
+      transition: 'background-color 0.3s ease, border-color 0.3s ease'
     },
     profileLabel: {
-      color: colors.textSecondary,
+      color: textSecondary,
       fontSize: '0.9rem',
       marginBottom: '0.5rem',
       fontWeight: '500'
     },
     profileValue: {
-      color: colors.accent,
+      color: accent,
       fontSize: '1.1rem',
       fontWeight: '700'
     },
@@ -387,21 +382,21 @@ const getStyles = (theme) => {
       marginBottom: '1rem'
     },
     emptyTitle: {
-      color: colors.textPrimary,
+      color: textPrimary,
       fontSize: '2rem',
       marginBottom: '1rem',
       fontWeight: '700'
     },
     emptyText: {
-      color: colors.textSecondary,
+      color: textSecondary,
       fontSize: '1.1rem',
       marginBottom: '2rem',
       maxWidth: '500px',
       margin: '0 auto 2rem'
     },
     generateBtn: {
-      backgroundColor: colors.accent,
-      color: colors.textPrimary,
+      backgroundColor: accent,
+      color: textPrimary,
       padding: 'clamp(0.875rem, 2vw, 1rem) clamp(1.5rem, 4vw, 2rem)',
       border: 'none',
       borderRadius: '12px',
@@ -419,8 +414,8 @@ const getStyles = (theme) => {
       transition: 'all 0.3s ease'
     },
     regenerateBtn: {
-      backgroundColor: colors.accent,
-      color: colors.textPrimary,
+      backgroundColor: accent,
+      color: textPrimary,
       padding: '0.875rem 1.5rem',
       border: 'none',
       borderRadius: '12px',
@@ -432,8 +427,8 @@ const getStyles = (theme) => {
       minHeight: '48px'
     },
     spinner: {
-      border: `3px solid ${colors.textPrimary}33`,
-      borderTop: `3px solid ${colors.textPrimary}`,
+      border: `3px solid ${textPrimary}33`,
+      borderTop: `3px solid ${textPrimary}`,
       borderRadius: '50%',
       width: '20px',
       height: '20px',
@@ -443,16 +438,16 @@ const getStyles = (theme) => {
     planInfo: {
       marginBottom: '2rem',
       paddingBottom: '1.5rem',
-      borderBottom: `1px solid ${colors.border}`
+      borderBottom: `1px solid ${border}`
     },
     planName: {
-      color: colors.textPrimary,
+      color: textPrimary,
       fontSize: '1.5rem',
       marginBottom: '0.5rem',
       fontWeight: '700'
     },
     planDescription: {
-      color: colors.textSecondary,
+      color: textSecondary,
       fontSize: '1rem',
       marginBottom: '1rem'
     },
@@ -466,13 +461,13 @@ const getStyles = (theme) => {
       flexDirection: 'column'
     },
     statLabel: {
-      color: colors.textSecondary,
+      color: textSecondary,
       fontSize: '0.9rem',
       marginBottom: '0.25rem',
       fontWeight: '500'
     },
     statValue: {
-      color: colors.accent,
+      color: accent,
       fontSize: '1.1rem',
       fontWeight: '700'
     },
@@ -480,7 +475,7 @@ const getStyles = (theme) => {
       marginTop: '2rem'
     },
     sectionTitle: {
-      color: colors.textPrimary,
+      color: textPrimary,
       fontSize: '1.5rem',
       marginBottom: '1.5rem',
       fontWeight: '700'
@@ -491,12 +486,12 @@ const getStyles = (theme) => {
       gap: 'clamp(1rem, 3vw, 1.5rem)'
     },
     workoutDay: {
-      border: `1px solid ${colors.border}`,
+      border: `1px solid ${border}`,
       borderRadius: '16px',
       padding: '1.5rem',
-      backgroundColor: colors.bgSecondary,
-      transition: 'transform 0.2s, box-shadow 0.2s, border-color 0.2s',
-      boxShadow: '0 4px 12px rgba(0, 0, 0, 0.5)'
+      backgroundColor: bgSecondary,
+      transition: 'transform 0.2s, box-shadow 0.2s, border-color 0.3s ease, background-color 0.3s ease',
+      boxShadow: `0 4px 12px ${shadow}`
     },
     dayHeader: {
       display: 'flex',
@@ -504,16 +499,16 @@ const getStyles = (theme) => {
       alignItems: 'center',
       marginBottom: '1rem',
       paddingBottom: '0.75rem',
-      borderBottom: `1px solid ${colors.border}`
+      borderBottom: `1px solid ${border}`
     },
     dayTitle: {
-      color: colors.textPrimary,
+      color: textPrimary,
       fontSize: '1.2rem',
       margin: 0,
       fontWeight: '700'
     },
     dayDuration: {
-      color: colors.accent,
+      color: accent,
       fontSize: '0.9rem',
       fontWeight: '600'
     },
@@ -521,7 +516,7 @@ const getStyles = (theme) => {
       marginBottom: '1rem'
     },
     exerciseCount: {
-      color: colors.textSecondary,
+      color: textSecondary,
       fontSize: '0.9rem',
       marginBottom: '0.5rem',
       fontWeight: '500'
@@ -534,17 +529,17 @@ const getStyles = (theme) => {
     exerciseItem: {
       marginBottom: '1rem',
       paddingBottom: '0.75rem',
-      borderBottom: `1px solid ${colors.border}`
+      borderBottom: `1px solid ${border}`
     },
     exerciseListItem: {
-      color: colors.textPrimary,
+      color: textPrimary,
       fontSize: '0.95rem',
       padding: '0.25rem 0',
       lineHeight: '1.5',
       marginBottom: '0.5rem'
     },
     moreExercises: {
-      color: colors.accent,
+      color: accent,
       fontSize: '0.9rem',
       fontStyle: 'italic',
       marginTop: '0.5rem',
@@ -552,8 +547,8 @@ const getStyles = (theme) => {
     },
     startBtn: {
       width: '100%',
-      backgroundColor: colors.accent,
-      color: colors.textPrimary,
+      backgroundColor: accent,
+      color: textPrimary,
       padding: '0.875rem',
       border: 'none',
       borderRadius: '12px',
@@ -566,14 +561,15 @@ const getStyles = (theme) => {
       marginTop: '1rem'
     },
     actionsCard: {
-      backgroundColor: colors.cardBg,
+      backgroundColor: cardBg,
       borderRadius: '20px',
-      boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
+      boxShadow: `0 8px 32px ${shadow}`,
       padding: '1.5rem',
-      border: `1px solid ${colors.border}`
+      border: `1px solid ${border}`,
+      transition: 'background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease'
     },
     actionsTitle: {
-      color: colors.textPrimary,
+      color: textPrimary,
       fontSize: '1.3rem',
       marginBottom: '1rem',
       fontWeight: '700'
@@ -584,10 +580,10 @@ const getStyles = (theme) => {
       gap: 'clamp(0.75rem, 2vw, 1rem)'
     },
     actionBtn: {
-      backgroundColor: colors.bgSecondary,
-      color: colors.textPrimary,
+      backgroundColor: bgSecondary,
+      color: textPrimary,
       padding: 'clamp(0.875rem, 2vw, 1rem)',
-      border: `1px solid ${colors.border}`,
+      border: `1px solid ${border}`,
       borderRadius: '12px',
       fontSize: 'clamp(0.9rem, 2.5vw, 1rem)',
       fontWeight: '600',
@@ -602,7 +598,7 @@ const getStyles = (theme) => {
     exerciseName: {
       fontSize: '1rem',
       fontWeight: '600',
-      color: colors.textPrimary
+      color: textPrimary
     }
   };
 };

@@ -1,221 +1,153 @@
-import React, { useState, useRef, useEffect, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { useTheme } from '../context/ThemeContext';
 
-// Helper function to get CSS variable with fallback
-const getCSSVar = (varName, fallback) => {
-  if (typeof window === 'undefined') return fallback;
-  try {
-    const root = document.documentElement;
-    const value = getComputedStyle(root).getPropertyValue(varName).trim();
-    return value || fallback;
-  } catch {
-    return fallback;
-  }
-};
-
 const ThemeToggle = () => {
-  const { currentTheme, changeTheme, resetToAutoTheme, availableThemes, manualOverride } = useTheme();
-  const [isOpen, setIsOpen] = useState(false);
-  const dropdownRef = useRef(null);
-  
-  // Get dynamic styles based on current theme
-  const dynamicStyles = useMemo(() => ({
-    button: {
-      display: 'flex',
-      alignItems: 'center',
-      gap: '0.5rem',
-      backgroundColor: getCSSVar('--b2', '#2d2d2d'),
-      color: getCSSVar('--bc', '#ffffff'),
-      border: `1px solid ${getCSSVar('--b3', '#404040')}`,
-      padding: '0.5rem 0.75rem',
-      borderRadius: '8px',
-      cursor: 'pointer',
-      fontSize: 'clamp(0.85rem, 2.5vw, 1rem)',
-      minHeight: '44px',
-      transition: 'all 0.3s ease',
-      fontWeight: '600',
-      whiteSpace: 'nowrap'
-    },
-    dropdown: {
-      position: 'absolute',
-      top: '100%',
-      right: 0,
-      marginTop: '0.5rem',
-      backgroundColor: getCSSVar('--b1', '#1a1a1a'),
-      border: `1px solid ${getCSSVar('--b3', '#404040')}`,
-      borderRadius: '12px',
-      boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
-      minWidth: '200px',
-      zIndex: 1000,
-      overflow: 'hidden'
-    },
-    dropdownTitle: {
-      fontSize: '0.9rem',
-      fontWeight: '600',
-      color: getCSSVar('--bc', '#ffffff')
-    },
-    overrideBadge: {
-      fontSize: '0.7rem',
-      padding: '0.2rem 0.5rem',
-      backgroundColor: getCSSVar('--a', '#FFD700'),
-      color: getCSSVar('--ac', '#000000'),
-      borderRadius: '4px',
-      fontWeight: '600'
-    },
-    themeOption: {
-      width: '100%',
-      display: 'flex',
-      alignItems: 'center',
-      gap: '0.75rem',
-      padding: '0.75rem 1rem',
-      backgroundColor: 'transparent',
-      border: 'none',
-      borderRadius: '8px',
-      cursor: 'pointer',
-      transition: 'all 0.2s ease',
-      textAlign: 'left',
-      color: getCSSVar('--bc', '#ffffff'),
-      fontSize: '0.95rem'
-    },
-    themeOptionActive: {
-      backgroundColor: `${getCSSVar('--a', '#FFD700')}20`,
-      fontWeight: '600'
-    },
-    checkmark: {
-      color: getCSSVar('--su', '#10b981'),
-      fontWeight: 'bold'
-    },
-    resetButton: {
-      width: '100%',
-      padding: '0.75rem 1rem',
-      marginTop: '0.5rem',
-      backgroundColor: getCSSVar('--b2', '#2d2d2d'),
-      color: getCSSVar('--bc', '#ffffff'),
-      border: `1px solid ${getCSSVar('--b3', '#404040')}`,
-      borderRadius: '8px',
-      cursor: 'pointer',
-      fontSize: '0.9rem',
-      fontWeight: '600',
-      transition: 'all 0.2s ease'
-    }
-  }), [currentTheme]); // Recompute when theme changes
+  const { currentTheme, changeTheme, availableThemes } = useTheme();
 
-  // Close dropdown when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setIsOpen(false);
+  // Theme configuration
+  const themeConfig = useMemo(() => ({
+    calm: {
+      label: 'Calm',
+      emoji: '🌿',
+      description: 'Soft, muted colors',
+      ariaLabel: 'Switch to Calm theme - soft, muted colors with a relaxing feel'
+    },
+    energetic: {
+      label: 'Energetic',
+      emoji: '⚡',
+      description: 'Bright, lively colors',
+      ariaLabel: 'Switch to Energetic theme - bright, lively colors with a playful feel'
+    },
+    intense: {
+      label: 'Intense',
+      emoji: '🔥',
+      description: 'Dark, bold colors',
+      ariaLabel: 'Switch to Intense theme - dark, saturated colors with a bold, high-impact feel'
+    }
+  }), []);
+
+  // Helper function to get CSS variable
+  const getCSSVar = (varName, fallback) => {
+    if (typeof window === 'undefined') return fallback;
+    try {
+      const root = document.documentElement;
+      const value = getComputedStyle(root).getPropertyValue(varName).trim();
+      return value || fallback;
+    } catch {
+      return fallback;
+    }
+  };
+
+  // Get dynamic styles based on current theme
+  const styles = useMemo(() => {
+    return {
+      container: {
+        display: 'flex',
+        gap: '0.5rem',
+        alignItems: 'center',
+        flexWrap: 'wrap'
+      },
+      button: (theme, isActive) => ({
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: '0.25rem',
+        padding: '0.5rem 0.75rem',
+        minWidth: '70px',
+        minHeight: '60px',
+        borderRadius: '12px',
+        border: `2px solid ${isActive ? getCSSVar('--theme-accent', '#a8c5d9') : getCSSVar('--theme-border', '#d1d9e0')}`,
+        backgroundColor: isActive 
+          ? getCSSVar('--theme-accent-light', '#d4e4f0')
+          : getCSSVar('--theme-button-secondary', '#e8edf2'),
+        color: isActive 
+          ? getCSSVar('--theme-text-primary', '#2c3e50')
+          : getCSSVar('--theme-text-secondary', '#5a6c7d'),
+        cursor: 'pointer',
+        transition: 'all 0.3s ease',
+        fontWeight: isActive ? '600' : '500',
+        fontSize: '0.85rem',
+        position: 'relative',
+        boxShadow: isActive 
+          ? `0 4px 12px ${getCSSVar('--theme-shadow', 'rgba(44, 62, 80, 0.15)')}`
+          : 'none'
+      }),
+      emoji: {
+        fontSize: '1.5rem',
+        lineHeight: '1'
+      },
+      label: {
+        fontSize: '0.75rem',
+        lineHeight: '1.2',
+        textAlign: 'center'
+      },
+      activeIndicator: {
+        position: 'absolute',
+        top: '4px',
+        right: '4px',
+        width: '8px',
+        height: '8px',
+        borderRadius: '50%',
+        backgroundColor: getCSSVar('--theme-accent', '#a8c5d9'),
+        boxShadow: `0 0 4px ${getCSSVar('--theme-accent', '#a8c5d9')}`
       }
     };
+  }, [currentTheme]);
 
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
-
-  const themeLabels = {
-    beginner: '🌿 Calm',
-    intermediate: '⚡ Energetic',
-    advanced: '🔥 Intense'
-  };
-
-  const handleThemeSelect = (theme) => {
+  const handleThemeChange = (theme) => {
     changeTheme(theme);
-    setIsOpen(false);
-  };
-
-  const handleReset = () => {
-    resetToAutoTheme();
-    setIsOpen(false);
+    // Announce theme change for screen readers
+    const announcement = document.createElement('div');
+    announcement.setAttribute('role', 'status');
+    announcement.setAttribute('aria-live', 'polite');
+    announcement.setAttribute('aria-atomic', 'true');
+    announcement.style.position = 'absolute';
+    announcement.style.left = '-10000px';
+    announcement.style.width = '1px';
+    announcement.style.height = '1px';
+    announcement.style.overflow = 'hidden';
+    announcement.textContent = `Theme changed to ${themeConfig[theme].label}`;
+    document.body.appendChild(announcement);
+    setTimeout(() => document.body.removeChild(announcement), 1000);
   };
 
   return (
-    <div style={styles.container} ref={dropdownRef}>
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        style={dynamicStyles.button}
-        aria-label="Change theme"
-        title="Daily Experience Theme"
-      >
-        <span style={styles.icon}>🎨</span>
-        <span style={styles.label}>{themeLabels[currentTheme] || 'Theme'}</span>
-        <span style={styles.arrow}>{isOpen ? '▲' : '▼'}</span>
-      </button>
-
-      {isOpen && (
-        <div style={dynamicStyles.dropdown}>
-          <div style={{...styles.dropdownHeader, borderBottom: `1px solid ${getCSSVar('--b3', '#404040')}`}}>
-            <span style={dynamicStyles.dropdownTitle}>Daily Experience Theme</span>
-            {manualOverride && (
-              <span style={dynamicStyles.overrideBadge}>Manual</span>
-            )}
-          </div>
-          
-          <div style={styles.themeList}>
-            {availableThemes.map((theme) => (
-              <button
-                key={theme}
-                onClick={() => handleThemeSelect(theme)}
-                style={{
-                  ...dynamicStyles.themeOption,
-                  ...(currentTheme === theme ? dynamicStyles.themeOptionActive : {})
-                }}
-              >
-                <span style={styles.themeIcon}>{themeLabels[theme].split(' ')[0]}</span>
-                <span style={styles.themeName}>{themeLabels[theme].split(' ')[1]}</span>
-                {currentTheme === theme && (
-                  <span style={dynamicStyles.checkmark}>✓</span>
-                )}
-              </button>
-            ))}
-          </div>
-
-          {manualOverride && (
-            <button
-              onClick={handleReset}
-              style={dynamicStyles.resetButton}
-            >
-              🔄 Reset to Auto
-            </button>
-          )}
-        </div>
-      )}
+    <div style={styles.container} role="group" aria-label="Theme selection">
+      {availableThemes.map((theme) => {
+        const config = themeConfig[theme];
+        const isActive = currentTheme === theme;
+        
+        return (
+          <button
+            key={theme}
+            onClick={() => handleThemeChange(theme)}
+            style={styles.button(theme, isActive)}
+            aria-label={config.ariaLabel}
+            aria-pressed={isActive}
+            title={`${config.label} - ${config.description}`}
+            onMouseEnter={(e) => {
+              if (!isActive) {
+                const shadow = getCSSVar('--theme-shadow', 'rgba(0, 0, 0, 0.1)');
+                e.currentTarget.style.transform = 'translateY(-2px)';
+                e.currentTarget.style.boxShadow = `0 4px 12px ${shadow}`;
+              }
+            }}
+            onMouseLeave={(e) => {
+              if (!isActive) {
+                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.boxShadow = 'none';
+              }
+            }}
+          >
+            {isActive && <span style={styles.activeIndicator} aria-hidden="true" />}
+            <span style={styles.emoji} aria-hidden="true">{config.emoji}</span>
+            <span style={styles.label}>{config.label}</span>
+          </button>
+        );
+      })}
     </div>
   );
 };
 
-const styles = {
-  container: {
-    position: 'relative',
-    display: 'inline-block'
-  },
-  icon: {
-    fontSize: '1.1rem'
-  },
-  label: {
-    display: 'inline-block'
-  },
-  arrow: {
-    fontSize: '0.7rem',
-    marginLeft: '0.25rem'
-  },
-  dropdownHeader: {
-    padding: '0.75rem 1rem',
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center'
-  },
-  themeList: {
-    padding: '0.5rem'
-  },
-  themeIcon: {
-    fontSize: '1.2rem'
-  },
-  themeName: {
-    flex: 1
-  }
-};
-
 export default ThemeToggle;
-

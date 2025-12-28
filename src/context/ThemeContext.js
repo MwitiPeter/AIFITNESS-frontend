@@ -52,7 +52,7 @@ export const ThemeProvider = ({ children }) => {
         document.documentElement.style.setProperty('--current-theme', currentTheme);
         
         // Force a reflow to ensure CSS variables are applied
-        document.documentElement.offsetHeight;
+        void document.documentElement.offsetHeight;
         
         // Increment theme version to force all components to re-render
         setThemeVersion(prev => prev + 1);

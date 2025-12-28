@@ -69,9 +69,6 @@ const Dashboard = React.memo(() => {
     return <Loading message="Loading your dashboard..." />;
   }
 
-  // Get dynamic styles based on current theme
-  const styles = useMemo(() => getStyles(currentTheme), [currentTheme]);
-
   return (
     <div style={styles.container}>
       <div style={styles.content}>

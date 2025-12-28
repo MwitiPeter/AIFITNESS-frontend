@@ -85,7 +85,9 @@ const Home = () => {
         boxShadow: `0 8px 32px ${shadow}`,
         transition: 'transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease, background-color 0.3s ease',
         color: textPrimary,
-        cursor: 'default'
+        cursor: 'default',
+        position: 'relative',
+        overflow: 'hidden'
       },
       icon: {
         fontSize: 'clamp(2rem, 6vw, 3rem)',
@@ -140,10 +142,11 @@ const Home = () => {
         fontWeight: '600',
         border: `1px solid ${border}`,
         transition: 'all 0.3s ease',
-        display: 'inline-block',
+        display: 'inline-flex',
+        alignItems: 'center',
+        justifyContent: 'center',
         minHeight: '48px',
-        minWidth: '140px',
-        textAlign: 'center'
+        minWidth: '140px'
       }
     };
   }, [currentTheme, themeVersion]); // Add themeVersion to dependencies
@@ -161,19 +164,49 @@ const Home = () => {
         </p>
         
         <div style={styles.features}>
-          <div style={styles.feature}>
+          <div 
+            style={styles.feature}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = 'translateY(-8px)';
+              e.currentTarget.style.boxShadow = `0 12px 40px ${getCSSVar('--theme-shadow', 'rgba(0, 0, 0, 0.15)')}`;
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.boxShadow = `0 8px 32px ${getCSSVar('--theme-shadow', 'rgba(0, 0, 0, 0.1)')}`;
+            }}
+          >
             <span style={styles.icon}>🤖</span>
             <h3 style={styles.featureTitle}>AI-Powered Plans</h3>
             <p style={styles.featureText}>Custom workouts generated just for you</p>
           </div>
           
-          <div style={styles.feature}>
+          <div 
+            style={styles.feature}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = 'translateY(-8px)';
+              e.currentTarget.style.boxShadow = `0 12px 40px ${getCSSVar('--theme-shadow', 'rgba(0, 0, 0, 0.15)')}`;
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.boxShadow = `0 8px 32px ${getCSSVar('--theme-shadow', 'rgba(0, 0, 0, 0.1)')}`;
+            }}
+          >
             <span style={styles.icon}>📊</span>
             <h3 style={styles.featureTitle}>Track Progress</h3>
             <p style={styles.featureText}>Monitor your fitness journey with detailed analytics</p>
           </div>
           
-          <div style={styles.feature}>
+          <div 
+            style={styles.feature}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = 'translateY(-8px)';
+              e.currentTarget.style.boxShadow = `0 12px 40px ${getCSSVar('--theme-shadow', 'rgba(0, 0, 0, 0.15)')}`;
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.boxShadow = `0 8px 32px ${getCSSVar('--theme-shadow', 'rgba(0, 0, 0, 0.1)')}`;
+            }}
+          >
             <span style={styles.icon}>🎯</span>
             <h3 style={styles.featureTitle}>Reach Goals</h3>
             <p style={styles.featureText}>Achieve your fitness objectives with personalized guidance</p>

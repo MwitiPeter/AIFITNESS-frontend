@@ -56,10 +56,16 @@ const Dashboard = React.memo(() => {
     try {
       const response = await workoutAPI.generateWorkout();
       setWorkoutPlan(response.data.data);
-      alert('✅ Workout plan generated successfully!');
+      if (window.showToast) {
+        window.showToast('Workout plan generated successfully!', 'success');
+      }
     } catch (err) {
       console.error('Error generating workout:', err);
-      setError(err.response?.data?.message || 'Failed to generate workout plan');
+      const errorMsg = err.response?.data?.message || 'Failed to generate workout plan';
+      setError(errorMsg);
+      if (window.showToast) {
+        window.showToast(errorMsg, 'error');
+      }
     } finally {
       setGenerating(false);
     }
@@ -115,10 +121,10 @@ const Dashboard = React.memo(() => {
         {!workoutPlan ? (
           <div style={styles.card}>
             <div style={styles.emptyState}>
-              <span style={styles.emptyIcon}>🤖</span>
-              <h2 style={styles.emptyTitle}>No Workout Plan Yet</h2>
+              <span style={styles.emptyIcon} role="img" aria-label="Robot">🤖</span>
+              <h2 style={styles.emptyTitle}>Ready to Start Your Journey?</h2>
               <p style={styles.emptyText}>
-                Generate your personalized AI-powered workout plan based on your profile and goals!
+                Generate your personalized AI-powered workout plan based on your profile and goals. Our AI will create a custom workout plan tailored just for you!
               </p>
               <button
                 onClick={handleGenerateWorkout}
@@ -310,13 +316,17 @@ const getStyles = () => {
       opacity: 0.9
     },
     error: {
-      backgroundColor: cardBg,
-      color: '#ff6b6b',
-      padding: '1rem',
+      backgroundColor: 'rgba(239, 68, 68, 0.1)',
+      color: '#ef4444',
+      padding: '1rem 1.25rem',
       borderRadius: '12px',
       marginBottom: '1rem',
-      textAlign: 'center',
-      border: '1px solid #ff6b6b'
+      textAlign: 'left',
+      border: '1px solid rgba(239, 68, 68, 0.3)',
+      display: 'flex',
+      alignItems: 'center',
+      gap: '0.75rem',
+      fontWeight: '500'
     },
     card: {
       backgroundColor: cardBg,
@@ -371,25 +381,37 @@ const getStyles = () => {
     },
     emptyState: {
       textAlign: 'center',
-      padding: '3rem 1rem'
+      padding: 'clamp(3rem, 8vw, 5rem) 1rem',
+      backgroundColor: cardBg,
+      borderRadius: '20px',
+      border: `1px solid ${border}`,
+      boxShadow: `0 8px 32px ${shadow}`,
+      maxWidth: '600px',
+      margin: '0 auto',
+      transition: 'background-color 0.3s ease, border-color 0.3s ease'
     },
     emptyIcon: {
-      fontSize: '5rem',
+      fontSize: 'clamp(4rem, 10vw, 6rem)',
       display: 'block',
-      marginBottom: '1rem'
+      marginBottom: '1.5rem',
+      animation: 'pulse 2s ease-in-out infinite',
+      filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.1))'
     },
     emptyTitle: {
       color: textPrimary,
-      fontSize: '2rem',
+      fontSize: 'clamp(1.5rem, 5vw, 2.5rem)',
       marginBottom: '1rem',
-      fontWeight: '700'
+      fontWeight: '700',
+      transition: 'color 0.3s ease'
     },
     emptyText: {
       color: textSecondary,
-      fontSize: '1.1rem',
-      marginBottom: '2rem',
+      fontSize: 'clamp(1rem, 3vw, 1.2rem)',
+      marginBottom: '2.5rem',
       maxWidth: '500px',
-      margin: '0 auto 2rem'
+      margin: '0 auto 2.5rem',
+      lineHeight: '1.6',
+      transition: 'color 0.3s ease'
     },
     generateBtn: {
       backgroundColor: accent,
@@ -407,8 +429,10 @@ const getStyles = () => {
       width: '100%',
       maxWidth: '400px',
       justifyContent: 'center',
-      boxShadow: '0 4px 20px rgba(0, 0, 0, 0.3)',
-      transition: 'all 0.3s ease'
+      boxShadow: `0 4px 20px ${shadow}`,
+      transition: 'all 0.3s ease',
+      position: 'relative',
+      overflow: 'hidden'
     },
     regenerateBtn: {
       backgroundColor: accent,

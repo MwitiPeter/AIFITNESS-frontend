@@ -112,6 +112,10 @@ const Login = () => {
         color: textPrimary,
         fontFamily: 'inherit'
       },
+      inputError: {
+        borderColor: '#ef4444',
+        boxShadow: '0 0 0 3px rgba(239, 68, 68, 0.1)'
+      },
       submitBtn: {
         backgroundColor: buttonPrimary,
         color: buttonPrimaryText,
@@ -186,7 +190,12 @@ const Login = () => {
       <div style={styles.formCard}>
         <h2 style={styles.title}>Welcome Back!</h2>
         
-        {error && <div style={styles.error}>{error}</div>}
+        {error && (
+          <div style={styles.error} role="alert" aria-live="polite">
+            <span>⚠️</span>
+            <span>{error}</span>
+          </div>
+        )}
         
         <form onSubmit={handleSubmit} style={styles.form}>
           <div style={styles.formGroup}>
@@ -197,11 +206,15 @@ const Login = () => {
               name="email"
               value={formData.email}
               onChange={handleChange}
-              style={styles.input}
+              style={{
+                ...styles.input,
+                ...(error && formData.email === '' ? styles.inputError : {})
+              }}
               placeholder="your.email@example.com"
               autoComplete="email"
               required
               aria-required="true"
+              aria-invalid={error && formData.email === ''}
             />
           </div>
 
@@ -213,11 +226,15 @@ const Login = () => {
               name="password"
               value={formData.password}
               onChange={handleChange}
-              style={styles.input}
+              style={{
+                ...styles.input,
+                ...(error && formData.password === '' ? styles.inputError : {})
+              }}
               placeholder="Enter your password"
               autoComplete="current-password"
               required
               aria-required="true"
+              aria-invalid={error && formData.password === ''}
             />
           </div>
 
@@ -225,8 +242,24 @@ const Login = () => {
             type="submit" 
             style={styles.submitBtn}
             disabled={loading}
+            aria-busy={loading}
           >
-            {loading ? 'Logging in...' : 'Login'}
+            {loading ? (
+              <>
+                <span style={{
+                  display: 'inline-block',
+                  width: '16px',
+                  height: '16px',
+                  border: `2px solid ${getCSSVar('--theme-button-primary-text', '#2c3e50')}33`,
+                  borderTop: `2px solid ${getCSSVar('--theme-button-primary-text', '#2c3e50')}`,
+                  borderRadius: '50%',
+                  animation: 'spin 0.8s linear infinite',
+                  marginRight: '0.5rem',
+                  verticalAlign: 'middle'
+                }}></span>
+                Logging in...
+              </>
+            ) : 'Login'}
           </button>
         </form>
 

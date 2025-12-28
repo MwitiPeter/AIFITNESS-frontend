@@ -102,12 +102,16 @@ const WorkoutTracker = () => {
     e.preventDefault();
 
     if (logData.completedExercises.length === 0) {
-      alert('Please check off at least one completed exercise');
+      if (window.showToast) {
+        window.showToast('Please check off at least one completed exercise', 'warning');
+      }
       return;
     }
 
     if (logData.totalDuration === 0) {
-      alert('Please enter the workout duration');
+      if (window.showToast) {
+        window.showToast('Please enter the workout duration', 'warning');
+      }
       return;
     }
 
@@ -129,7 +133,9 @@ const WorkoutTracker = () => {
       };
       await progressAPI.logWorkout(workoutLog);
 
-      alert('✅ Workout logged successfully!');
+      if (window.showToast) {
+        window.showToast('Workout logged successfully!', 'success');
+      }
       navigate('/progress');
 
     } catch (err) {

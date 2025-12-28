@@ -15,6 +15,22 @@ const getCSSVar = (varName, fallback) => {
   }
 };
 
+// Add spin animation if not exists
+if (typeof document !== 'undefined') {
+  const styleId = 'register-spin-animation';
+  if (!document.getElementById(styleId)) {
+    const style = document.createElement('style');
+    style.id = styleId;
+    style.textContent = `
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+    `;
+    document.head.appendChild(style);
+  }
+}
+
 const Register = () => {
   const [formData, setFormData] = useState({
     name: '',
@@ -74,14 +90,18 @@ const Register = () => {
         transition: 'color 0.3s ease'
       },
       error: {
-        backgroundColor: '#2d1a1a',
-        color: '#ff6b6b',
-        padding: '0.75rem',
-        borderRadius: '8px',
+        backgroundColor: 'rgba(239, 68, 68, 0.1)',
+        color: '#ef4444',
+        padding: '0.875rem 1rem',
+        borderRadius: '10px',
         marginBottom: '1rem',
-        textAlign: 'center',
-        border: '1px solid #ff6b6b',
-        fontSize: '0.9rem'
+        textAlign: 'left',
+        border: '1px solid rgba(239, 68, 68, 0.3)',
+        fontSize: '0.9rem',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '0.5rem',
+        fontWeight: '500'
       },
       form: {
         display: 'flex',
@@ -112,6 +132,10 @@ const Register = () => {
         backgroundColor: inputBg,
         color: textPrimary,
         fontFamily: 'inherit'
+      },
+      inputError: {
+        borderColor: '#ef4444',
+        boxShadow: '0 0 0 3px rgba(239, 68, 68, 0.1)'
       },
       hint: {
         display: 'block',
@@ -200,7 +224,12 @@ const Register = () => {
       <div style={styles.formCard}>
         <h2 style={styles.title}>Create Account</h2>
         
-        {error && <div style={styles.error}>{error}</div>}
+        {error && (
+          <div style={styles.error} role="alert" aria-live="polite">
+            <span>⚠️</span>
+            <span>{error}</span>
+          </div>
+        )}
         
         <form onSubmit={handleSubmit} style={styles.form}>
           <div style={styles.formGroup}>
@@ -273,8 +302,24 @@ const Register = () => {
             type="submit" 
             style={styles.submitBtn}
             disabled={loading}
+            aria-busy={loading}
           >
-            {loading ? 'Creating Account...' : 'Register'}
+            {loading ? (
+              <>
+                <span style={{
+                  display: 'inline-block',
+                  width: '16px',
+                  height: '16px',
+                  border: `2px solid ${getCSSVar('--theme-button-primary-text', '#2c3e50')}33`,
+                  borderTop: `2px solid ${getCSSVar('--theme-button-primary-text', '#2c3e50')}`,
+                  borderRadius: '50%',
+                  animation: 'spin 0.8s linear infinite',
+                  marginRight: '0.5rem',
+                  verticalAlign: 'middle'
+                }}></span>
+                Creating Account...
+              </>
+            ) : 'Register'}
           </button>
         </form>
 

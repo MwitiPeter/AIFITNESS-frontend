@@ -8,6 +8,7 @@ import Navbar from './components/Navbar';
 import PrivateRoute from './components/PrivateRoute';
 import PWAInstallPrompt from './components/PWAInstallPrompt';
 import Loading from './components/Loading';
+import { ToastContainer } from './components/Toast';
 
 // Lazy load pages for better performance
 const Home = lazy(() => import('./pages/Home'));
@@ -83,6 +84,7 @@ function App() {
               </Routes>
             </Suspense>
             <PWAInstallPrompt />
+            <ToastContainer />
           </div>
         </ThemeProvider>
       </AuthProvider>

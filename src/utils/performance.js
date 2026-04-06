@@ -76,6 +76,9 @@ export const measurePerformance = () => {
     window.addEventListener('load', () => {
       setTimeout(() => {
         const perfData = performance.getEntriesByType('navigation')[0];
+        if (!perfData) {
+          return;
+        }
         const metrics = {
           dns: perfData.domainLookupEnd - perfData.domainLookupStart,
           tcp: perfData.connectEnd - perfData.connectStart,
@@ -84,7 +87,9 @@ export const measurePerformance = () => {
           dom: perfData.domContentLoadedEventEnd - perfData.responseEnd,
           load: perfData.loadEventEnd - perfData.fetchStart
         };
-        console.log('Performance Metrics:', metrics);
+        if (process.env.NODE_ENV === 'development') {
+          console.log('Performance Metrics:', metrics);
+        }
         return metrics;
       }, 0);
     });

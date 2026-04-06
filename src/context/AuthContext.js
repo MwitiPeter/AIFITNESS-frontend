@@ -3,6 +3,20 @@ import { authAPI } from '../utils/api';
 
 const AuthContext = createContext();
 
+const getAuthErrorMessage = (error, fallbackMessage) => {
+  const status = error?.response?.status;
+
+  if (status === 502 || status === 503 || status === 504) {
+    return 'Backend is waking up or temporarily unavailable. Please wait a few seconds and try again.';
+  }
+
+  if (!error?.response) {
+    return 'Unable to reach the server. Please check your connection and try again in a few seconds.';
+  }
+
+  return error.response?.data?.message || fallbackMessage;
+};
+
 // Custom hook to use auth context
 export const useAuth = () => {
   const context = useContext(AuthContext);
@@ -52,7 +66,7 @@ export const AuthProvider = ({ children }) => {
       console.error('Registration error:', error);
       return {
         success: false,
-        message: error.response?.data?.message || 'Registration failed'
+        message: getAuthErrorMessage(error, 'Registration failed')
       };
     }
   };
@@ -72,7 +86,7 @@ export const AuthProvider = ({ children }) => {
       console.error('Login error:', error);
       return {
         success: false,
-        message: error.response?.data?.message || 'Login failed'
+        message: getAuthErrorMessage(error, 'Login failed')
       };
     }
   };
